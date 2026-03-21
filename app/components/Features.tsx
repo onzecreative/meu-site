@@ -64,7 +64,7 @@ export default function Features() {
   });
 
   useEffect(() => {
-    fetch("/api/admin/section/features")
+    fetch("/api/admin/section/features?t=" + Date.now())
       .then((res) => res.json())
       .then((json) => {
         if (json && Object.keys(json).length > 0) setData(json);

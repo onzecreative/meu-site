@@ -49,7 +49,7 @@ export default function Industries() {
   });
 
   useEffect(() => {
-    fetch("/api/admin/section/industries")
+    fetch("/api/admin/section/industries?t=" + Date.now())
       .then((res) => res.json())
       .then((json) => {
         if (json && Object.keys(json).length > 0) setData(json);

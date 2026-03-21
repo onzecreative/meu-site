@@ -14,7 +14,7 @@ export default function WhatsAppButton() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    fetch("/api/admin/footer")
+    fetch("/api/admin/footer?t=" + Date.now())
       .then((r) => r.json())
       .then((data) => setConfig(data))
       .catch(() => {});

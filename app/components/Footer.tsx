@@ -54,7 +54,7 @@ export default function Footer() {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    fetch("/api/admin/footer")
+    fetch("/api/admin/footer?t=" + Date.now())
       .then((r) => r.json())
       .then((data) => setConfig(data))
       .catch(() => {});

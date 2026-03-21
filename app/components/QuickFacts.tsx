@@ -28,7 +28,7 @@ export default function QuickFacts() {
   });
 
   useEffect(() => {
-    fetch("/api/admin/section/quickfacts")
+    fetch("/api/admin/section/quickfacts?t=" + Date.now())
       .then((res) => res.json())
       .then((json) => {
         if (json && Object.keys(json).length > 0) setData(json);

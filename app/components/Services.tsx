@@ -65,7 +65,7 @@ export default function Services() {
   });
 
   useEffect(() => {
-    fetch("/api/admin/section/services")
+    fetch("/api/admin/section/services?t=" + Date.now())
       .then((res) => res.json())
       .then((json) => {
         if (json && Object.keys(json).length > 0) setData(json);

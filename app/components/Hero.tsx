@@ -130,7 +130,7 @@ export default function Hero() {
   });
 
   useEffect(() => {
-    fetch("/api/admin/hero")
+    fetch("/api/admin/hero?t=" + Date.now())
       .then((r) => r.json())
       .then((data) => setHeroConfig(data))
       .catch(() => {});
