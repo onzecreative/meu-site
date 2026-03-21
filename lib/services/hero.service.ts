@@ -39,9 +39,11 @@ export async function saveHeroConfig(data: Partial<HeroConfig>): Promise<HeroCon
   const current = await getHeroConfig();
   const updated = { ...current, ...data };
   
-  await supabase
+  const { error } = await supabase
     .from("site_content")
     .upsert({ id: "hero", data: updated, updated_at: new Date().toISOString() });
+    
+  if (error) throw error;
     
   return updated;
 }

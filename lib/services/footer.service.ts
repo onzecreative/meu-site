@@ -73,9 +73,11 @@ export async function saveFooterConfig(data: Partial<FooterConfig>): Promise<Foo
     columns: data.columns ?? current.columns,
   };
   
-  await supabase
+  const { error } = await supabase
     .from("site_content")
     .upsert({ id: "footer", data: updated, updated_at: new Date().toISOString() });
     
+  if (error) throw error;
+
   return updated;
 }

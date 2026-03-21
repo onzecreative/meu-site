@@ -21,9 +21,11 @@ export async function saveSectionData<T>(id: string, payload: Partial<T>): Promi
   const current = await getSectionData<T>(id, {} as T);
   const updated = { ...current, ...payload };
   
-  await supabase
+  const { error } = await supabase
     .from("site_content")
     .upsert({ id, data: updated, updated_at: new Date().toISOString() });
+    
+  if (error) throw error;
     
   return updated as T;
 }
