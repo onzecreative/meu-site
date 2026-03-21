@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { IconDeviceFloppy, IconLogout, IconPlus, IconTrash } from "@tabler/icons-react";
+import SectionEditor from "./components/SectionEditor";
 
 export default function AdminDashboard() {
   const [heroConfig, setHeroConfig] = useState<any>(null);
@@ -322,6 +323,51 @@ export default function AdminDashboard() {
               </div>
             </form>
           </section>
+        )}
+
+        {/* NOSSOS SERVIÇOS */}
+        {!loading && (
+          <SectionEditor 
+            id="services" 
+            label="Seção: Nossos Serviços" 
+            defaultData={{ sectionTitle: "Nossos Serviços", title: "Soluções para cada tipo de carga", description: "Da coleta à entrega, cuidamos de tudo com tecnologia, eficiência e comprometimento total com o seu negócio.", items: [] }}
+          />
+        )}
+
+        {/* SETORES ATENDIDOS */}
+        {!loading && (
+          <SectionEditor 
+            id="industries" 
+            label="Seção: Setores Atendidos" 
+            defaultData={{ sectionTitle: "Setores Atendidos", title: "Expertise em cada segmento de mercado", description: "Décadas de experiência nos principais setores da economia brasileira.", items: [] }}
+          />
+        )}
+
+        {/* POR QUE NOS ESCOLHER */}
+        {!loading && (
+          <SectionEditor 
+            id="features" 
+            label="Seção: Por que nos escolher (Features)" 
+            defaultData={{ sectionTitle: "Por que nos escolher", title: "Tecnologia e confiança em cada entrega", items: [] }}
+          />
+        )}
+
+        {/* DEPOIMENTOS */}
+        {!loading && (
+          <SectionEditor 
+            id="testimonials" 
+            label="Seção: Depoimentos" 
+            defaultData={{ sectionTitle: "Depoimentos", title: "O que nossos clientes dizem", items: [] }}
+          />
+        )}
+
+        {/* NÚMEROS QUE FALAM POR SI */}
+        {!loading && (
+          <SectionEditor 
+            id="quickfacts" 
+            label="Seção: Quick Facts (Números)" 
+            defaultData={{ sectionTitle: "Números que falam por si", title: "Resultados reais, clientes satisfeitos", stats: [], partners: [] }}
+          />
         )}
 
       </div>

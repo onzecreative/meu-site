@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-
-const VIDEOS_DIR = path.join(process.cwd(), "public", "videos");
+import { supabase } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,25 +10,34 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Nenhum arquivo enviado" }, { status: 400 });
     }
 
-    const ext = path.extname(file.name).toLowerCase();
-    if (![".mp4", ".mov"].includes(ext)) {
-      return NextResponse.json({ error: "Formato inválido. Use MP4 ou MOV." }, { status: 400 });
+    const ext = file.name.substring(file.name.lastIndexOf(".")).toLowerCase();
+    if (![".mp4", ".mov", ".png", ".jpg", ".jpeg", ".webp"].includes(ext)) {
+      return NextResponse.json({ error: "Formato de arquivo inválido." }, { status: 400 });
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    fs.mkdirSync(VIDEOS_DIR, { recursive: true });
-
     const timestamp = Date.now();
-    const safeName = path.basename(file.name, ext).replace(/[^a-zA-Z0-9-_]/g, "-");
-    const fileName = `${safeName}-${timestamp}${ext}`;
-    const filePath = path.join(VIDEOS_DIR, fileName);
+    const safeName = file.name.substring(0, file.name.lastIndexOf(".")).replace(/[^a-zA-Z0-9-_]/g, "-");
+    const fileName = `uploads/${safeName}-${timestamp}${ext}`;
 
-    fs.writeFileSync(filePath, buffer);
+    const { error } = await supabase.storage
+      .from("public_assets")
+      .upload(fileName, file, {
+        contentType: file.type,
+        upsert: false,
+      });
 
-    return NextResponse.json({ url: `/videos/${fileName}` });
+    if (error) {
+      console.error("Supabase Upload Error:", error);
+      return NextResponse.json({ error: "Falha ao enviar arquivo para o Supabase." }, { status: 500 });
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from("public_assets")
+      .getPublicUrl(fileName);
+
+    return NextResponse.json({ url: publicUrlData.publicUrl });
   } catch (e) {
+    console.error("Upload Error:", e);
     return NextResponse.json({ error: String(e) }, { status: 500 });
   }
 }

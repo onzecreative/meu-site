@@ -1,20 +1,41 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 
-const stats = [
+const defaultStats = [
   { number: "98.6%", label: "Entregas no Prazo", sub: "nos últimos 12 meses" },
   { number: "12K+", label: "Clientes Ativos", sub: "em todo o Brasil" },
   { number: "500+", label: "Veículos na Frota", sub: "rastreados em tempo real" },
   { number: "24/7", label: "Suporte Disponível", sub: "365 dias por ano" },
 ];
 
-const partners = [
+const defaultPartners = [
   "Ambev", "Vale", "Petrobras", "BRF", "Embraer",
   "Ambev", "Vale", "Petrobras", "BRF", "Embraer",
 ];
 
 export default function QuickFacts() {
+  const [data, setData] = useState<{
+    sectionTitle: string;
+    title: string;
+    stats: typeof defaultStats;
+    partners: typeof defaultPartners;
+  }>({
+    sectionTitle: "Números que falam por si",
+    title: "Resultados reais, clientes satisfeitos",
+    stats: defaultStats,
+    partners: defaultPartners,
+  });
+
+  useEffect(() => {
+    fetch("/api/admin/section/quickfacts")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json && Object.keys(json).length > 0) setData(json);
+      })
+      .catch(() => {});
+  }, []);
+
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -37,7 +58,7 @@ export default function QuickFacts() {
             textTransform: "uppercase",
             marginBottom: "16px",
           }}>
-            Números que falam por si
+            {data.sectionTitle}
           </p>
           <h2 style={{
             fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -47,7 +68,7 @@ export default function QuickFacts() {
             letterSpacing: "-0.03em",
             lineHeight: 1.1,
           }}>
-            Resultados reais,<br />clientes satisfeitos
+            {data.title}
           </h2>
         </motion.div>
 
@@ -61,7 +82,7 @@ export default function QuickFacts() {
           overflow: "hidden",
           marginBottom: "80px",
         }}>
-          {stats.map((stat, i) => (
+          {data.stats.map((stat, i) => (
             <motion.div
               key={stat.number}
               initial={{ opacity: 0, y: 20 }}
@@ -111,7 +132,7 @@ export default function QuickFacts() {
           width: "max-content",
           animation: "marquee 25s linear infinite",
         }}>
-          {[...partners, ...partners].map((p, i) => (
+          {[...data.partners, ...data.partners].map((p, i) => (
             <span key={i} style={{
               padding: "0 48px",
               fontSize: "18px",

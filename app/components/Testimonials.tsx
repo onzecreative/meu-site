@@ -1,9 +1,9 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { IconChevronLeft, IconChevronRight, IconQuote } from "@tabler/icons-react";
 
-const testimonials = [
+const defaultTestimonials = [
   {
     quote:
       "A LogiNord transformou completamente nossa operação logística. Reduziu nosso custo de frete em 23% e o prazo de entrega em dois dias. Simplesmente excepcional.",
@@ -34,14 +34,33 @@ const testimonials = [
 ];
 
 export default function Testimonials() {
+  const [data, setData] = useState<{
+    sectionTitle: string;
+    title: string;
+    items: typeof defaultTestimonials;
+  }>({
+    sectionTitle: "Depoimentos",
+    title: "O que nossos clientes dizem",
+    items: defaultTestimonials,
+  });
+
+  useEffect(() => {
+    fetch("/api/admin/section/testimonials")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json && Object.keys(json).length > 0) setData(json);
+      })
+      .catch(() => {});
+  }, []);
+
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const [current, setCurrent] = useState(0);
 
-  const prev = () => setCurrent((c) => (c - 1 + testimonials.length) % testimonials.length);
-  const next = () => setCurrent((c) => (c + 1) % testimonials.length);
+  const prev = () => setCurrent((c) => (c - 1 + data.items.length) % data.items.length);
+  const next = () => setCurrent((c) => (c + 1) % data.items.length);
 
-  const t = testimonials[current];
+  const t = data.items[current] || data.items[0];
 
   return (
     <section
@@ -64,7 +83,7 @@ export default function Testimonials() {
             textTransform: "uppercase",
             marginBottom: "16px",
           }}>
-            Depoimentos
+            {data.sectionTitle}
           </p>
           <h2 style={{
             fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -74,7 +93,7 @@ export default function Testimonials() {
             letterSpacing: "-0.03em",
             marginBottom: "64px",
           }}>
-            O que nossos clientes dizem
+            {data.title}
           </h2>
         </motion.div>
 
@@ -174,7 +193,7 @@ export default function Testimonials() {
           </button>
 
           <div style={{ display: "flex", gap: "8px" }}>
-            {testimonials.map((_, i) => (
+            {data.items.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrent(i)}

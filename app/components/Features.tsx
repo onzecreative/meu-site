@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import {
   IconMapPin,
@@ -10,40 +10,68 @@ import {
   IconHeadset,
 } from "@tabler/icons-react";
 
-const features = [
+const defaultFeatures = [
   {
-    icon: <IconMapPin size={24} />,
+    icon: "IconMapPin",
     title: "Rastreamento em Tempo Real",
     desc: "Visibilidade completa da sua carga 24h por dia, com alertas automáticos via SMS e e-mail.",
   },
   {
-    icon: <IconShield size={24} />,
+    icon: "IconShield",
     title: "Seguro de Carga Integrado",
     desc: "Cobertura total para todas as cargas transportadas, sem burocracia adicional.",
   },
   {
-    icon: <IconChartBar size={24} />,
+    icon: "IconChartBar",
     title: "Dashboard Analítico",
     desc: "Relatórios detalhados de performance, custos e KPIs de entrega em painel centralizado.",
   },
   {
-    icon: <IconBolt size={24} />,
+    icon: "IconBolt",
     title: "Cotação Instantânea",
     desc: "Preços automáticos em segundos com base no peso, dimensões e destino da carga.",
   },
   {
-    icon: <IconRefresh size={24} />,
+    icon: "IconRefresh",
     title: "Gestão de Devoluções",
     desc: "Logística reversa simplificada com coleta agendada e reprocessamento ágil.",
   },
   {
-    icon: <IconHeadset size={24} />,
+    icon: "IconHeadset",
     title: "Gerente de Conta Dedicado",
     desc: "Atendimento personalizado com especialista dedicado ao seu negócio.",
   },
 ];
 
+const iconMap: Record<string, React.ReactNode> = {
+  IconMapPin: <IconMapPin size={24} />,
+  IconShield: <IconShield size={24} />,
+  IconChartBar: <IconChartBar size={24} />,
+  IconBolt: <IconBolt size={24} />,
+  IconRefresh: <IconRefresh size={24} />,
+  IconHeadset: <IconHeadset size={24} />,
+};
+
 export default function Features() {
+  const [data, setData] = useState<{
+    sectionTitle: string;
+    title: string;
+    items: typeof defaultFeatures;
+  }>({
+    sectionTitle: "Por que nos escolher",
+    title: "Tecnologia e confiança em cada entrega",
+    items: defaultFeatures,
+  });
+
+  useEffect(() => {
+    fetch("/api/admin/section/features")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json && Object.keys(json).length > 0) setData(json);
+      })
+      .catch(() => {});
+  }, []);
+
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -66,7 +94,7 @@ export default function Features() {
             textTransform: "uppercase",
             marginBottom: "16px",
           }}>
-            Por que nos escolher
+            {data.sectionTitle}
           </p>
           <h2 style={{
             fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -76,7 +104,7 @@ export default function Features() {
             letterSpacing: "-0.03em",
             lineHeight: 1.1,
           }}>
-            Tecnologia e confiança<br />em cada entrega
+            {data.title}
           </h2>
         </motion.div>
 
@@ -86,7 +114,7 @@ export default function Features() {
           gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
           gap: "24px",
         }}>
-          {features.map((feature, i) => (
+          {data.items.map((feature, i) => (
             <motion.div
               key={feature.title}
               initial={{ opacity: 0, y: 20 }}
@@ -117,7 +145,7 @@ export default function Features() {
                 color: "#DE3F0B",
                 marginBottom: "20px",
               }}>
-                {feature.icon}
+                {iconMap[feature.icon] || <IconMapPin size={24} />}
               </div>
               <h3 style={{
                 fontFamily: "'Plus Jakarta Sans', sans-serif",

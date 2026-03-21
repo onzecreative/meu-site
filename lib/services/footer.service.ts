@@ -1,10 +1,4 @@
-// MIGRAÇÃO SUPABASE: para migrar este serviço consulte
-// /docs/migrar-para-supabase.md
-
-import fs from "fs";
-import path from "path";
-
-const FOOTER_PATH = path.join(process.cwd(), "data", "footer.json");
+import { supabase } from "../supabase";
 
 export interface FooterLink {
   id: string;
@@ -49,10 +43,18 @@ const defaultFooterConfig: FooterConfig = {
   ],
 };
 
-export function getFooterConfig(): FooterConfig {
+export async function getFooterConfig(): Promise<FooterConfig> {
   try {
-    const raw = fs.readFileSync(FOOTER_PATH, "utf8");
-    const parsed = JSON.parse(raw);
+    const { data, error } = await supabase
+      .from("site_content")
+      .select("data")
+      .eq("id", "footer")
+      .single();
+
+    if (error || !data) {
+      return defaultFooterConfig;
+    }
+    const parsed = data.data as Partial<FooterConfig>;
     return {
       ...defaultFooterConfig,
       ...parsed,
@@ -63,14 +65,17 @@ export function getFooterConfig(): FooterConfig {
   }
 }
 
-export function saveFooterConfig(data: Partial<FooterConfig>): FooterConfig {
-  const current = getFooterConfig();
+export async function saveFooterConfig(data: Partial<FooterConfig>): Promise<FooterConfig> {
+  const current = await getFooterConfig();
   const updated: FooterConfig = {
     ...current,
     ...data,
     columns: data.columns ?? current.columns,
   };
-  fs.mkdirSync(path.dirname(FOOTER_PATH), { recursive: true });
-  fs.writeFileSync(FOOTER_PATH, JSON.stringify(updated, null, 2));
+  
+  await supabase
+    .from("site_content")
+    .upsert({ id: "footer", data: updated, updated_at: new Date().toISOString() });
+    
   return updated;
 }

@@ -1,47 +1,62 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 
-const industries = [
+const defaultIndustries = [
   {
     title: "Alimentos & Bebidas",
     desc: "Cadeia de frio completa, rastreabilidade e conformidade sanitária para produtos perecíveis.",
     emoji: "🥩",
-    color: "from-orange-900/40",
   },
   {
     title: "Farmacêutico",
     desc: "Transporte especializado com controle de temperatura, documentação e conformidade ANVISA.",
     emoji: "💊",
-    color: "from-blue-900/40",
   },
   {
     title: "Automotivo",
     desc: "JIT delivery, gestão de estoques e logística de peças com rastreamento avançado.",
     emoji: "🚗",
-    color: "from-slate-800/60",
   },
   {
     title: "E-commerce",
     desc: "Fulfillment, last-mile urbano e gestão de devoluções para operações de alta escala.",
     emoji: "📦",
-    color: "from-emerald-900/40",
   },
   {
     title: "Construção Civil",
     desc: "Movimentação de materiais pesados, equipamentos e insumos para obras em todo o país.",
     emoji: "🏗️",
-    color: "from-yellow-900/40",
   },
   {
     title: "Varejo",
     desc: "Reabastecimento de lojas, cross-docking e gestão de estoque com precisão e velocidade.",
     emoji: "🏪",
-    color: "from-purple-900/40",
   },
 ];
 
 export default function Industries() {
+  const [data, setData] = useState<{
+    sectionTitle: string;
+    title: string;
+    description: string;
+    items: typeof defaultIndustries;
+  }>({
+    sectionTitle: "Setores Atendidos",
+    title: "Expertise em cadasegmento de mercado",
+    description: "Décadas de experiência nos principais setores da economia brasileira.",
+    items: defaultIndustries,
+  });
+
+  useEffect(() => {
+    fetch("/api/admin/section/industries")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json && Object.keys(json).length > 0) setData(json);
+      })
+      .catch(() => {});
+  }, []);
+
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -85,7 +100,7 @@ export default function Industries() {
             textTransform: "uppercase",
             marginBottom: "16px",
           }}>
-            Setores Atendidos
+            {data.sectionTitle}
           </p>
           <h2 style={{
             fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -96,7 +111,7 @@ export default function Industries() {
             lineHeight: 1.1,
             marginBottom: "20px",
           }}>
-            Expertise em cada<br />segmento de mercado
+            {data.title}
           </h2>
           <p style={{
             color: "rgba(255,255,255,0.4)",
@@ -105,7 +120,7 @@ export default function Industries() {
             margin: "0 auto",
             lineHeight: 1.7,
           }}>
-            Décadas de experiência nos principais setores da economia brasileira.
+            {data.description}
           </p>
         </motion.div>
 
@@ -115,7 +130,7 @@ export default function Industries() {
           gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
           gap: "20px",
         }}>
-          {industries.map((industry, i) => (
+          {data.items.map((industry, i) => (
             <motion.div
               key={industry.title}
               initial={{ opacity: 0, y: 30 }}

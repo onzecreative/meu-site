@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import {
   IconTruckDelivery,
@@ -9,13 +9,13 @@ import {
   IconArrowRight,
 } from "@tabler/icons-react";
 
-const services = [
+const defaultServices = [
   {
     number: "01",
     title: "Frete Rodoviário",
     description:
       "Cobertura nacional completa com rastreamento em tempo real. Transferências porta a porta com frota moderna e motoristas certificados.",
-    icon: <IconTruckDelivery size={28} />,
+    icon: "IconTruckDelivery",
     tags: ["Full TL", "LTL", "Rastreamento GPS"],
   },
   {
@@ -23,7 +23,7 @@ const services = [
     title: "Logística Last-Mile",
     description:
       "Entrega urbana expressa com gestão de rotas otimizada por IA. Confirmação de entrega fotográfica e assinatura digital.",
-    icon: <IconPackage size={28} />,
+    icon: "IconPackage",
     tags: ["Express", "Same-day", "Prova de entrega"],
   },
   {
@@ -31,7 +31,7 @@ const services = [
     title: "Carga Frigorificada",
     description:
       "Transporte com controle rigoroso de temperatura para alimentos, farmacêuticos e produtos sensíveis. Conformidade total com ANVISA.",
-    icon: <IconTemperature size={28} />,
+    icon: "IconTemperature",
     tags: ["2°C–8°C", "Congelados", "Farmacêuticos"],
   },
   {
@@ -39,12 +39,40 @@ const services = [
     title: "Carga Pesada & Especial",
     description:
       "Equipamentos de grande porte, maquinários industriais e cargas indivisíveis com escolta e licenças de transporte.",
-    icon: <IconCrane size={28} />,
+    icon: "IconCrane",
     tags: ["Over-dimensional", "Escolta", "Licenciado"],
   },
 ];
 
+const iconMap: Record<string, React.ReactNode> = {
+  IconTruckDelivery: <IconTruckDelivery size={28} />,
+  IconPackage: <IconPackage size={28} />,
+  IconTemperature: <IconTemperature size={28} />,
+  IconCrane: <IconCrane size={28} />,
+};
+
 export default function Services() {
+  const [data, setData] = useState<{
+    sectionTitle: string;
+    title: string;
+    description: string;
+    items: typeof defaultServices;
+  }>({
+    sectionTitle: "Nossos Serviços",
+    title: "Soluções para cada tipo de carga",
+    description: "Da coleta à entrega, cuidamos de tudo com tecnologia, eficiência e comprometimento total com o seu negócio.",
+    items: defaultServices,
+  });
+
+  useEffect(() => {
+    fetch("/api/admin/section/services")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json && Object.keys(json).length > 0) setData(json);
+      })
+      .catch(() => {});
+  }, []);
+
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -75,7 +103,7 @@ export default function Services() {
             textTransform: "uppercase",
             marginBottom: "20px",
           }}>
-            Nossos Serviços
+            {data.sectionTitle}
           </p>
           <h2 style={{
             fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -86,7 +114,7 @@ export default function Services() {
             lineHeight: 1.1,
             marginBottom: "24px",
           }}>
-            Soluções para cada tipo de carga
+            {data.title}
           </h2>
           <p style={{
             color: "rgba(255,255,255,0.5)",
@@ -94,8 +122,7 @@ export default function Services() {
             lineHeight: 1.7,
             marginBottom: "40px",
           }}>
-            Da coleta à entrega, cuidamos de tudo com tecnologia, eficiência e
-            comprometimento total com o seu negócio.
+            {data.description}
           </p>
           <a
             href="#contact"
@@ -128,9 +155,9 @@ export default function Services() {
 
         {/* Right scrollable cards */}
         <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-          {services.map((service, i) => (
+          {data.items.map((service, i) => (
             <motion.div
-              key={service.number}
+              key={service.number + i}
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.12 }}
@@ -153,7 +180,7 @@ export default function Services() {
                 }}>
                   {service.number}
                 </span>
-                <div style={{ color: "#DE3F0B" }}>{service.icon}</div>
+                <div style={{ color: "#DE3F0B" }}>{iconMap[service.icon] || <IconPackage size={28} />}</div>
               </div>
               <h3 style={{
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
