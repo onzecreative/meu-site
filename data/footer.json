@@ -1,0 +1,23 @@
+{
+  "whatsappNumber": "5511900000000",
+  "whatsappMessage": "Olá! Gostaria de solicitar uma cotação.",
+  "description": "Logística de precisão para empresas que exigem o melhor. Tecnologia e compromisso em cada entrega.",
+  "columns": [
+    {
+      "id": "col1",
+      "title": "Blog",
+      "links": [
+        { "id": "l1", "text": "Ver posts", "url": "/blog" },
+        { "id": "l2", "text": "Novidades", "url": "/blog/novidades" }
+      ]
+    },
+    {
+      "id": "col2",
+      "title": "Carreiras",
+      "links": [
+        { "id": "l3", "text": "Vagas abertas", "url": "/carreiras" },
+        { "id": "l4", "text": "Cultura", "url": "/carreiras/cultura" }
+      ]
+    }
+  ]
+}
