@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getHeroConfig, saveHeroConfig } from "@/lib/services/hero.service";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const config = await getHeroConfig();
   return NextResponse.json(config);

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSectionData, saveSectionData } from "@/lib/services/section.service";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }

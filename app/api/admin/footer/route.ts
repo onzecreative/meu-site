@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getFooterConfig, saveFooterConfig } from "@/lib/services/footer.service";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const config = await getFooterConfig();
   return NextResponse.json(config);
