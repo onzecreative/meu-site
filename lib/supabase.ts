@@ -4,4 +4,13 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder
 // Usar a service_role key caso exista, senão usar a anon key para back-end actions
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder";
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: { persistSession: false },
+  global: {
+    fetch: (url, options = {}) => {
+      // Força o Next.js a nunca colocar as queries do Supabase no cache estático/ISR
+      // @ts-ignore
+      return fetch(url, { ...options, cache: "no-store" });
+    },
+  },
+});
