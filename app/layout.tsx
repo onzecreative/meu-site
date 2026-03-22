@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import JsonLd from "./components/JsonLd";
 import WhatsAppButton from "./components/WhatsAppButton";
+import CustomCursor from "./components/CustomCursor";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -10,11 +11,10 @@ const inter = Inter({
   display: "swap",
 });
 
-const plusJakarta = Plus_Jakarta_Sans({
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  variable: "--font-plus-jakarta",
+  variable: "--font-playfair",
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
 });
 
 const rawUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://project-6o5rg.vercel.app";
@@ -23,7 +23,7 @@ const BASE_URL = rawUrl.startsWith("http") ? rawUrl : `https://${rawUrl}`;
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#DE3F0B",
+  themeColor: "#111111",
 };
 
 export const metadata: Metadata = {
@@ -32,63 +32,19 @@ export const metadata: Metadata = {
     default: "LogiNord – Sua Carga, Entregue com Precisão",
     template: "%s | LogiNord",
   },
-  description:
-    "Soluções de logística de ponta para empresas que não comprometem com qualidade, velocidade ou confiabilidade. Frete rodoviário, last-mile e carga especial.",
-  keywords: [
-    "logística",
-    "frete",
-    "transporte",
-    "carga",
-    "last-mile",
-    "logística reversa",
-    "carga frigorificada",
-  ],
-  authors: [{ name: "LogiNord" }],
-  creator: "LogiNord",
-  publisher: "LogiNord",
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
+  description: "Soluções de logística de ponta focadas em precisão e rastreamento em tempo real. Frete seguro e rápido global e regional.",
+  keywords: ["logística", "frete", "transporte internacional", "rastreamento em tempo real", "cadeia de suprimentos"],
+  alternates: { canonical: BASE_URL },
   openGraph: {
     type: "website",
     locale: "pt_BR",
     url: BASE_URL,
     siteName: "LogiNord",
     title: "LogiNord – Sua Carga, Entregue com Precisão",
-    description:
-      "Soluções de logística de ponta para empresas que não comprometem com qualidade, velocidade ou confiabilidade.",
-    images: [
-      {
-        url: `${BASE_URL}/og-image.jpg`,
-        width: 1200,
-        height: 630,
-        alt: "LogiNord – Logística de Precisão",
-      },
-    ],
+    description: "Soluções de logística de ponta focadas em precisão e rastreamento em tempo real.",
+    images: [{ url: `${BASE_URL}/og-image.jpg`, width: 1200, height: 630, alt: "LogiNord" }],
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "LogiNord – Sua Carga, Entregue com Precisão",
-    description:
-      "Soluções de logística de ponta para empresas que não comprometem com qualidade.",
-    images: [`${BASE_URL}/og-image.jpg`],
-    creator: "@loginord",
-  },
-  alternates: {
-    canonical: BASE_URL,
-  },
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-  },
+  robots: "index, follow",
   manifest: "/manifest.webmanifest",
 };
 
@@ -98,14 +54,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${plusJakarta.variable}`}>
+    <html lang="pt-BR" className={`${inter.variable} ${playfair.variable} scroll-smooth`}>
       <head>
-        {/* Preconnect para Google Fonts (redundante mas seguro) */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <JsonLd />
       </head>
-      <body className="antialiased" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+      <body className="antialiased bg-white text-[#111111] font-inter overflow-x-hidden">
+        <CustomCursor />
         {children}
         <WhatsAppButton />
       </body>

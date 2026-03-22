@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { IconArrowRight } from "@tabler/icons-react";
+import { ArrowRight } from "lucide-react";
 
 export interface HeroConfig {
   type: "mp4local" | "youtube" | "url";
@@ -63,7 +63,14 @@ function VideoBackground({ config }: { config: HeroConfig }) {
     return () => observer.disconnect();
   }, []);
 
-  if (isSlowConnection) return null;
+  if (isSlowConnection || isMobile) {
+    // Return image or fallback placeholder in Mobile
+    return (
+      <div className="absolute inset-0 bg-[#DE3F0B]/10 mix-blend-color-dodge">
+        {config?.posterUrl && <img src={config.posterUrl} className="w-full h-full object-cover" alt="Hero background" />}
+      </div>
+    );
+  }
 
   if (config?.type === "youtube" && config?.youtubeId) {
     return (
@@ -82,15 +89,13 @@ function VideoBackground({ config }: { config: HeroConfig }) {
     );
   }
 
-  const src = config?.type === "mp4local" || config?.type === "url" ? config?.videoUrl : null;
+  const src = config?.videoUrl;
   if (!src) return null;
-
-  const mobileSrc = config?.videoUrlMobile || src;
 
   return (
     <div ref={containerRef} className="absolute inset-0">
       {isVisible && (
-        <video
+         <video
           ref={videoRef}
           autoPlay
           muted
@@ -99,15 +104,32 @@ function VideoBackground({ config }: { config: HeroConfig }) {
           poster={config?.posterUrl || undefined}
           className="absolute inset-0 w-full h-full object-cover"
         >
-          {config?.videoUrlMobile && (
-            <source src={config?.videoUrlMobile} media="(max-width: 768px)" type="video/mp4" />
-          )}
           <source src={src} type={src.endsWith(".mov") ? "video/quicktime" : "video/mp4"} />
         </video>
       )}
     </div>
   );
 }
+
+// STAGGER CHILDREN ANIMATION
+const containerVars: any = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const wordVars: any = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1, y: 0,
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+  }
+};
 
 export default function Hero() {
   const [heroConfig, setHeroConfig] = useState<HeroConfig>(defaultHeroConfig);
@@ -122,6 +144,8 @@ export default function Hero() {
       })
       .catch(() => {});
   }, []);
+
+  const titleWords = (heroConfig?.title ?? defaultHeroConfig.title).split(" ");
 
   return (
     <section className="relative min-h-screen flex flex-col justify-end overflow-hidden bg-[#111]">
@@ -141,19 +165,24 @@ export default function Hero() {
         
         {/* Title area (Center-left) */}
         <div className="flex flex-col items-start w-full mt-auto mb-16 md:mb-32">
+          
           <motion.h1
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="font-['Plus_Jakarta_Sans'] font-semibold text-[clamp(44px,7vw,100px)] leading-[1.05] tracking-[-0.03em] text-white max-w-[900px] mb-6 whitespace-pre-line"
+            variants={containerVars}
+            initial="hidden"
+            animate="visible"
+            className="font-playfair font-semibold text-[clamp(44px,7vw,100px)] leading-[1.05] tracking-[-0.03em] text-white max-w-[900px] mb-6 flex flex-wrap gap-x-[clamp(10px,1.5vw,20px)]"
           >
-            {heroConfig?.title ?? defaultHeroConfig.title}
+            {titleWords.map((word, i) => (
+              <motion.span key={i} variants={wordVars} className={word.includes('\\n') ? 'w-full block h-0 border-none m-0' : 'inline-block'}>
+                {word.includes('\\n') ? '' : word.replace('\n', '')}
+              </motion.span>
+            ))}
           </motion.h1>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="flex items-center gap-3"
           >
             <div className="w-3 h-3 rounded-full border-[2.5px] border-[#E0400C] flex-shrink-0" />
@@ -168,7 +197,7 @@ export default function Hero() {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.6 }}
+            transition={{ duration: 1, delay: 1 }}
             className="text-white/80 text-[15px] leading-[1.6] max-w-[300px] whitespace-pre-line font-medium"
           >
             {heroConfig?.bottomLeftText ?? defaultHeroConfig.bottomLeftText}
@@ -177,19 +206,25 @@ export default function Hero() {
           <motion.a
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
             href={heroConfig?.bottomRightUrl ?? defaultHeroConfig.bottomRightUrl}
-            className="group flex items-center gap-4 border border-white/20 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full pl-6 pr-2 py-2 transition-all w-fit"
+            className="group flex items-center gap-4 bg-[#E0400C] rounded-full pl-6 pr-2 py-2 transition-all w-fit shadow-lg hover:shadow-[#E0400C]/30 hover:-translate-y-1 relative overflow-hidden"
           >
-            <span className="text-white font-medium text-[14px] tracking-wide">
+            <div className="absolute inset-0 -translate-x-[150%] group-hover:animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+            <span className="text-white font-bold text-[14px] tracking-wide relative z-10">
               {heroConfig?.bottomRightText ?? defaultHeroConfig.bottomRightText}
             </span>
-            <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-[#E0400C] group-hover:border-[#E0400C] transition-colors">
-              <IconArrowRight size={18} className="text-white group-hover:translate-x-0.5 transition-transform" />
+            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white transition-colors relative z-10">
+              <ArrowRight size={18} className="text-white group-hover:text-[#E0400C] group-hover:translate-x-0.5 transition-all" />
             </div>
           </motion.a>
         </div>
       </div>
+      <style>{`
+        @keyframes shimmer {
+          100% { transform: translateX(150%); }
+        }
+      `}</style>
     </section>
   );
 }

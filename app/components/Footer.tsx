@@ -3,11 +3,11 @@ import { useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import {
-  IconArrowRight,
-  IconBrandLinkedin,
-  IconBrandInstagram,
-  IconBrandTwitter,
-} from "@tabler/icons-react";
+  ArrowRight,
+  Linkedin,
+  Instagram,
+  Twitter,
+} from "lucide-react";
 
 interface FooterLink {
   id: string;
@@ -78,12 +78,12 @@ export default function Footer() {
         {/* Left Column - Brand & CTA */}
         <div className="col-span-1 md:col-span-5 flex flex-col items-start pr-0 md:pr-12">
           <a href="#" className="flex items-center gap-2 text-white no-underline mb-12">
-            <span className="font-['Plus_Jakarta_Sans'] font-medium text-[24px] tracking-tight text-white flex items-center gap-1">
+            <span className="font-playfair font-medium text-[24px] tracking-tight text-white flex items-center gap-1">
               LogiNord
             </span>
           </a>
 
-          <h3 className="font-['Plus_Jakarta_Sans'] font-semibold text-[40px] text-white leading-[1.1] tracking-[-0.02em] mb-4">
+          <h3 className="font-playfair font-semibold text-[40px] text-white leading-[1.1] tracking-[-0.02em] mb-4">
             Ready to start? Let&apos;s work together.
           </h3>
           <p className="text-white/60 text-[16px] leading-[1.6] mb-12 max-w-[340px]">
@@ -98,7 +98,7 @@ export default function Footer() {
           >
             Falar no WhatsApp
             <div className="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center group-hover:translate-x-1 transition-transform">
-              <IconArrowRight size={16} />
+              <ArrowRight size={16} />
             </div>
           </a>
         </div>
@@ -160,7 +160,7 @@ export default function Footer() {
 
           {/* Social Icons */}
           <div className="flex gap-3 mt-12">
-            {[IconBrandLinkedin, IconBrandInstagram, IconBrandTwitter].map((Icon, i) => (
+            {[Linkedin, Instagram, Twitter].map((Icon, i) => (
               <a
                 key={i}
                 href="#"
