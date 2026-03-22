@@ -51,8 +51,8 @@ export default function Testimonials() {
   const safeItems = data.items && data.items.length > 0 ? data.items : defaultTestimonials;
 
   return (
-    <section id="testimonials" className="w-full bg-white pt-32 pb-40 overflow-hidden">
-      <div className="max-w-[1280px] mx-auto px-6" ref={ref}>
+    <section id="testimonials" className="w-full bg-white py-16 md:py-24 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24" ref={ref}>
         {/* Header */}
         <div className="flex flex-col items-start mb-20">
           <div className="w-3 h-3 rounded-full border-[2.5px] border-[#E0400C] mb-8" />

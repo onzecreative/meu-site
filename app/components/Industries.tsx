@@ -42,8 +42,8 @@ export default function Industries() {
   const items = data?.items && data.items.length > 0 ? data.items : defaultIndustries;
 
   return (
-    <section id="industries" className="w-full bg-white pt-32 pb-32">
-      <div className="max-w-[1280px] mx-auto px-6" ref={ref}>
+    <section id="industries" className="w-full bg-white py-16 md:py-24">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24" ref={ref}>
         
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-20">
@@ -59,17 +59,16 @@ export default function Industries() {
         </div>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {items.map((ind: any, i: number) => (
             <motion.div
               key={ind?.title ?? i}
               initial={{ opacity: 0, y: 40 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="group cursor-pointer flex flex-col"
+              className="group cursor-pointer flex flex-col p-6 rounded-2xl bg-[#FAFAFA] card-hover"
             >
               {/* Image box/Placeholder */}
-              <div className="w-full aspect-[4/3] bg-[#FAFAFA] rounded-3xl mb-8 overflow-hidden relative shadow-sm hover:shadow-xl transition-shadow duration-500">
+              <div className="w-full aspect-[4/3] bg-white rounded-xl mb-6 overflow-hidden relative shadow-sm">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <img 
                   src={ind?.image || defaultIndustries[i]?.image} 
@@ -79,8 +78,8 @@ export default function Industries() {
               </div>
 
               {/* Text Content */}
-              <div className="flex flex-col items-start px-2">
-                <h3 className="font-playfair font-semibold text-[26px] md:text-[32px] text-[#111111] leading-[1.2] tracking-[-0.02em] mb-4">
+              <div className="flex flex-col items-start">
+                <h3 className="font-playfair font-semibold text-[26px] mb-2 leading-tight">
                   {ind?.title ?? ""}
                 </h3>
                 <p className="text-[#666666] text-[16px] md:text-[18px] font-medium leading-[1.5] mb-8">

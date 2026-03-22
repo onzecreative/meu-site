@@ -72,8 +72,11 @@ export default function Footer() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <footer id="contact" className="w-full bg-[#111111] pt-32 pb-12 rounded-t-[40px] mt-[-40px] z-10 relative">
-      <div className="max-w-[1280px] mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-8" ref={ref}>
+    <footer className="w-full bg-[#111111] border-t border-white/10 relative overflow-hidden px-6 md:px-12 py-16">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-20 relative z-10" ref={ref}>
         
         {/* Left Column - Brand & CTA */}
         <div className="col-span-1 md:col-span-5 flex flex-col items-start pr-0 md:pr-12">
@@ -171,13 +174,14 @@ export default function Footer() {
             ))}
           </div>
         </div>
+        </div>
       </div>
 
       {/* Bottom Bar */}
       <div className="max-w-[1280px] mx-auto px-6 mt-24 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
-        <p className="text-white/30 text-[14px]">
-          © {new Date().getFullYear()} LogiNord. Made in Framer template clone.
-        </p>
+          <div className="text-sm text-gray-400">
+            © {new Date().getFullYear()} LogiNord Integrada Ltda. Todos os direitos reservados.
+          </div>
         <p className="text-white/30 text-[14px]">
           All rights reserved.
         </p>

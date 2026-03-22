@@ -31,7 +31,7 @@ export default function Navbar() {
         scrolled ? "bg-[#111111]/80 backdrop-blur-xl border-b border-white/10 py-4" : "bg-transparent py-6"
       }`}
     >
-      <div className="max-w-[1280px] mx-auto px-6 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between z-50">
         {/* Logo */}
         <a href="/" className="flex items-center gap-2 text-white no-underline group scale-100 hover:scale-105 transition-transform z-50">
           <span className="font-playfair font-medium text-[22px] tracking-tight text-white flex items-center gap-1">
@@ -68,7 +68,7 @@ export default function Navbar() {
         <div className="flex items-center gap-4 z-50">
           <a
             href="/contato"
-            className="hidden md:flex items-center gap-2 bg-[#E0400C] hover:bg-[#ff551b] text-white px-5 py-2.5 rounded-full text-[13px] font-bold transition-all shadow-lg shadow-[#E0400C]/20 hover:shadow-[#E0400C]/40 hover:-translate-y-0.5 border border-[#E0400C] overflow-hidden relative group"
+            className="hidden md:flex items-center gap-2 bg-[#E0400C] text-white px-6 py-3 rounded-full text-[13px] font-bold transition-all duration-300 hover:opacity-90 shadow-lg cursor-pointer overflow-hidden relative group"
           >
             <span className="relative z-10 flex items-center gap-2">Solicitar Orçamento <ArrowRight size={16} /></span>
             <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent" />

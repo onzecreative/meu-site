@@ -39,16 +39,16 @@ export default function QuickFacts() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="stats" className="w-full bg-white pt-24 pb-0 flex flex-col items-center">
+    <section id="stats" className="w-full bg-white py-16 md:py-24 flex flex-col items-center">
       
       {/* Tiny Orange Circle Indicator */}
-      <div className="w-full max-w-[1280px] mx-auto px-6 mb-24">
+      <div className="w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-24 mb-16">
         <div className="w-3 h-3 rounded-full border-[2.5px] border-[#E0400C]" />
       </div>
 
-      <div className="w-full max-w-[1280px] mx-auto px-6" ref={ref}>
+      <div className="w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-24" ref={ref}>
         {/* Stats grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16 md:gap-y-0 mb-32">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-16">
           {(data?.stats || []).map((stat: any, i: number) => {
             const parsed = parseStat(stat?.number ?? "");
             return (
@@ -59,7 +59,7 @@ export default function QuickFacts() {
                 transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 className="flex flex-col items-start group"
               >
-                <div className="font-playfair font-semibold text-[54px] md:text-[64px] text-[#111111] leading-none mb-4 tracking-[-0.03em]">
+                <div className="font-playfair font-bold text-3xl md:text-4xl text-[#111111] leading-none mb-4 tracking-[-0.03em]">
                   {inView && parsed.isValid ? (
                     <CountUp
                       start={0}
@@ -73,7 +73,7 @@ export default function QuickFacts() {
                     stat?.number ?? ""
                   )}
                 </div>
-                <div className="text-[17px] text-[#666666] font-medium tracking-tight">
+                <div className="text-sm text-[#666666] font-medium tracking-tight">
                   {stat?.label ?? ""}
                 </div>
               </motion.div>
@@ -83,7 +83,7 @@ export default function QuickFacts() {
       </div>
 
       {/* Partner strip */}
-      <div className="w-full bg-[#FAFAFA] py-16 overflow-hidden border-y border-black/[0.04] group/marquee">
+      <div className="w-full bg-[#FAFAFA] py-6 overflow-hidden border-y border-black/[0.04] group/marquee">
         <div className="w-full max-w-[1280px] mx-auto px-6 mb-12 flex items-center justify-start">
            <div className="w-3 h-3 rounded-full border-[2.5px] border-[#E0400C]" />
         </div>

@@ -160,8 +160,7 @@ export default function Hero() {
         backgroundSize: "60px 60px"
       }} />
 
-      {/* Content */}
-      <div className="relative w-full max-w-[1280px] mx-auto px-6 pb-12 pt-40 md:pb-16 flex flex-col h-full justify-center">
+      <div className="relative w-full max-w-7xl mx-auto px-6 md:px-12 pt-24 pb-16 flex flex-col h-full justify-center">
         
         {/* Title area (Center-left) */}
         <div className="flex flex-col items-start w-full mt-auto mb-16 md:mb-32">
@@ -204,11 +203,11 @@ export default function Hero() {
           </motion.p>
 
           <motion.a
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
             href={heroConfig?.bottomRightUrl ?? defaultHeroConfig.bottomRightUrl}
-            className="group flex items-center gap-4 bg-[#E0400C] rounded-full pl-6 pr-2 py-2 transition-all w-fit shadow-lg hover:shadow-[#E0400C]/30 hover:-translate-y-1 relative overflow-hidden"
+            className="group flex items-center gap-4 bg-[#E0400C] rounded-full px-6 py-3 transition-all duration-300 shadow-lg hover:opacity-90 cursor-pointer text-white relative overflow-hidden"
           >
             <div className="absolute inset-0 -translate-x-[150%] group-hover:animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
             <span className="text-white font-bold text-[14px] tracking-wide relative z-10">
