@@ -71,13 +71,13 @@ function VideoBackground({ config }: { config: HeroConfig }) {
   if (isSlowConnection) return null;
 
   // YouTube embed
-  if (config.type === "youtube" && config.youtubeId) {
+  if (config?.type === "youtube" && config?.youtubeId) {
     return (
       <div ref={containerRef} style={{ position: "absolute", inset: 0 }}>
         {isVisible && (
           <iframe
             style={{ ...sharedStyle, border: "none", pointerEvents: "none" }}
-            src={`https://www.youtube.com/embed/${config.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${config.youtubeId}&controls=0&showinfo=0&rel=0&enablejsapi=1&loading=lazy&playsinline=1`}
+            src={`https://www.youtube.com/embed/${config?.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${config?.youtubeId}&controls=0&showinfo=0&rel=0&enablejsapi=1&loading=lazy&playsinline=1`}
             allow="autoplay; encrypted-media"
             allowFullScreen
             loading="lazy"
@@ -89,10 +89,10 @@ function VideoBackground({ config }: { config: HeroConfig }) {
   }
 
   // MP4 local ou URL pública
-  const src = config.type === "mp4local" || config.type === "url" ? config.videoUrl : null;
+  const src = config?.type === "mp4local" || config?.type === "url" ? config?.videoUrl : null;
   if (!src) return null;
 
-  const mobileSrc = config.videoUrlMobile || src;
+  const mobileSrc = config?.videoUrlMobile || src;
   const activeSrc = isMobile ? mobileSrc : src;
 
   return (
@@ -104,12 +104,12 @@ function VideoBackground({ config }: { config: HeroConfig }) {
           muted
           loop
           playsInline
-          poster={config.posterUrl || undefined}
+          poster={config?.posterUrl || undefined}
           style={sharedStyle}
           preload="auto"
         >
           {/* Source mobile (480p) */}
-          {config.videoUrlMobile && (
+          {config?.videoUrlMobile && (
             <source src={config.videoUrlMobile} media="(max-width: 768px)" type="video/mp4" />
           )}
           {/* Source desktop */}

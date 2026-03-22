@@ -58,7 +58,7 @@ export default function QuickFacts() {
             textTransform: "uppercase",
             marginBottom: "16px",
           }}>
-            {data.sectionTitle}
+            {data?.sectionTitle ?? ""}
           </p>
           <h2 style={{
             fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -68,7 +68,7 @@ export default function QuickFacts() {
             letterSpacing: "-0.03em",
             lineHeight: 1.1,
           }}>
-            {data.title}
+            {data?.title ?? ""}
           </h2>
         </motion.div>
 
@@ -81,7 +81,7 @@ export default function QuickFacts() {
         }}>
           {(data.stats || []).map((stat, i) => (
             <motion.div
-              key={stat.number}
+              key={stat?.number ?? i}
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.1 }}
@@ -100,7 +100,7 @@ export default function QuickFacts() {
                 lineHeight: 1,
                 marginBottom: "12px",
               }}>
-                {stat.number}
+                {stat?.number ?? ""}
               </div>
               <div style={{
                 fontSize: "16px",
@@ -108,10 +108,10 @@ export default function QuickFacts() {
                 color: "#111827",
                 marginBottom: "6px",
               }}>
-                {stat.label}
+                {stat?.label ?? ""}
               </div>
               <div style={{ fontSize: "13px", color: "#6B7280" }}>
-                {stat.sub}
+                {stat?.sub ?? ""}
               </div>
             </motion.div>
           ))}

@@ -100,7 +100,7 @@ export default function Industries() {
             textTransform: "uppercase",
             marginBottom: "16px",
           }}>
-            {data.sectionTitle}
+            {data?.sectionTitle ?? ""}
           </p>
           <h2 style={{
             fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -111,7 +111,7 @@ export default function Industries() {
             lineHeight: 1.1,
             marginBottom: "20px",
           }}>
-            {data.title}
+            {data?.title ?? ""}
           </h2>
           <p style={{
             color: "rgba(255,255,255,0.4)",
@@ -120,7 +120,7 @@ export default function Industries() {
             margin: "0 auto",
             lineHeight: 1.7,
           }}>
-            {data.description}
+            {data?.description ?? ""}
           </p>
         </motion.div>
 
@@ -143,6 +143,8 @@ export default function Industries() {
                 padding: "44px 36px",
                 cursor: "pointer",
                 transition: "all 0.35s",
+                display: "flex", // Added for layout
+                gap: "20px", // Added for spacing
               }}
               whileHover={{
                 scale: 1.02,
@@ -150,26 +152,26 @@ export default function Industries() {
                 boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
               }}
             >
-              <div style={{ fontSize: "44px", marginBottom: "20px" }}>
-                {industry.emoji}
+              <span style={{ fontSize: "28px", flexShrink: 0 }}>{industry?.emoji ?? ""}</span>
+              <div>
+                <h3 style={{
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  fontWeight: 700,
+                  fontSize: "20px",
+                  color: "white",
+                  marginBottom: "8px",
+                  letterSpacing: "-0.01em",
+                }}>
+                  {industry?.title ?? ""}
+                </h3>
+                <p style={{
+                  color: "rgba(255,255,255,0.5)",
+                  fontSize: "15px",
+                  lineHeight: 1.6,
+                }}>
+                  {industry?.desc ?? ""}
+                </p>
               </div>
-              <h3 style={{
-                fontFamily: "'Plus Jakarta Sans', sans-serif",
-                fontWeight: 700,
-                fontSize: "20px",
-                color: "white",
-                marginBottom: "12px",
-                letterSpacing: "-0.02em",
-              }}>
-                {industry.title}
-              </h3>
-              <p style={{
-                color: "rgba(255,255,255,0.45)",
-                fontSize: "15px",
-                lineHeight: 1.65,
-              }}>
-                {industry.desc}
-              </p>
             </motion.div>
           ))}
         </div>

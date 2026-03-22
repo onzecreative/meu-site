@@ -60,7 +60,7 @@ export default function Footer() {
       .catch(() => {});
   }, []);
 
-  const whatsappHref = `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent(config.whatsappMessage)}`;
+  const whatsappHref = `https://wa.me/${config?.whatsappNumber ?? ""}?text=${encodeURIComponent(config?.whatsappMessage ?? "")}`;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,7 +130,7 @@ export default function Footer() {
               maxWidth: "280px",
             }}
           >
-            {config.description}
+            {config?.description ?? ""}
           </p>
 
           {/* Newsletter */}
@@ -201,13 +201,13 @@ export default function Footer() {
                 marginBottom: "20px",
               }}
             >
-              {col.title}
+              {col?.title ?? ""}
             </h4>
             <ul style={{ listStyle: "none", padding: 0 }}>
-              {col.links.map((link) => (
-                <li key={link.id} style={{ marginBottom: "12px" }}>
+              {(col?.links || []).map((link) => (
+                <li key={link?.id ?? Math.random()} style={{ marginBottom: "12px" }}>
                   <a
-                    href={link.url}
+                    href={link?.url ?? "#"}
                     style={{
                       color: "rgba(255,255,255,0.5)",
                       textDecoration: "none",
@@ -221,7 +221,7 @@ export default function Footer() {
                       ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.5)")
                     }
                   >
-                    {link.text}
+                    {link?.text ?? ""}
                   </a>
                 </li>
               ))}

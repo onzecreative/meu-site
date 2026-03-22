@@ -133,14 +133,14 @@ export default function Testimonials() {
               marginBottom: "40px",
               letterSpacing: "0.01em",
             }}>
-              &ldquo;{t.quote}&rdquo;
+              &ldquo;{t?.quote ?? ""}&rdquo;
             </p>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "16px" }}>
               <div style={{
                 width: "52px",
                 height: "52px",
                 borderRadius: "50%",
-                background: t.color,
+                background: t?.color ?? "#333",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -149,14 +149,14 @@ export default function Testimonials() {
                 color: "white",
                 flexShrink: 0,
               }}>
-                {t.initials}
+                {t?.initials ?? ""}
               </div>
               <div style={{ textAlign: "left" }}>
                 <div style={{ fontWeight: 700, fontSize: "16px", color: "white" }}>
-                  {t.name}
+                  {t?.name ?? ""}
                 </div>
                 <div style={{ fontSize: "14px", color: "rgba(255,255,255,0.4)" }}>
-                  {t.role} · {t.company}
+                  {t?.role ?? ""} {t?.company ? `· ${t.company}` : ""}
                 </div>
               </div>
             </div>

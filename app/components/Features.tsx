@@ -94,7 +94,7 @@ export default function Features() {
             textTransform: "uppercase",
             marginBottom: "16px",
           }}>
-            {data.sectionTitle}
+            {data?.sectionTitle ?? ""}
           </p>
           <h2 style={{
             fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -104,7 +104,7 @@ export default function Features() {
             letterSpacing: "-0.03em",
             lineHeight: 1.1,
           }}>
-            {data.title}
+            {data?.title ?? ""}
           </h2>
         </motion.div>
 
@@ -145,7 +145,7 @@ export default function Features() {
                 color: "#DE3F0B",
                 marginBottom: "20px",
               }}>
-                {iconMap[feature.icon] || <IconMapPin size={24} />}
+                {feature?.icon && iconMap[feature.icon] ? iconMap[feature.icon] : <IconMapPin size={24} />}
               </div>
               <h3 style={{
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -155,14 +155,14 @@ export default function Features() {
                 marginBottom: "10px",
                 letterSpacing: "-0.02em",
               }}>
-                {feature.title}
+                {feature?.title ?? ""}
               </h3>
               <p style={{
                 color: "#6B7280",
                 fontSize: "15px",
                 lineHeight: 1.65,
               }}>
-                {feature.desc}
+                {feature?.desc ?? ""}
               </p>
             </motion.div>
           ))}

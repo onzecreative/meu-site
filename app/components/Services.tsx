@@ -103,7 +103,7 @@ export default function Services() {
             textTransform: "uppercase",
             marginBottom: "20px",
           }}>
-            {data.sectionTitle}
+            {data?.sectionTitle ?? ""}
           </p>
           <h2 style={{
             fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -114,7 +114,7 @@ export default function Services() {
             lineHeight: 1.1,
             marginBottom: "24px",
           }}>
-            {data.title}
+            {data?.title ?? ""}
           </h2>
           <p style={{
             color: "rgba(255,255,255,0.5)",
@@ -122,7 +122,7 @@ export default function Services() {
             lineHeight: 1.7,
             marginBottom: "40px",
           }}>
-            {data.description}
+            {data?.description ?? ""}
           </p>
           <a
             href="#contact"
@@ -178,9 +178,9 @@ export default function Services() {
                   color: "rgba(255,255,255,0.2)",
                   letterSpacing: "0.05em",
                 }}>
-                  {service.number}
+                  {service?.number ?? ""}
                 </span>
-                <div style={{ color: "#DE3F0B" }}>{iconMap[service.icon] || <IconPackage size={28} />}</div>
+                <div style={{ color: "#DE3F0B" }}>{service?.icon && iconMap[service.icon] ? iconMap[service.icon] : <IconPackage size={28} />}</div>
               </div>
               <h3 style={{
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -190,7 +190,7 @@ export default function Services() {
                 marginBottom: "14px",
                 letterSpacing: "-0.02em",
               }}>
-                {service.title}
+                {service?.title ?? ""}
               </h3>
               <p style={{
                 color: "rgba(255,255,255,0.5)",
@@ -198,10 +198,10 @@ export default function Services() {
                 lineHeight: 1.7,
                 marginBottom: "20px",
               }}>
-                {service.description}
+                {service?.description ?? ""}
               </p>
               <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-                {service.tags.map((tag) => (
+                {(service?.tags || []).map((tag) => (
                   <span key={tag} style={{
                     fontSize: "12px",
                     fontWeight: 600,
