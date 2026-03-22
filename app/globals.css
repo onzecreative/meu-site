@@ -1,17 +1,19 @@
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
 @theme {
-  --color-accent: #DE3F0B;
-  --color-bg-dark: #1C1C1C;
-  --color-text-light: #FFFFFF;
+  --font-figtree: var(--font-figtree);
+  --color-primary: #E8431A;
+  --color-brand-dark: #1A0500;
+  --color-brand-light: #F2F0EB;
+  --color-brand-gray: #E0DDD8;
+  --color-text-main: #1A1A1A;
 }
 
 :root {
-  --accent: #DE3F0B;
-  --bg-dark: #1C1C1C;
-  --text-light: #FFFFFF;
+  --primary: #E8431A;
+  --brand-dark: #1A0500;
+  --brand-light: #F2F0EB;
+  --text-main: #1A1A1A;
 }
 
 html {
@@ -21,42 +23,54 @@ html {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--bg-dark);
-  color: var(--text-light);
+  background-color: var(--brand-light);
+  color: var(--text-main);
   overflow-x: hidden;
 }
 
+/* Typography Overrides (Framer Matches) */
+h1, h2, h3, h4, h5, h6 {
+  color: inherit;
+  font-family: var(--font-figtree), sans-serif;
+}
+
 h1 { 
-  font-size: 2.25rem; 
-  line-height: 2.5rem; 
-  font-weight: 700; 
-  letter-spacing: -0.025em; 
+  font-size: 72px; 
+  font-weight: 900; 
+  letter-spacing: -2px; 
+  line-height: 1.1;
 }
 h2 { 
-  font-size: 1.875rem; 
-  line-height: 2.25rem; 
-  font-weight: 700; 
+  font-size: 48px; 
+  font-weight: 800; 
+  line-height: 1.15;
+  letter-spacing: -1px;
 }
 h3 { 
-  font-size: 1.25rem; 
-  line-height: 1.75rem; 
-  font-weight: 600; 
+  font-size: 28px; 
+  font-weight: 700; 
+  line-height: 1.25;
 }
 p { 
-  font-size: 1rem; 
-  line-height: 1.625; 
+  font-size: 16px; 
+  line-height: 1.7; 
+  font-weight: 400;
 }
 
 @media (min-width: 768px) {
-  h1 { font-size: 3.75rem; line-height: 1; }
-  h2 { font-size: 2.25rem; line-height: 2.5rem; }
-  h3 { font-size: 1.5rem; line-height: 2rem; }
+  h1 { font-size: 86px; }
+  h2 { font-size: 64px; }
+  p { font-size: 18px; }
+}
+
+@media (min-width: 1280px) {
+  h1 { font-size: 96px; }
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background-color: #111; }
-::-webkit-scrollbar-thumb { background-color: #DE3F0B; border-radius: 3px; }
+::-webkit-scrollbar-track { background-color: var(--brand-dark); }
+::-webkit-scrollbar-thumb { background-color: var(--primary); border-radius: 3px; }
 
 @keyframes marquee {
   0% { transform: translateX(0); }
@@ -71,5 +85,5 @@ p {
 }
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.06);
 }

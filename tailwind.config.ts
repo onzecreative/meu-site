@@ -9,12 +9,14 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        inter: ["var(--font-inter)", "sans-serif"],
-        playfair: ["var(--font-playfair)", "serif"],
+        figtree: ["var(--font-figtree)", "sans-serif"],
       },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        primary: "#E8431A",
+        brandDark: "#1A0500",
+        brandLight: "#F2F0EB",
+        brandGray: "#E0DDD8",
+        textMain: "#1A1A1A",
       },
     },
   },

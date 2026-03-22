@@ -1,32 +1,44 @@
 "use client";
+import { useEffect, useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import { ArrowRight, ShieldCheck, Clock, Globe } from "lucide-react";
+import Label from "./ui/Label";
+import Button from "./ui/Button";
 
-const getIcon = (i: number) => {
-  if (i === 0) return <Clock size={20} className="text-[#E0400C]" />;
-  if (i === 1) return <ShieldCheck size={20} className="text-[#E0400C]" />;
-  return <Globe size={20} className="text-[#E0400C]" />;
-};
+// SVG Icons matching the requested logistics differentiators
+const Icons = [
+  () => (
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E8431A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </svg>
+  ),
+  () => (
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E8431A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+    </svg>
+  ),
+  () => (
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E8431A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>
+  ),
+  () => (
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E8431A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+  )
+];
 
 const defaultFeatures = [
-  {
-    title: "Real-Time Tracking",
-    desc: "Know exactly where your goods are going at all times with our advanced tracking systems.",
-  },
-  {
-    title: "Industry Experts",
-    desc: "Teams that know your requirements down to the smallest detail and regulations.",
-  },
-  {
-    title: "Global Reach",
-    desc: "We ensure fast, reliable deliveries across the most challenging international borders.",
-  }
+  { title: "Certified Fleet", desc: "Modern vehicles equipped for specialized transport compliance." },
+  { title: "Real-Time Visibility", desc: "Track every step of the journey with our advanced client portal." },
+  { title: "Fast Delivery 20+ Countries", desc: "Cross-border efficiency covering major hubs worldwide." },
+  { title: "Multilingual Support", desc: "Our 24/7 team speaks your language to ensure flawless communication." },
 ];
 
 export default function Features() {
   const [data, setData] = useState<any>({
     title: "Why Leading Businesses Rely on Us",
+    subtitle: "We combine operational excellence with robust infrastructure.",
     items: defaultFeatures,
   });
 
@@ -41,78 +53,63 @@ export default function Features() {
 
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
-
+  
   const items = data?.items && data.items.length > 0 ? data.items : defaultFeatures;
 
   return (
-    <section id="features" className="w-full bg-[#FAFAFA] py-16 md:py-24 border-y border-black/[0.04] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24" ref={ref}>
-        <div className="flex flex-col items-center text-center mb-20">
-           <div className="w-3 h-3 rounded-full border-[2.5px] border-[#E0400C] mb-8 animate-pulse" />
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="font-playfair font-semibold text-[44px] md:text-[56px] text-[#111111] leading-[1.05] tracking-[-0.03em] max-w-[800px]"
-            >
-              {data?.title ?? "Why Leading Businesses Rely on Us"}
-            </motion.h2>
-        </div>
-
-        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-center">
-          
-          {/* Left Large Image */}
-          <motion.div 
-            initial={{ opacity: 0, x: -40 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full lg:w-1/2 relative"
+    <section id="features" className="w-full bg-white py-24 md:py-32">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row gap-16 md:gap-12" ref={ref}>
+        
+        {/* Left Column */}
+        <div className="w-full md:w-[35%] flex flex-col items-start pr-0 md:pr-12">
+          <Label text="Why LogiNord" />
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="text-[#1A1A1A] mb-6"
           >
-            <div className="w-full aspect-square md:aspect-[4/3] bg-gradient-to-br from-[#E0400C]/10 to-transparent rounded-[40px] overflow-hidden relative shadow-2xl">
-              <img src="https://picsum.photos/seed/truck-hero/1000/1000" alt="Why Choose Us" className="w-full h-full object-cover" />
-              {/* Pulse Badges Floating on Image */}
-              <div className="absolute top-8 left-8 bg-white/90 backdrop-blur-md px-6 py-4 rounded-2xl shadow-xl flex items-center gap-4 animate-[bounce_4s_infinite]">
-                 <div className="w-12 h-12 rounded-full bg-[#E0400C]/20 flex items-center justify-center animate-pulse">
-                    <ShieldCheck size={24} className="text-[#E0400C]" />
-                 </div>
-                 <div>
-                    <p className="font-playfair font-bold text-[18px]">100% Safe</p>
-                    <p className="text-black/50 text-[13px] font-semibold">ISO 9001 Certified</p>
-                 </div>
-              </div>
-            </div>
+            {data?.title ?? "Why Leading Businesses Rely on Us"}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            className="text-[#1A1A1A]/70 mb-10 max-w-[340px]"
+          >
+            {data?.subtitle ?? "We combine operational excellence with robust infrastructure."}
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+          >
+            <Button variant="outline-dark" text="Know More About Us" href="/sobre" />
           </motion.div>
-
-          {/* Right List */}
-          <div className="w-full lg:w-1/2 flex flex-col">
-            {items.map((feat: any, i: number) => {
-              const num = (i + 1).toString().padStart(2, "0");
-              return (
-                <motion.div
-                  key={feat?.title ?? i}
-                  initial={{ opacity: 0, x: 40 }}
-                  animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
-                  className="group py-10 border-b border-black/[0.08] last:border-0 flex flex-col md:flex-row gap-6 cursor-pointer hover:bg-white/50 -mx-6 px-6 rounded-2xl transition-colors"
-                >
-                  <div className="flex-shrink-0 w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(224,64,12,0.2)] transition-all duration-300">
-                     {getIcon(i)}
-                  </div>
-
-                  <div className="flex-1 flex flex-col items-start pt-1">
-                    <h3 className="font-playfair font-semibold text-[26px] md:text-[32px] text-[#111111] leading-[1.1] tracking-[-0.02em] mb-4">
-                      {feat?.title ?? ""}
-                    </h3>
-                    <p className="text-[#666666] text-[16px] md:text-[18px] font-medium leading-[1.6]">
-                      {feat?.desc ?? ""}
-                    </p>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-
         </div>
+
+        {/* Right Column Grid 2x2 */}
+        <div className="w-full md:w-[65%] grid grid-cols-1 md:grid-cols-2 gap-6">
+          {items.map((feat: any, i: number) => {
+            const Icon = Icons[i % Icons.length];
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.97, y: 20 }}
+                animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.1 * i, ease: "easeOut" }}
+                className="flex flex-col items-center justify-center text-center bg-[#F2F0EB] p-10 rounded-2xl aspect-square md:aspect-auto hover:-translate-y-2 transition-transform duration-300"
+              >
+                <div className="mb-6 bg-white p-4 rounded-full shadow-sm">
+                  <Icon />
+                </div>
+                <h3 className="text-[#1A1A1A] font-bold text-[22px] mb-3">{feat?.title ?? ""}</h3>
+                <p className="text-[#1A1A1A]/60 text-[15px]">{feat?.desc ?? ""}</p>
+              </motion.div>
+            );
+          })}
+        </div>
+
       </div>
     </section>
   );

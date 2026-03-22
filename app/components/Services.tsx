@@ -1,44 +1,36 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import { useInView } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import Label from "./ui/Label";
 
 const defaultServices = [
   {
-    title: "Air Route",
-    description: "Covering global destinations with speed and reliability. Ensure your cargo reaches anywhere in the world seamlessly.",
-    number: "01",
-    linkText: "See Detail",
-    image: "https://picsum.photos/seed/air/800/800",
+    title: "National & International Freight",
+    desc: "From local deliveries to cross-border transport, we offer reliable freight solutions tailored to your schedule.",
+    image: "https://picsum.photos/seed/trucks2/1200/800",
   },
   {
-    title: "Sea Route",
-    description: "Delivering across continents. Economical and massive scale transport for non-perishable long-distance freight.",
-    number: "02",
-    linkText: "See Detail",
-    image: "https://picsum.photos/seed/sea/800/800",
+    title: "Regional Distribution",
+    desc: "Efficient short-haul transit ensuring that localized supply chains run seamlessly without costly delays.",
+    image: "https://picsum.photos/seed/boxes/1200/800",
   },
   {
-    title: "Land Route",
-    description: "Over the road transportation. Flexible fleets serving regional nodes precisely on schedule.",
-    number: "03",
-    linkText: "See Detail",
-    image: "https://picsum.photos/seed/land/800/800",
+    title: "Cold Chain Logistics",
+    desc: "Temperature-controlled transport to keep sensitive goods strictly within compliance from origin to destination.",
+    image: "https://picsum.photos/seed/ice/1200/800",
   },
 ];
 
 export default function Services() {
   const [data, setData] = useState<any>({
     title: "Logistics that fit your needs.",
+    subtitle: "From temperature-controlled transport to regional distribution — we've got it covered.",
     items: defaultServices,
   });
 
-  const [activeIdx, setActiveIdx] = useState(0);
-
   useEffect(() => {
     fetch("/api/admin/section/services?t=" + Date.now())
-      .then((res) => res.json())
+      .then((r) => r.json())
       .then((json) => {
         if (json && Object.keys(json).length > 0) setData((prev: any) => ({ ...prev, ...json }));
       })
@@ -51,90 +43,62 @@ export default function Services() {
   const items = data?.items || defaultServices;
 
   return (
-    <section id="services" className="w-full bg-[#FAFAFA] py-16 md:py-24">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24" ref={ref}>
-        {/* Header */}
-        <div className="flex flex-col items-start mb-20">
-           <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="font-playfair font-semibold text-[40px] md:text-[56px] text-[#111111] leading-[1.1] tracking-[-0.03em] max-w-[600px]"
-          >
-            {data?.title ?? "Logistics that fit your needs."}
-          </motion.h2>
+    <section id="services" className="w-full bg-white py-24 md:py-32">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row gap-16 md:gap-8 relative" ref={ref}>
+        
+        {/* Left Column (Sticky) */}
+        <div className="w-full md:w-[40%] flex flex-col relative">
+          <div className="md:sticky md:top-32 flex flex-col items-start pr-0 md:pr-12">
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="text-[#1A1A1A] mb-6 max-w-[400px]"
+            >
+              {data?.title ?? "Logistics that fit your needs."}
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              className="text-[#1A1A1A]/70 max-w-[340px]"
+            >
+              {data?.subtitle ?? "From temperature-controlled transport to regional distribution — we've got it covered."}
+            </motion.p>
+          </div>
         </div>
 
-        {/* Split Accordion Layout */}
-        <div className="flex flex-col md:flex-row gap-12 lg:gap-24 min-h-[500px]">
-          
-          <div className="w-full md:w-1/2 flex flex-col gap-6 p-6 rounded-2xl">
-            {items.map((service: any, i: number) => {
-              const isActive = activeIdx === i;
-              const num = (i + 1).toString().padStart(2, "0");
-              return (
-                <div
-                  key={service?.title ?? i}
-                  onMouseEnter={() => setActiveIdx(i)}
-                  className={`group flex flex-col border-b border-black/10 pb-6 cursor-pointer transition-all duration-300 ${isActive ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
-                >
-                  <div className="flex items-center gap-6 mt-6">
-                    <span className="font-playfair font-semibold text-[20px] text-[#E0400C] w-8">
-                      {num}
-                    </span>
-                    <h3 className="font-playfair font-semibold text-[32px] md:text-[40px] text-[#111111] leading-[1.1] tracking-[-0.02em]">
-                      {service?.title ?? ""}
-                    </h3>
-                  </div>
-                  
-                  {/* Expanded Content */}
-                  <AnimatePresence>
-                    {isActive && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.4, ease: "easeInOut" }}
-                        className="overflow-hidden"
-                      >
-                        <div className="pl-[56px] pt-4">
-                          <p className="text-[#666666] text-[16px] md:text-[18px] font-medium leading-[1.5] mb-6 max-w-[400px]">
-                            {service?.description ?? ""}
-                          </p>
-                          <div className="flex items-center gap-4">
-                            <span className="text-[#111111] font-bold text-[15px] tracking-wide">
-                              {service?.linkText || "See Detail"}
-                            </span>
-                            <div className="w-10 h-10 rounded-full border border-[#E0400C] flex items-center justify-center bg-[#E0400C] shadow-lg shadow-[#E0400C]/20 cursor-pointer hover:bg-[#ff551b] hover:scale-105 transition-all">
-                              <ArrowRight size={18} className="text-white" />
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Right: Sticky Image Reveal */}
-          <div className="w-full md:w-1/2 h-[450px] md:h-auto relative rounded-3xl overflow-hidden bg-black/5">
-            <AnimatePresence mode="wait">
-              <motion.img
-                key={activeIdx}
-                src={items[activeIdx]?.image || `https://picsum.photos/seed/service${activeIdx}/800/800`}
-                alt="Service showcase"
-                initial={{ opacity: 0, scale: 1.05 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            </AnimatePresence>
-          </div>
-
+        {/* Right Column (Stacked List) */}
+        <div className="w-full md:w-[60%] flex flex-col gap-24">
+          {items.map((service: any, i: number) => {
+             const num = (i + 1).toString().padStart(2, "0");
+             return (
+               <motion.div 
+                 key={i}
+                 initial={{ opacity: 0, y: 40 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 viewport={{ once: true, margin: "-100px" }}
+                 transition={{ duration: 0.8, ease: "easeOut" }}
+                 className="flex flex-col items-start w-full"
+               >
+                 <Label text={num} />
+                 
+                 <h3 className="text-[#1A1A1A] mb-8 leading-tight">
+                   {service?.title ?? ""}
+                 </h3>
+                 
+                 <div className="w-full overflow-hidden rounded-2xl bg-[#F2F0EB]">
+                   <img 
+                     src={service?.image ?? defaultServices[i]?.image} 
+                     alt={service?.title} 
+                     className="w-full aspect-[4/3] md:aspect-[16/10] object-cover scale-[1.01] hover:scale-105 transition-transform duration-700 ease-out" 
+                   />
+                 </div>
+               </motion.div>
+             )
+          })}
         </div>
+
       </div>
     </section>
   );

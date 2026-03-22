@@ -1,190 +1,77 @@
 "use client";
-import { useState, useEffect } from "react";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import {
-  ArrowRight,
-  Linkedin,
-  Instagram,
-  Twitter,
-} from "lucide-react";
-
-interface FooterLink {
-  id: string;
-  text: string;
-  url: string;
-}
-
-interface FooterColumn {
-  id: string;
-  title: string;
-  links: FooterLink[];
-}
-
-interface FooterConfig {
-  whatsappNumber: string;
-  whatsappMessage: string;
-  description: string;
-  columns: FooterColumn[];
-}
-
-const defaultConfig: FooterConfig = {
-  whatsappNumber: "5511900000000",
-  whatsappMessage: "Olá! Gostaria de solicitar uma cotação.",
-  description: "Reliable transport. Real-time tracking. Tailored logistics for your business.",
-  columns: [
-    {
-      id: "col1",
-      title: "Company",
-      links: [{ id: "l1", text: "Home", url: "#" }, { id: "l2", text: "About Us", url: "#features" }, { id: "l3", text: "Services", url: "#services" }],
-    },
-    {
-      id: "col2",
-      title: "Legal",
-      links: [{ id: "l4", text: "Privacy Policy", url: "#" }, { id: "l5", text: "Terms of Service", url: "#" }],
-    },
-  ],
-};
+import { ArrowUpRight } from "lucide-react";
 
 export default function Footer() {
-  const [config, setConfig] = useState<FooterConfig>(defaultConfig);
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-
-  useEffect(() => {
-    fetch("/api/admin/footer?t=" + Date.now())
-      .then((r) => r.json())
-      .then((data) => setConfig(prev => ({ ...prev, ...data })))
-      .catch(() => {});
-  }, []);
-
-  const whatsappHref = `https://wa.me/${config?.whatsappNumber ?? ""}?text=${encodeURIComponent(config?.whatsappMessage ?? "")}`;
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) {
-      setSubmitted(true);
-      setEmail("");
-    }
-  };
-
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const years = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-[#111111] border-t border-white/10 relative overflow-hidden px-6 md:px-12 py-16">
-      <div className="max-w-7xl mx-auto">
+    <footer className="w-full bg-[#0a0a0a] text-white pt-24 pb-12 px-6 md:px-12 mt-auto">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-16 md:gap-8 justify-between">
         
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-20 relative z-10" ref={ref}>
-        
-        {/* Left Column - Brand & CTA */}
-        <div className="col-span-1 md:col-span-5 flex flex-col items-start pr-0 md:pr-12">
-          <a href="#" className="flex items-center gap-2 text-white no-underline mb-12">
-            <span className="font-playfair font-medium text-[24px] tracking-tight text-white flex items-center gap-1">
-              LogiNord
-            </span>
+        {/* Newsletter / Brand */}
+        <div className="w-full md:w-[35%] flex flex-col items-start pr-0 md:pr-12">
+          <a href="/" className="font-figtree font-bold text-[28px] flex items-center gap-1 mb-8 text-white no-underline group">
+            LogiNord <ArrowUpRight size={24} strokeWidth={3} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
           </a>
-
-          <h3 className="font-playfair font-semibold text-[40px] text-white leading-[1.1] tracking-[-0.02em] mb-4">
-            Ready to start? Let&apos;s work together.
-          </h3>
-          <p className="text-white/60 text-[16px] leading-[1.6] mb-12 max-w-[340px]">
-            {config?.description ?? ""}
-          </p>
-
-          <a
-            href={whatsappHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center gap-4 bg-[#E0400C] hover:bg-[#ff551b] text-white px-6 py-3.5 rounded-full text-[15px] font-bold transition-all w-fit shadow-lg shadow-[#E0400C]/20"
-          >
-            Falar no WhatsApp
-            <div className="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center group-hover:translate-x-1 transition-transform">
-              <ArrowRight size={16} />
-            </div>
-          </a>
-        </div>
-
-        {/* Center Columns - Links */}
-        <div className="col-span-1 md:col-span-4 grid grid-cols-2 gap-8 md:pt-4">
-          {(config?.columns || []).map((col) => (
-            <div key={col?.id ?? Math.random()} className="flex flex-col">
-              <h4 className="text-white/40 text-[13px] font-bold uppercase tracking-wider mb-8">
-                {col?.title ?? ""}
-              </h4>
-              <ul className="flex flex-col gap-4">
-                {(col?.links || []).map((link) => (
-                  <li key={link?.id ?? Math.random()}>
-                    <a
-                      href={link?.url ?? "#"}
-                      className="text-white/60 hover:text-white text-[15px] font-medium transition-colors"
-                    >
-                      {link?.text ?? ""}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        {/* Right Column - Newsletter */}
-        <div className="col-span-1 md:col-span-3 flex flex-col md:pt-4">
-          <h4 className="text-white/40 text-[13px] font-bold uppercase tracking-wider mb-8">
-            Stay in the loop
-          </h4>
-          <p className="text-white/70 text-[15px] mb-6">
+          <p className="text-white/60 mb-8 max-w-[300px]">
             Receive our news and updates directly in your inbox.
           </p>
-          
-          {submitted ? (
-            <div className="bg-[#E0400C]/10 border border-[#E0400C]/20 text-[#E0400C] px-4 py-3 rounded-xl text-[14px] font-medium">
-              ✓ Subscribed successfully!
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Your email address"
-                required
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3.5 text-white text-[15px] outline-none focus:border-white/30 transition-colors placeholder-white/40"
-              />
-              <button
-                type="submit"
-                className="w-full bg-white text-[#111111] hover:bg-gray-200 px-5 py-3.5 rounded-xl text-[15px] font-bold transition-colors flex items-center justify-center gap-2"
-              >
-                Subscribe
-              </button>
-            </form>
-          )}
+          <form className="w-full flex flex-col gap-4">
+            <input 
+              type="email" 
+              placeholder="Your email address" 
+              className="w-full bg-white/5 border border-white/10 rounded-full px-6 py-4 text-white placeholder-white/40 focus:outline-none focus:border-white/30 transition-colors"
+            />
+            <button className="w-full bg-[#E8431A] text-white font-bold rounded-full px-6 py-4 hover:bg-[#d03a15] transition-colors flex items-center justify-center gap-2 group">
+              Subscribe <ArrowUpRight size={18} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+            </button>
+          </form>
+        </div>
 
-          {/* Social Icons */}
-          <div className="flex gap-3 mt-12">
-            {[Linkedin, Instagram, Twitter].map((Icon, i) => (
-              <a
-                key={i}
-                href="#"
-                className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:border-white/30 transition-all"
-              >
-                <Icon size={18} />
-              </a>
-            ))}
+        {/* Links Grid */}
+        <div className="w-full md:w-[60%] grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-12">
+          <div className="flex flex-col">
+            <h4 className="font-bold text-[14px] uppercase tracking-wider mb-6">Company</h4>
+            <ul className="flex flex-col gap-4 text-white/60 text-[15px]">
+              <li><a href="/" className="hover:text-white transition-colors">Home</a></li>
+              <li><a href="/sobre" className="hover:text-white transition-colors">About Us</a></li>
+              <li><a href="/servicos" className="hover:text-white transition-colors">Services</a></li>
+              <li><a href="/galeria" className="hover:text-white transition-colors">Fleet</a></li>
+            </ul>
+          </div>
+          <div className="flex flex-col">
+            <h4 className="font-bold text-[14px] uppercase tracking-wider mb-6">Services</h4>
+            <ul className="flex flex-col gap-4 text-white/60 text-[15px]">
+              <li><a href="/servicos" className="hover:text-white transition-colors">National Freight</a></li>
+              <li><a href="/servicos" className="hover:text-white transition-colors">Regional Dist.</a></li>
+              <li><a href="/servicos" className="hover:text-white transition-colors">Cold Chain</a></li>
+              <li><a href="/servicos" className="hover:text-white transition-colors">Courier Services</a></li>
+            </ul>
+          </div>
+          <div className="flex flex-col">
+            <h4 className="font-bold text-[14px] uppercase tracking-wider mb-6">Contacts</h4>
+            <ul className="flex flex-col gap-4 text-white/60 text-[15px]">
+              <li>hello@loginord.com</li>
+              <li>+1 (555) 123-4567</li>
+              <li>+44 (0) 20 7123</li>
+            </ul>
+          </div>
+          <div className="flex flex-col">
+            <h4 className="font-bold text-[14px] uppercase tracking-wider mb-6">Connect</h4>
+            <ul className="flex flex-col gap-4 text-white/60 text-[15px]">
+              <li><a href="#" className="hover:text-white group transition-colors flex items-center gap-1">LinkedIn <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></a></li>
+              <li><a href="#" className="hover:text-white group transition-colors flex items-center gap-1">Twitter <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></a></li>
+              <li><a href="#" className="hover:text-white group transition-colors flex items-center gap-1">Instagram <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></a></li>
+              <li><a href="#" className="hover:text-white group transition-colors flex items-center gap-1">Facebook <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></a></li>
+            </ul>
           </div>
         </div>
-        </div>
+
       </div>
 
-      {/* Bottom Bar */}
-      <div className="max-w-[1280px] mx-auto px-6 mt-24 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="text-sm text-gray-400">
-            © {new Date().getFullYear()} LogiNord Integrada Ltda. Todos os direitos reservados.
-          </div>
-        <p className="text-white/30 text-[14px]">
-          All rights reserved.
-        </p>
+      <div className="max-w-7xl mx-auto border-t border-white/10 mt-20 pt-8 flex flex-col md:flex-row justify-between items-center text-[14px] text-white/40 gap-4">
+        <p>© {years} LogiNord Integrada Ltda.</p>
+        <p>All rights reserved. Made based on Framer Clone Specs.</p>
       </div>
     </footer>
   );
