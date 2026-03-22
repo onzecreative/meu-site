@@ -189,7 +189,7 @@ export default function Footer() {
         </div>
 
         {/* ── Link Columns (dynamic) ── */}
-        {config.columns.map((col) => (
+        {(config.columns || []).map((col) => (
           <div key={col.id}>
             <h4
               style={{

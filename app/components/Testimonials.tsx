@@ -57,10 +57,11 @@ export default function Testimonials() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const [current, setCurrent] = useState(0);
 
-  const prev = () => setCurrent((c) => (c - 1 + data.items.length) % data.items.length);
-  const next = () => setCurrent((c) => (c + 1) % data.items.length);
+  const safeItems = data.items && data.items.length > 0 ? data.items : defaultTestimonials;
+  const prev = () => setCurrent((c) => (c - 1 + safeItems.length) % safeItems.length);
+  const next = () => setCurrent((c) => (c + 1) % safeItems.length);
 
-  const t = data.items[current] || data.items[0];
+  const t = safeItems[current] || safeItems[0];
 
   return (
     <section

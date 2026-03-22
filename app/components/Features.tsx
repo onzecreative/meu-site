@@ -114,7 +114,7 @@ export default function Features() {
           gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
           gap: "24px",
         }}>
-          {data.items.map((feature, i) => (
+          {(data.items || []).map((feature, i) => (
             <motion.div
               key={feature.title}
               initial={{ opacity: 0, y: 20 }}

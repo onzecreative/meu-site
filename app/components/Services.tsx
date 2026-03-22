@@ -155,7 +155,7 @@ export default function Services() {
 
         {/* Right scrollable cards */}
         <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-          {data.items.map((service, i) => (
+          {(data.items || []).map((service, i) => (
             <motion.div
               key={service.number + i}
               initial={{ opacity: 0, y: 30 }}

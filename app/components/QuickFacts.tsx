@@ -75,14 +75,11 @@ export default function QuickFacts() {
         {/* Stats grid */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: "2px",
-          background: "rgba(0,0,0,0.06)",
-          borderRadius: "20px",
-          overflow: "hidden",
-          marginBottom: "80px",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "24px",
+          marginBottom: "80px", // Retained from original, as the snippet didn't explicitly remove it from the outer div
         }}>
-          {data.stats.map((stat, i) => (
+          {(data.stats || []).map((stat, i) => (
             <motion.div
               key={stat.number}
               initial={{ opacity: 0, y: 20 }}

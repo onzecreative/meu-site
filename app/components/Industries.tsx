@@ -127,10 +127,10 @@ export default function Industries() {
         {/* Grid */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
-          gap: "20px",
+          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+          gap: "24px",
         }}>
-          {data.items.map((industry, i) => (
+          {(data.items || []).map((industry, i) => (
             <motion.div
               key={industry.title}
               initial={{ opacity: 0, y: 30 }}
