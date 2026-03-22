@@ -17,7 +17,8 @@ const plusJakarta = Plus_Jakarta_Sans({
   weight: ["400", "500", "600", "700", "800"],
 });
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://project-6o5rg.vercel.app";
+const rawUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://project-6o5rg.vercel.app";
+const BASE_URL = rawUrl.startsWith("http") ? rawUrl : `https://${rawUrl}`;
 
 export const viewport: Viewport = {
   width: "device-width",
