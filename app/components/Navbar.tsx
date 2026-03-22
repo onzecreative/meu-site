@@ -1,18 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  IconTruck,
-  IconMenu2,
-  IconX,
-  IconArrowRight,
-} from "@tabler/icons-react";
+import { IconMenu2, IconX, IconArrowRight } from "@tabler/icons-react";
 
 const navLinks = [
-  { label: "Serviços", href: "#services" },
-  { label: "Setores", href: "#industries" },
-  { label: "Sobre", href: "#features" },
-  { label: "Depoimentos", href: "#testimonials" },
+  { label: "Home", href: "#" },
+  { label: "About Us", href: "#features" },
+  { label: "Services", href: "#services" },
+  { label: "Fleet", href: "#quickfacts" },
+  { label: "Industries", href: "#industries" },
+  { label: "Contact Us", href: "#contact" },
 ];
 
 export default function Navbar() {
@@ -30,65 +27,25 @@ export default function Navbar() {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1000,
-        padding: "16px 0",
-        background: scrolled
-          ? "rgba(18,18,18,0.92)"
-          : "transparent",
-        backdropFilter: scrolled ? "blur(20px)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(255,255,255,0.06)" : "none",
-        transition: "all 0.4s ease",
-      }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? "bg-[#111111]/90 backdrop-blur-md border-b border-white/10 py-4" : "bg-transparent py-6"
+      }`}
     >
-      <div style={{
-        maxWidth: "1280px",
-        margin: "0 auto",
-        padding: "0 24px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-      }}>
+      <div className="max-w-[1280px] mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
-        <a href="#" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
-          <div style={{
-            width: "36px", height: "36px",
-            background: "#DE3F0B",
-            borderRadius: "8px",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <IconTruck size={20} color="white" />
-          </div>
-          <span style={{
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
-            fontWeight: 800,
-            fontSize: "20px",
-            color: "white",
-            letterSpacing: "-0.02em",
-          }}>
+        <a href="#" className="flex items-center gap-2 text-white no-underline group scale-100 hover:scale-105 transition-transform">
+          <span className="font-['Plus_Jakarta_Sans'] font-medium text-[22px] tracking-tight text-white flex items-center gap-1">
             LogiNord
           </span>
         </a>
 
         {/* Desktop Nav */}
-        <nav style={{ display: "flex", gap: "36px" }} className="hidden-mobile">
+        <nav className="hidden md:flex items-center gap-8 bg-white/5 backdrop-blur-md border border-white/10 px-8 py-3 rounded-full">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              style={{
-                color: "rgba(255,255,255,0.7)",
-                textDecoration: "none",
-                fontSize: "15px",
-                fontWeight: 500,
-                transition: "color 0.2s",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "white")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.7)")}
+              className="text-white hover:text-white/70 text-[13px] font-bold tracking-wide transition-colors"
             >
               {link.label}
             </a>
@@ -96,53 +53,18 @@ export default function Navbar() {
         </nav>
 
         {/* CTA */}
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          <a href="#" style={{
-            color: "rgba(255,255,255,0.7)",
-            textDecoration: "none",
-            fontSize: "15px",
-            fontWeight: 500,
-          }} className="hidden-mobile">
-            Entrar
-          </a>
+        <div className="flex items-center gap-4">
           <a
             href="#contact"
-            style={{
-              background: "#DE3F0B",
-              color: "white",
-              padding: "10px 22px",
-              borderRadius: "100px",
-              textDecoration: "none",
-              fontSize: "14px",
-              fontWeight: 600,
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              transition: "all 0.2s",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "#FF5722";
-              (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "#DE3F0B";
-              (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-            }}
+            className="hidden md:flex items-center gap-2 bg-[#E0400C] hover:bg-[#ff551b] text-white px-5 py-2.5 rounded-full text-[13px] font-bold transition-all shadow-lg shadow-[#E0400C]/20 hover:shadow-[#E0400C]/40 hover:-translate-y-0.5 border border-[#E0400C]"
           >
-            Solicitar Cotação <IconArrowRight size={16} />
+            Get a Quote <IconArrowRight size={16} />
           </a>
 
           {/* Mobile toggle */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            style={{
-              background: "none",
-              border: "none",
-              color: "white",
-              cursor: "pointer",
-              display: "none",
-            }}
-            className="show-mobile"
+            className="md:hidden text-white p-2"
             aria-label="Toggle menu"
           >
             {menuOpen ? <IconX size={24} /> : <IconMenu2 size={24} />}
@@ -157,43 +79,30 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            style={{
-              background: "#1a1a1a",
-              borderTop: "1px solid rgba(255,255,255,0.08)",
-              padding: "20px 24px",
-            }}
+            className="md:hidden bg-[#111111] border-t border-white/10 px-6 py-4 absolute top-full left-0 w-full"
           >
-            {navLinks.map((link) => (
+            <div className="flex flex-col gap-4">
+              {navLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="text-white/80 hover:text-white text-lg font-semibold border-b border-white/10 pb-2"
+                >
+                  {link.label}
+                </a>
+              ))}
               <a
-                key={link.label}
-                href={link.href}
+                href="#contact"
                 onClick={() => setMenuOpen(false)}
-                style={{
-                  display: "block",
-                  color: "rgba(255,255,255,0.8)",
-                  textDecoration: "none",
-                  fontSize: "17px",
-                  fontWeight: 500,
-                  padding: "12px 0",
-                  borderBottom: "1px solid rgba(255,255,255,0.06)",
-                }}
+                className="mt-2 flex justify-center items-center gap-2 bg-[#E0400C] text-white px-5 py-3 rounded-full text-[15px] font-bold"
               >
-                {link.label}
+                Get a Quote <IconArrowRight size={18} />
               </a>
-            ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      <style>{`
-        @media (max-width: 768px) {
-          .hidden-mobile { display: none !important; }
-          .show-mobile { display: flex !important; }
-        }
-        @media (min-width: 769px) {
-          .show-mobile { display: none !important; }
-        }
-      `}</style>
     </motion.header>
   );
 }

@@ -208,6 +208,32 @@ export default function AdminDashboard() {
                 </>
               )}
 
+              <h3 style={{ fontSize: "16px", marginTop: "24px", marginBottom: "16px" }}>Textos Principais</h3>
+              <label style={labelStyle}>Título Principal</label>
+              <textarea value={heroConfig.title || ""} onChange={(e) => setHeroConfig({ ...heroConfig, title: e.target.value })} style={{ ...inputStyle, minHeight: "80px" }} />
+              
+              <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "16px" }}>
+                <div>
+                  <label style={labelStyle}>Subtítulo (com bolinha laranja)</label>
+                  <input type="text" value={heroConfig.subtitleIndicator || ""} onChange={(e) => setHeroConfig({ ...heroConfig, subtitleIndicator: e.target.value })} style={inputStyle} />
+                </div>
+                <div>
+                  <label style={labelStyle}>Texto Informativo (Canto Inferior Esquerdo)</label>
+                  <textarea value={heroConfig.bottomLeftText || ""} onChange={(e) => setHeroConfig({ ...heroConfig, bottomLeftText: e.target.value })} style={{ ...inputStyle, minHeight: "60px" }} />
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                <div>
+                  <label style={labelStyle}>Texto do Botão (Canto Inferior Direito)</label>
+                  <input type="text" value={heroConfig.bottomRightText || ""} onChange={(e) => setHeroConfig({ ...heroConfig, bottomRightText: e.target.value })} style={inputStyle} />
+                </div>
+                <div>
+                  <label style={labelStyle}>URL do Botão</label>
+                  <input type="text" value={heroConfig.bottomRightUrl || ""} onChange={(e) => setHeroConfig({ ...heroConfig, bottomRightUrl: e.target.value })} style={inputStyle} />
+                </div>
+              </div>
+
               <button type="submit" disabled={saving} style={{
                 background: "#DE3F0B", color: "white", border: "none", borderRadius: "8px",
                 padding: "10px 20px", fontSize: "14px", fontWeight: 600, cursor: saving ? "not-allowed" : "pointer",

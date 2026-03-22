@@ -1,27 +1,35 @@
 "use client";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import {
-  IconArrowRight,
-  IconChevronDown,
-  IconShieldCheck,
-  IconClock24,
-  IconGlobe,
-} from "@tabler/icons-react";
+import { IconArrowRight } from "@tabler/icons-react";
 
-const badges = [
-  { icon: <IconShieldCheck size={16} />, text: "ISO 9001 Certificado" },
-  { icon: <IconClock24 size={16} />, text: "Suporte 24/7" },
-  { icon: <IconGlobe size={16} />, text: "Cobertura Nacional" },
-];
-
-interface HeroConfig {
+export interface HeroConfig {
   type: "mp4local" | "youtube" | "url";
   videoUrl: string;
   videoUrlMobile: string;
   posterUrl: string;
   youtubeId: string;
+  title: string;
+  subtitleIndicator: string;
+  subtitle: string;
+  bottomLeftText: string;
+  bottomRightText: string;
+  bottomRightUrl: string;
 }
+
+const defaultHeroConfig: HeroConfig = {
+  type: "url",
+  videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+  videoUrlMobile: "",
+  posterUrl: "",
+  youtubeId: "",
+  title: "Your Freight, delivered\nwith Precision.",
+  subtitleIndicator: "Across Europe and the US.",
+  subtitle: "",
+  bottomLeftText: "Reliable transport. Real-time tracking.\nTailored logistics for your business.",
+  bottomRightText: "Know Our Services",
+  bottomRightUrl: "#services"
+};
 
 function VideoBackground({ config }: { config: HeroConfig }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -31,19 +39,15 @@ function VideoBackground({ config }: { config: HeroConfig }) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Detecta conexão lenta
     const nav = navigator as Navigator & {
       connection?: { effectiveType?: string };
     };
-    const conn = nav.connection;
-    if (conn?.effectiveType === "2g" || conn?.effectiveType === "slow-2g") {
+    if (nav.connection?.effectiveType === "2g" || nav.connection?.effectiveType === "slow-2g") {
       setIsSlowConnection(true);
     }
-    // Detecta mobile
     setIsMobile(window.innerWidth <= 768);
   }, []);
 
-  // Lazy loading via IntersectionObserver
   useEffect(() => {
     if (!containerRef.current) return;
     const observer = new IntersectionObserver(
@@ -59,24 +63,14 @@ function VideoBackground({ config }: { config: HeroConfig }) {
     return () => observer.disconnect();
   }, []);
 
-  const sharedStyle: React.CSSProperties = {
-    position: "absolute",
-    inset: 0,
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-  };
-
-  // Se conexão lenta, mostra só o poster/gradiente
   if (isSlowConnection) return null;
 
-  // YouTube embed
   if (config?.type === "youtube" && config?.youtubeId) {
     return (
-      <div ref={containerRef} style={{ position: "absolute", inset: 0 }}>
+      <div ref={containerRef} className="absolute inset-0">
         {isVisible && (
           <iframe
-            style={{ ...sharedStyle, border: "none", pointerEvents: "none" }}
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none border-none"
             src={`https://www.youtube.com/embed/${config?.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${config?.youtubeId}&controls=0&showinfo=0&rel=0&enablejsapi=1&loading=lazy&playsinline=1`}
             allow="autoplay; encrypted-media"
             allowFullScreen
@@ -88,15 +82,13 @@ function VideoBackground({ config }: { config: HeroConfig }) {
     );
   }
 
-  // MP4 local ou URL pública
   const src = config?.type === "mp4local" || config?.type === "url" ? config?.videoUrl : null;
   if (!src) return null;
 
   const mobileSrc = config?.videoUrlMobile || src;
-  const activeSrc = isMobile ? mobileSrc : src;
 
   return (
-    <div ref={containerRef} style={{ position: "absolute", inset: 0 }}>
+    <div ref={containerRef} className="absolute inset-0">
       {isVisible && (
         <video
           ref={videoRef}
@@ -105,14 +97,11 @@ function VideoBackground({ config }: { config: HeroConfig }) {
           loop
           playsInline
           poster={config?.posterUrl || undefined}
-          style={sharedStyle}
-          preload="auto"
+          className="absolute inset-0 w-full h-full object-cover"
         >
-          {/* Source mobile (480p) */}
           {config?.videoUrlMobile && (
-            <source src={config.videoUrlMobile} media="(max-width: 768px)" type="video/mp4" />
+            <source src={config?.videoUrlMobile} media="(max-width: 768px)" type="video/mp4" />
           )}
-          {/* Source desktop */}
           <source src={src} type={src.endsWith(".mov") ? "video/quicktime" : "video/mp4"} />
         </video>
       )}
@@ -121,253 +110,85 @@ function VideoBackground({ config }: { config: HeroConfig }) {
 }
 
 export default function Hero() {
-  const [heroConfig, setHeroConfig] = useState<HeroConfig>({
-    type: "url",
-    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
-    videoUrlMobile: "",
-    posterUrl: "",
-    youtubeId: "",
-  });
+  const [heroConfig, setHeroConfig] = useState<HeroConfig>(defaultHeroConfig);
 
   useEffect(() => {
     fetch("/api/admin/hero?t=" + Date.now())
       .then((r) => r.json())
-      .then((data) => setHeroConfig(data))
+      .then((data) => {
+        if (data && Object.keys(data).length > 0) {
+           setHeroConfig(prev => ({ ...prev, ...data }));
+        }
+      })
       .catch(() => {});
   }, []);
 
   return (
-    <section
-      style={{
-        minHeight: "100vh",
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
-        overflow: "hidden",
-        background: "#111",
-      }}
-    >
-      {/* ── Video background ── */}
+    <section className="relative min-h-screen flex flex-col justify-end overflow-hidden bg-[#111]">
       <VideoBackground config={heroConfig} />
 
-      {/* ── Dark overlay sobre o vídeo ── */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: `
-            radial-gradient(ellipse at 20% 50%, rgba(222,63,11,0.20) 0%, transparent 60%),
-            radial-gradient(ellipse at 80% 20%, rgba(222,63,11,0.10) 0%, transparent 50%),
-            linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.70) 100%)
-          `,
-          pointerEvents: "none",
-        }}
-      />
+      {/* Dark overlay specifically matching framer */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/30 pointer-events-none" />
 
-      {/* ── Grid lines ── */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)
-          `,
-          backgroundSize: "80px 80px",
-          pointerEvents: "none",
-        }}
-      />
+      {/* Repeating Arrows Background Pattern */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15 15l15 15-15 15M30 15l15 15-15 15' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
+        backgroundSize: "60px 60px"
+      }} />
 
-      {/* ── Animated glow orb ── */}
-      <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        style={{
-          position: "absolute",
-          width: "600px",
-          height: "600px",
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(222,63,11,0.15) 0%, transparent 70%)",
-          top: "-200px",
-          right: "-100px",
-          pointerEvents: "none",
-        }}
-      />
-
-      {/* ── Content ── */}
-      <div
-        style={{
-          position: "relative",
-          maxWidth: "1280px",
-          margin: "0 auto",
-          padding: "120px 24px 80px",
-          width: "100%",
-        }}
-      >
-        {/* Badges */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginBottom: "32px" }}
-        >
-          {badges.map((badge) => (
-            <div
-              key={badge.text}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                background: "rgba(222,63,11,0.14)",
-                border: "1px solid rgba(222,63,11,0.35)",
-                borderRadius: "100px",
-                padding: "6px 14px",
-                fontSize: "13px",
-                color: "#FF7043",
-                fontWeight: 500,
-                backdropFilter: "blur(4px)",
-              }}
-            >
-              {badge.icon}
-              {badge.text}
-            </div>
-          ))}
-        </motion.div>
-
-        {/* Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          style={{
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
-            fontWeight: 800,
-            fontSize: "clamp(48px, 7vw, 96px)",
-            lineHeight: 1.05,
-            letterSpacing: "-0.04em",
-            color: "white",
-            maxWidth: "900px",
-            marginBottom: "28px",
-          }}
-        >
-          Sua Carga,{" "}
-          <span
-            style={{
-              background: "linear-gradient(135deg, #DE3F0B, #FF7043)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
+      {/* Content */}
+      <div className="relative w-full max-w-[1280px] mx-auto px-6 pb-12 pt-40 md:pb-16 flex flex-col h-full justify-center">
+        
+        {/* Title area (Center-left) */}
+        <div className="flex flex-col items-start w-full mt-auto mb-16 md:mb-32">
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="font-['Plus_Jakarta_Sans'] font-semibold text-[clamp(44px,7vw,100px)] leading-[1.05] tracking-[-0.03em] text-white max-w-[900px] mb-6 whitespace-pre-line"
           >
-            Entregue com
-          </span>
-          <br />
-          Precisão.
-        </motion.h1>
+            {heroConfig?.title ?? defaultHeroConfig.title}
+          </motion.h1>
 
-        {/* Subheading */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          style={{
-            fontSize: "clamp(16px, 2vw, 20px)",
-            color: "rgba(255,255,255,0.65)",
-            maxWidth: "540px",
-            lineHeight: 1.7,
-            marginBottom: "44px",
-          }}
-        >
-          Soluções de logística de ponta para empresas que não comprometem com
-          qualidade, velocidade ou confiabilidade.
-        </motion.p>
-
-        {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          style={{ display: "flex", gap: "16px", flexWrap: "wrap", alignItems: "center" }}
-        >
-          <a
-            href="#contact"
-            id="hero-cta-primary"
-            style={{
-              background: "#DE3F0B",
-              color: "white",
-              padding: "16px 32px",
-              borderRadius: "100px",
-              textDecoration: "none",
-              fontSize: "16px",
-              fontWeight: 700,
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              transition: "all 0.3s",
-              boxShadow: "0 8px 32px rgba(222,63,11,0.4)",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-              (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 40px rgba(222,63,11,0.6)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-              (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(222,63,11,0.4)";
-            }}
-          >
-            Solicitar Cotação <IconArrowRight size={18} />
-          </a>
-
-          <a
-            href="#services"
-            id="hero-cta-secondary"
-            style={{
-              color: "rgba(255,255,255,0.85)",
-              padding: "16px 32px",
-              borderRadius: "100px",
-              textDecoration: "none",
-              fontSize: "16px",
-              fontWeight: 600,
-              border: "1px solid rgba(255,255,255,0.2)",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              transition: "all 0.3s",
-              backdropFilter: "blur(4px)",
-              background: "rgba(255,255,255,0.05)",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.45)";
-              (e.currentTarget as HTMLElement).style.color = "white";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.2)";
-              (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)";
-            }}
-          >
-            Conheça a empresa
-          </a>
-        </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          style={{
-            position: "absolute",
-            bottom: "40px",
-            left: "50%",
-            transform: "translateX(-50%)",
-          }}
-        >
           <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity }}
-            style={{ color: "rgba(255,255,255,0.4)" }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="flex items-center gap-3"
           >
-            <IconChevronDown size={28} />
+            <div className="w-3 h-3 rounded-full border-[2.5px] border-[#E0400C] flex-shrink-0" />
+            <p className="text-white/90 text-[18px] md:text-[22px] font-medium tracking-tight">
+              {heroConfig?.subtitleIndicator ?? defaultHeroConfig.subtitleIndicator}
+            </p>
           </motion.div>
-        </motion.div>
+        </div>
+
+        {/* Bottom row */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between w-full gap-8">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.6 }}
+            className="text-white/80 text-[15px] leading-[1.6] max-w-[300px] whitespace-pre-line font-medium"
+          >
+            {heroConfig?.bottomLeftText ?? defaultHeroConfig.bottomLeftText}
+          </motion.p>
+
+          <motion.a
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            href={heroConfig?.bottomRightUrl ?? defaultHeroConfig.bottomRightUrl}
+            className="group flex items-center gap-4 border border-white/20 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full pl-6 pr-2 py-2 transition-all w-fit"
+          >
+            <span className="text-white font-medium text-[14px] tracking-wide">
+              {heroConfig?.bottomRightText ?? defaultHeroConfig.bottomRightText}
+            </span>
+            <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-[#E0400C] group-hover:border-[#E0400C] transition-colors">
+              <IconArrowRight size={18} className="text-white group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </motion.a>
+        </div>
       </div>
     </section>
   );

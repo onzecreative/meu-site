@@ -1,66 +1,36 @@
 "use client";
-import { useRef, useState, useEffect } from "react";
-import { motion, useInView } from "framer-motion";
-import {
-  IconTruckDelivery,
-  IconPackage,
-  IconTemperature,
-  IconCrane,
-  IconArrowRight,
-} from "@tabler/icons-react";
+import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { useInView } from "framer-motion";
+import { IconArrowRight } from "@tabler/icons-react";
 
 const defaultServices = [
   {
+    title: "Air Route",
+    description: "Covering global destinations.",
+    tags: ["Fast", "Global"],
     number: "01",
-    title: "Frete Rodoviário",
-    description:
-      "Cobertura nacional completa com rastreamento em tempo real. Transferências porta a porta com frota moderna e motoristas certificados.",
-    icon: "IconTruckDelivery",
-    tags: ["Full TL", "LTL", "Rastreamento GPS"],
+    linkText: "See Detail"
   },
   {
+    title: "Sea Route",
+    description: "Delivering across continents.",
+    tags: ["Bulk", "Economical"],
     number: "02",
-    title: "Logística Last-Mile",
-    description:
-      "Entrega urbana expressa com gestão de rotas otimizada por IA. Confirmação de entrega fotográfica e assinatura digital.",
-    icon: "IconPackage",
-    tags: ["Express", "Same-day", "Prova de entrega"],
+    linkText: "See Detail"
   },
   {
+    title: "Land Route",
+    description: "Over the road transportation.",
+    tags: ["Flexible", "Regional"],
     number: "03",
-    title: "Carga Frigorificada",
-    description:
-      "Transporte com controle rigoroso de temperatura para alimentos, farmacêuticos e produtos sensíveis. Conformidade total com ANVISA.",
-    icon: "IconTemperature",
-    tags: ["2°C–8°C", "Congelados", "Farmacêuticos"],
-  },
-  {
-    number: "04",
-    title: "Carga Pesada & Especial",
-    description:
-      "Equipamentos de grande porte, maquinários industriais e cargas indivisíveis com escolta e licenças de transporte.",
-    icon: "IconCrane",
-    tags: ["Over-dimensional", "Escolta", "Licenciado"],
+    linkText: "See Detail"
   },
 ];
 
-const iconMap: Record<string, React.ReactNode> = {
-  IconTruckDelivery: <IconTruckDelivery size={28} />,
-  IconPackage: <IconPackage size={28} />,
-  IconTemperature: <IconTemperature size={28} />,
-  IconCrane: <IconCrane size={28} />,
-};
-
 export default function Services() {
-  const [data, setData] = useState<{
-    sectionTitle: string;
-    title: string;
-    description: string;
-    items: typeof defaultServices;
-  }>({
-    sectionTitle: "Nossos Serviços",
-    title: "Soluções para cada tipo de carga",
-    description: "Da coleta à entrega, cuidamos de tudo com tecnologia, eficiência e comprometimento total com o seu negócio.",
+  const [data, setData] = useState<any>({
+    title: "Logistics that fit your needs.",
     items: defaultServices,
   });
 
@@ -68,164 +38,62 @@ export default function Services() {
     fetch("/api/admin/section/services?t=" + Date.now())
       .then((res) => res.json())
       .then((json) => {
-        if (json && Object.keys(json).length > 0) setData(json);
+        if (json && Object.keys(json).length > 0) setData((prev: any) => ({ ...prev, ...json }));
       })
       .catch(() => {});
   }, []);
 
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="services" style={{ background: "#1C1C1C", padding: "120px 0" }}>
-      <div style={{
-        maxWidth: "1280px",
-        margin: "0 auto",
-        padding: "0 24px",
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "80px",
-        alignItems: "start",
-      }}>
-        {/* Left sticky panel */}
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, x: -30 }}
-          animate={inView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.7 }}
-          style={{ position: "sticky", top: "120px" }}
-        >
-          <p style={{
-            color: "#DE3F0B",
-            fontSize: "13px",
-            fontWeight: 700,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            marginBottom: "20px",
-          }}>
-            {data?.sectionTitle ?? ""}
-          </p>
-          <h2 style={{
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
-            fontWeight: 800,
-            fontSize: "clamp(36px, 4vw, 52px)",
-            color: "white",
-            letterSpacing: "-0.03em",
-            lineHeight: 1.1,
-            marginBottom: "24px",
-          }}>
-            {data?.title ?? ""}
-          </h2>
-          <p style={{
-            color: "rgba(255,255,255,0.5)",
-            fontSize: "16px",
-            lineHeight: 1.7,
-            marginBottom: "40px",
-          }}>
-            {data?.description ?? ""}
-          </p>
-          <a
-            href="#contact"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              background: "transparent",
-              color: "white",
-              border: "1px solid rgba(255,255,255,0.2)",
-              padding: "14px 28px",
-              borderRadius: "100px",
-              textDecoration: "none",
-              fontWeight: 600,
-              fontSize: "15px",
-              transition: "all 0.3s",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.border = "1px solid #DE3F0B";
-              (e.currentTarget as HTMLElement).style.color = "#DE3F0B";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.border = "1px solid rgba(255,255,255,0.2)";
-              (e.currentTarget as HTMLElement).style.color = "white";
-            }}
+    <section id="services" className="w-full bg-[#FAFAFA] pt-24 pb-32">
+      <div className="max-w-[1280px] mx-auto px-6" ref={ref}>
+        {/* Header */}
+        <div className="flex flex-col items-start mb-20">
+           <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="font-['Plus_Jakarta_Sans'] font-semibold text-[40px] md:text-[56px] text-[#111111] leading-[1.1] tracking-[-0.03em] max-w-[600px]"
           >
-            Ver todos os serviços <IconArrowRight size={16} />
-          </a>
-        </motion.div>
+            {data?.title ?? "Logistics that fit your needs."}
+          </motion.h2>
+        </div>
 
-        {/* Right scrollable cards */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-          {(data.items || []).map((service, i) => (
+        {/* Services Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {(data?.items || defaultServices).map((service: any, i: number) => (
             <motion.div
-              key={service.number + i}
-              initial={{ opacity: 0, y: 30 }}
+              key={service?.title ?? i}
+              initial={{ opacity: 0, y: 40 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.12 }}
-              style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.07)",
-                borderRadius: "20px",
-                padding: "36px",
-                cursor: "pointer",
-                transition: "all 0.3s",
-              }}
-              whileHover={{ y: -4, backgroundColor: "rgba(222,63,11,0.05)", borderColor: "rgba(222,63,11,0.2)" }}
+              transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+              className="group bg-white rounded-3xl p-8 md:p-10 flex flex-col justify-between aspect-square md:aspect-auto md:h-[400px] border border-black/[0.04] hover:shadow-[0_20px_50px_rgba(0,0,0,0.06)] transition-all duration-500 hover:-translate-y-2 cursor-pointer"
             >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
-                <span style={{
-                  fontSize: "13px",
-                  fontWeight: 700,
-                  color: "rgba(255,255,255,0.2)",
-                  letterSpacing: "0.05em",
-                }}>
-                  {service?.number ?? ""}
-                </span>
-                <div style={{ color: "#DE3F0B" }}>{service?.icon && iconMap[service.icon] ? iconMap[service.icon] : <IconPackage size={28} />}</div>
+              <div>
+                <div className="flex justify-between items-start mb-12">
+                  <h3 className="font-['Plus_Jakarta_Sans'] font-semibold text-[32px] md:text-[40px] text-[#111111] leading-[1.1] tracking-[-0.02em] max-w-[200px]">
+                    {service?.title ?? ""}
+                  </h3>
+                </div>
+                <p className="text-[#666666] text-[16px] md:text-[18px] font-medium leading-[1.5]">
+                  {service?.description ?? ""}
+                </p>
               </div>
-              <h3 style={{
-                fontFamily: "'Plus Jakarta Sans', sans-serif",
-                fontWeight: 700,
-                fontSize: "22px",
-                color: "white",
-                marginBottom: "14px",
-                letterSpacing: "-0.02em",
-              }}>
-                {service?.title ?? ""}
-              </h3>
-              <p style={{
-                color: "rgba(255,255,255,0.5)",
-                fontSize: "15px",
-                lineHeight: 1.7,
-                marginBottom: "20px",
-              }}>
-                {service?.description ?? ""}
-              </p>
-              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-                {(service?.tags || []).map((tag) => (
-                  <span key={tag} style={{
-                    fontSize: "12px",
-                    fontWeight: 600,
-                    color: "rgba(255,255,255,0.4)",
-                    background: "rgba(255,255,255,0.06)",
-                    padding: "4px 12px",
-                    borderRadius: "100px",
-                    letterSpacing: "0.03em",
-                  }}>
-                    {tag}
-                  </span>
-                ))}
+
+              <div className="mt-8 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span className="text-[#111111] font-semibold text-[15px]">
+                  {service?.linkText || "See Detail"}
+                </span>
+                <div className="w-10 h-10 rounded-full border border-[#E0400C] bg-[#E0400C] flex items-center justify-center -translate-x-4 group-hover:translate-x-0 transition-all duration-300">
+                  <IconArrowRight size={18} className="text-white" />
+                </div>
               </div>
             </motion.div>
           ))}
         </div>
       </div>
-
-      <style>{`
-        @media (max-width: 768px) {
-          #services > div { grid-template-columns: 1fr !important; }
-          #services > div > div:first-child { position: relative !important; top: 0 !important; }
-        }
-      `}</style>
     </section>
   );
 }

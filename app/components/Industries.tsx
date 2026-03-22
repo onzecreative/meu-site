@@ -1,50 +1,29 @@
 "use client";
-import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { IconArrowRight } from "@tabler/icons-react";
 
 const defaultIndustries = [
   {
-    title: "Alimentos & Bebidas",
-    desc: "Cadeia de frio completa, rastreabilidade e conformidade sanitária para produtos perecíveis.",
-    emoji: "🥩",
+    title: "Medical & Healthcare",
+    desc: "Precision and care for critical deliveries.",
+    image: "", // Placeholder support
   },
   {
-    title: "Farmacêutico",
-    desc: "Transporte especializado com controle de temperatura, documentação e conformidade ANVISA.",
-    emoji: "💊",
+    title: "Automotives",
+    desc: "Handling large scale industrial transport.",
+    image: "",
   },
   {
-    title: "Automotivo",
-    desc: "JIT delivery, gestão de estoques e logística de peças com rastreamento avançado.",
-    emoji: "🚗",
-  },
-  {
-    title: "E-commerce",
-    desc: "Fulfillment, last-mile urbano e gestão de devoluções para operações de alta escala.",
-    emoji: "📦",
-  },
-  {
-    title: "Construção Civil",
-    desc: "Movimentação de materiais pesados, equipamentos e insumos para obras em todo o país.",
-    emoji: "🏗️",
-  },
-  {
-    title: "Varejo",
-    desc: "Reabastecimento de lojas, cross-docking e gestão de estoque com precisão e velocidade.",
-    emoji: "🏪",
+    title: "Technology",
+    desc: "Speed and security for delicate electronics.",
+    image: "",
   },
 ];
 
 export default function Industries() {
-  const [data, setData] = useState<{
-    sectionTitle: string;
-    title: string;
-    description: string;
-    items: typeof defaultIndustries;
-  }>({
-    sectionTitle: "Setores Atendidos",
-    title: "Expertise em cadasegmento de mercado",
-    description: "Décadas de experiência nos principais setores da economia brasileira.",
+  const [data, setData] = useState<any>({
+    title: "Built for Critical Industries.",
     items: defaultIndustries,
   });
 
@@ -52,129 +31,71 @@ export default function Industries() {
     fetch("/api/admin/section/industries?t=" + Date.now())
       .then((res) => res.json())
       .then((json) => {
-        if (json && Object.keys(json).length > 0) setData(json);
+        if (json && Object.keys(json).length > 0) setData((prev: any) => ({ ...prev, ...json }));
       })
       .catch(() => {});
   }, []);
 
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section
-      id="industries"
-      style={{
-        background: "#111",
-        padding: "120px 0",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      {/* Background glow */}
-      <div style={{
-        position: "absolute",
-        bottom: "-200px",
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "800px",
-        height: "800px",
-        borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(222,63,11,0.06) 0%, transparent 70%)",
-        pointerEvents: "none",
-      }} />
-
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
+    <section id="industries" className="w-full bg-white pt-32 pb-32">
+      <div className="max-w-[1280px] mx-auto px-6" ref={ref}>
+        
         {/* Header */}
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          style={{ textAlign: "center", marginBottom: "80px" }}
-        >
-          <p style={{
-            color: "#DE3F0B",
-            fontSize: "13px",
-            fontWeight: 700,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            marginBottom: "16px",
-          }}>
-            {data?.sectionTitle ?? ""}
-          </p>
-          <h2 style={{
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
-            fontWeight: 800,
-            fontSize: "clamp(32px, 5vw, 56px)",
-            color: "white",
-            letterSpacing: "-0.03em",
-            lineHeight: 1.1,
-            marginBottom: "20px",
-          }}>
-            {data?.title ?? ""}
-          </h2>
-          <p style={{
-            color: "rgba(255,255,255,0.4)",
-            fontSize: "17px",
-            maxWidth: "500px",
-            margin: "0 auto",
-            lineHeight: 1.7,
-          }}>
-            {data?.description ?? ""}
-          </p>
-        </motion.div>
+        <div className="flex flex-col items-center text-center mb-20">
+          <div className="w-3 h-3 rounded-full border-[2.5px] border-[#E0400C] mb-8" />
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="font-['Plus_Jakarta_Sans'] font-semibold text-[40px] md:text-[56px] text-[#111111] leading-[1.1] tracking-[-0.03em] max-w-[800px]"
+          >
+            {data?.title ?? "Built for Critical Industries."}
+          </motion.h2>
+        </div>
 
-        {/* Grid */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-          gap: "24px",
-        }}>
-          {(data.items || []).map((industry, i) => (
+        {/* Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {(data?.items || defaultIndustries).map((ind: any, i: number) => (
             <motion.div
-              key={industry.title}
-              initial={{ opacity: 0, y: 30 }}
+              key={ind?.title ?? i}
+              initial={{ opacity: 0, y: 40 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-              style={{
-                background: `linear-gradient(135deg, rgba(30,30,30,0.8) 0%, rgba(20,20,20,0.9) 100%)`,
-                border: "1px solid rgba(255,255,255,0.06)",
-                borderRadius: "24px",
-                padding: "44px 36px",
-                cursor: "pointer",
-                transition: "all 0.35s",
-                display: "flex", // Added for layout
-                gap: "20px", // Added for spacing
-              }}
-              whileHover={{
-                scale: 1.02,
-                borderColor: "rgba(222,63,11,0.3)",
-                boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
-              }}
+              transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+              className="group cursor-pointer flex flex-col"
             >
-              <span style={{ fontSize: "28px", flexShrink: 0 }}>{industry?.emoji ?? ""}</span>
-              <div>
-                <h3 style={{
-                  fontFamily: "'Plus Jakarta Sans', sans-serif",
-                  fontWeight: 700,
-                  fontSize: "20px",
-                  color: "white",
-                  marginBottom: "8px",
-                  letterSpacing: "-0.01em",
-                }}>
-                  {industry?.title ?? ""}
+              {/* Image box/Placeholder */}
+              <div className="w-full aspect-[4/3] bg-[#FAFAFA] rounded-2xl mb-8 overflow-hidden relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#E0400C]/5 to-transparent blend-multiply group-hover:scale-105 transition-transform duration-700 ease-out" />
+                {ind?.image && (
+                  <img src={ind.image} alt={ind.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                )}
+              </div>
+
+              {/* Text Content */}
+              <div className="flex flex-col items-start px-2">
+                <h3 className="font-['Plus_Jakarta_Sans'] font-semibold text-[26px] md:text-[32px] text-[#111111] leading-[1.2] tracking-[-0.02em] mb-3">
+                  {ind?.title ?? ""}
                 </h3>
-                <p style={{
-                  color: "rgba(255,255,255,0.5)",
-                  fontSize: "15px",
-                  lineHeight: 1.6,
-                }}>
-                  {industry?.desc ?? ""}
+                <p className="text-[#666666] text-[16px] md:text-[18px] font-medium leading-[1.5] mb-8">
+                  {ind?.desc ?? ""}
                 </p>
+                
+                <div className="flex items-center gap-2 group-hover:gap-4 transition-all duration-300">
+                  <span className="text-[#111111] font-semibold text-[15px]">
+                    View details
+                  </span>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#FAFAFA] group-hover:bg-[#E0400C] transition-colors duration-300">
+                    <IconArrowRight size={16} className="text-[#111111] group-hover:text-white" />
+                  </div>
+                </div>
               </div>
             </motion.div>
           ))}
         </div>
+
       </div>
     </section>
   );

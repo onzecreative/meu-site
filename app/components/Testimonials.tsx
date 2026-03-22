@@ -1,46 +1,37 @@
 "use client";
-import { useRef, useState, useEffect } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
-import { IconChevronLeft, IconChevronRight, IconQuote } from "@tabler/icons-react";
+import { motion, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
 const defaultTestimonials = [
   {
-    quote:
-      "A LogiNord transformou completamente nossa operação logística. Reduziu nosso custo de frete em 23% e o prazo de entrega em dois dias. Simplesmente excepcional.",
-    name: "Fernanda Lima",
-    role: "Diretora de Operações",
-    company: "Grupo Alimentar BRF",
-    initials: "FL",
-    color: "#DE3F0B",
+    quote: "LogiNord transformed our supply chain with impressive, reliable logistics.",
+    name: "Tom Holland",
+    role: "CCO",
+    company: "Stark Industries",
+    initials: "TH",
+    color: "#E0400C",
   },
   {
-    quote:
-      "O sistema de rastreamento em tempo real nos dá total visibilidade. Nossos clientes adoram os alertas automáticos. Nunca tivemos tanta confiança na nossa cadeia de suprimentos.",
-    name: "Rodrigo Mendes",
-    role: "Gerente de Logística",
-    company: "TechFarm Solution",
-    initials: "RM",
-    color: "#1a6fbf",
+    quote: "Working with LogiNord has been a game-changer! Their support is incredible.",
+    name: "Mary Jane",
+    role: "Sales Executive",
+    company: "Empire",
+    initials: "MJ",
+    color: "#111111",
   },
   {
-    quote:
-      "Para o setor farmacêutico, qualidade e conformidade são críticas. A LogiNord entende isso perfeitamente. Zero incidentes em 3 anos de parceria.",
-    name: "Dra. Carla Souza",
-    role: "Supply Chain Manager",
-    company: "EuroFarma Brasil",
-    initials: "CS",
-    color: "#2e7d32",
+    quote: "Precision and speed that outmatches any other vendor we have worked with.",
+    name: "Peter Parker",
+    role: "CEO",
+    company: "Daily Bugle",
+    initials: "PP",
+    color: "#333333",
   },
 ];
 
 export default function Testimonials() {
-  const [data, setData] = useState<{
-    sectionTitle: string;
-    title: string;
-    items: typeof defaultTestimonials;
-  }>({
-    sectionTitle: "Depoimentos",
-    title: "O que nossos clientes dizem",
+  const [data, setData] = useState<any>({
+    title: "What Our Clients Say",
     items: defaultTestimonials,
   });
 
@@ -48,198 +39,67 @@ export default function Testimonials() {
     fetch("/api/admin/section/testimonials?t=" + Date.now())
       .then((res) => res.json())
       .then((json) => {
-        if (json && Object.keys(json).length > 0) setData(json);
+        if (json && Object.keys(json).length > 0) setData((prev: any) => ({ ...prev, ...json }));
       })
       .catch(() => {});
   }, []);
 
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
-  const [current, setCurrent] = useState(0);
 
   const safeItems = data.items && data.items.length > 0 ? data.items : defaultTestimonials;
-  const prev = () => setCurrent((c) => (c - 1 + safeItems.length) % safeItems.length);
-  const next = () => setCurrent((c) => (c + 1) % safeItems.length);
-
-  const t = safeItems[current] || safeItems[0];
 
   return (
-    <section
-      id="testimonials"
-      style={{ background: "#1C1C1C", padding: "120px 0" }}
-    >
-      <div style={{ maxWidth: "900px", margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
+    <section id="testimonials" className="w-full bg-white pt-32 pb-40">
+      <div className="max-w-[1280px] mx-auto px-6" ref={ref}>
+        
         {/* Header */}
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
-          <p style={{
-            color: "#DE3F0B",
-            fontSize: "13px",
-            fontWeight: 700,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            marginBottom: "16px",
-          }}>
-            {data.sectionTitle}
-          </p>
-          <h2 style={{
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
-            fontWeight: 800,
-            fontSize: "clamp(32px, 4vw, 48px)",
-            color: "white",
-            letterSpacing: "-0.03em",
-            marginBottom: "64px",
-          }}>
-            {data.title}
-          </h2>
-        </motion.div>
-
-        {/* Testimonial card */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={current}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4 }}
-            style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: "28px",
-              padding: "56px 48px",
-              marginBottom: "40px",
-              position: "relative",
-            }}
+        <div className="flex flex-col items-center text-center mb-24">
+          <div className="w-3 h-3 rounded-full border-[2.5px] border-[#E0400C] mb-8" />
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="font-['Plus_Jakarta_Sans'] font-semibold text-[44px] md:text-[56px] text-[#111111] leading-[1.05] tracking-[-0.03em] max-w-[800px]"
           >
-            <IconQuote
-              size={40}
-              style={{
-                color: "#DE3F0B",
-                opacity: 0.3,
-                position: "absolute",
-                top: "28px",
-                left: "36px",
-              }}
-            />
-            <p style={{
-              fontSize: "clamp(16px, 2vw, 21px)",
-              color: "rgba(255,255,255,0.8)",
-              lineHeight: 1.75,
-              fontStyle: "italic",
-              marginBottom: "40px",
-              letterSpacing: "0.01em",
-            }}>
-              &ldquo;{t?.quote ?? ""}&rdquo;
-            </p>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "16px" }}>
-              <div style={{
-                width: "52px",
-                height: "52px",
-                borderRadius: "50%",
-                background: t?.color ?? "#333",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: 700,
-                fontSize: "16px",
-                color: "white",
-                flexShrink: 0,
-              }}>
-                {t?.initials ?? ""}
-              </div>
-              <div style={{ textAlign: "left" }}>
-                <div style={{ fontWeight: 700, fontSize: "16px", color: "white" }}>
-                  {t?.name ?? ""}
-                </div>
-                <div style={{ fontSize: "14px", color: "rgba(255,255,255,0.4)" }}>
-                  {t?.role ?? ""} {t?.company ? `· ${t.company}` : ""}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Controls */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "16px" }}>
-          <button
-            onClick={prev}
-            id="testimonial-prev"
-            style={{
-              width: "44px",
-              height: "44px",
-              borderRadius: "50%",
-              border: "1px solid rgba(255,255,255,0.15)",
-              background: "transparent",
-              color: "white",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transition: "all 0.2s",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.borderColor = "#DE3F0B";
-              (e.currentTarget as HTMLElement).style.color = "#DE3F0B";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.15)";
-              (e.currentTarget as HTMLElement).style.color = "white";
-            }}
-          >
-            <IconChevronLeft size={20} />
-          </button>
-
-          <div style={{ display: "flex", gap: "8px" }}>
-            {data.items.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrent(i)}
-                style={{
-                  width: i === current ? "24px" : "8px",
-                  height: "8px",
-                  borderRadius: "100px",
-                  border: "none",
-                  background: i === current ? "#DE3F0B" : "rgba(255,255,255,0.2)",
-                  cursor: "pointer",
-                  transition: "all 0.3s",
-                  padding: 0,
-                }}
-              />
-            ))}
-          </div>
-
-          <button
-            onClick={next}
-            id="testimonial-next"
-            style={{
-              width: "44px",
-              height: "44px",
-              borderRadius: "50%",
-              border: "1px solid rgba(255,255,255,0.15)",
-              background: "transparent",
-              color: "white",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transition: "all 0.2s",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.borderColor = "#DE3F0B";
-              (e.currentTarget as HTMLElement).style.color = "#DE3F0B";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.15)";
-              (e.currentTarget as HTMLElement).style.color = "white";
-            }}
-          >
-            <IconChevronRight size={20} />
-          </button>
+            {data?.title ?? "What Our Clients Say"}
+          </motion.h2>
         </div>
+
+        {/* Grid Array */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {safeItems.map((t: any, i: number) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 40 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-[#FAFAFA] rounded-3xl p-10 flex flex-col justify-between aspect-[4/3] border border-black/[0.04] hover:border-black/10 transition-colors"
+            >
+              <p className="font-['Plus_Jakarta_Sans'] text-[#111111] text-[20px] md:text-[24px] font-medium leading-[1.4] tracking-[-0.01em] mb-12">
+                &ldquo;{t?.quote ?? ""}&rdquo;
+              </p>
+              
+              <div className="flex items-center gap-4">
+                <div 
+                  className="w-12 h-12 rounded-full flex flex-shrink-0 items-center justify-center text-white font-bold text-[15px]" 
+                  style={{ backgroundColor: t?.color ?? "#111" }}
+                >
+                  {t?.initials ?? "CL"}
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-['Plus_Jakarta_Sans'] font-bold text-[#111111] text-[16px]">
+                    {t?.name ?? ""}
+                  </span>
+                  <span className="text-[#666666] text-[14px] font-medium tracking-tight">
+                    {t?.role ?? ""} {t?.company ? `@ ${t.company}` : ""}
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
       </div>
     </section>
   );

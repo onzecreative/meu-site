@@ -3,35 +3,23 @@ import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 
 const defaultStats = [
-  { number: "98.6%", label: "Entregas no Prazo", sub: "nos últimos 12 meses" },
-  { number: "12K+", label: "Clientes Ativos", sub: "em todo o Brasil" },
-  { number: "500+", label: "Veículos na Frota", sub: "rastreados em tempo real" },
-  { number: "24/7", label: "Suporte Disponível", sub: "365 dias por ano" },
-];
-
-const defaultPartners = [
-  "Ambev", "Vale", "Petrobras", "BRF", "Embraer",
-  "Ambev", "Vale", "Petrobras", "BRF", "Embraer",
+  { number: "96.2%", label: "On-Time Delivery Rate.", sub: "" },
+  { number: "8/7", label: "GPS Tracking Coverage.", sub: "" },
+  { number: "+2", label: "Countries covered daily.", sub: "" },
+  { number: "+0.5K", label: "Monthly Orders Fulfilled.", sub: "" },
 ];
 
 export default function QuickFacts() {
-  const [data, setData] = useState<{
-    sectionTitle: string;
-    title: string;
-    stats: typeof defaultStats;
-    partners: typeof defaultPartners;
-  }>({
-    sectionTitle: "Números que falam por si",
-    title: "Resultados reais, clientes satisfeitos",
+  const [data, setData] = useState<any>({
     stats: defaultStats,
-    partners: defaultPartners,
+    partners: ["Logipack", "TransGlob", "FastWay", "OceanLine", "AirLift", "AutoFleet"]
   });
 
   useEffect(() => {
     fetch("/api/admin/section/quickfacts?t=" + Date.now())
       .then((res) => res.json())
       .then((json) => {
-        if (json && Object.keys(json).length > 0) setData(json);
+        if (json && Object.keys(json).length > 0) setData((prev: any) => ({ ...prev, ...json }));
       })
       .catch(() => {});
   }, []);
@@ -40,78 +28,29 @@ export default function QuickFacts() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="stats" style={{ background: "#F3F4F6", padding: "100px 0 0" }}>
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
-        {/* Header */}
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          style={{ textAlign: "center", marginBottom: "72px" }}
-        >
-          <p style={{
-            color: "#DE3F0B",
-            fontSize: "13px",
-            fontWeight: 700,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            marginBottom: "16px",
-          }}>
-            {data?.sectionTitle ?? ""}
-          </p>
-          <h2 style={{
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
-            fontWeight: 800,
-            fontSize: "clamp(32px, 5vw, 56px)",
-            color: "#111827",
-            letterSpacing: "-0.03em",
-            lineHeight: 1.1,
-          }}>
-            {data?.title ?? ""}
-          </h2>
-        </motion.div>
+    <section id="stats" className="w-full bg-white pt-24 pb-0 flex flex-col items-center">
+      
+      {/* Tiny Orange Circle Indicator */}
+      <div className="w-full max-w-[1280px] mx-auto px-6 mb-24">
+        <div className="w-3 h-3 rounded-full border-[2.5px] border-[#E0400C]" />
+      </div>
 
+      <div className="w-full max-w-[1280px] mx-auto px-6" ref={ref}>
         {/* Stats grid */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "24px",
-          marginBottom: "80px", // Retained from original, as the snippet didn't explicitly remove it from the outer div
-        }}>
-          {(data.stats || []).map((stat, i) => (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16 md:gap-y-0 mb-32">
+          {(data?.stats || []).map((stat: any, i: number) => (
             <motion.div
               key={stat?.number ?? i}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              style={{
-                background: "white",
-                padding: "48px 36px",
-                textAlign: "center",
-              }}
+              transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-start"
             >
-              <div style={{
-                fontFamily: "'Plus Jakarta Sans', sans-serif",
-                fontWeight: 800,
-                fontSize: "clamp(40px, 5vw, 60px)",
-                color: "#DE3F0B",
-                letterSpacing: "-0.04em",
-                lineHeight: 1,
-                marginBottom: "12px",
-              }}>
+              <div className="font-['Plus_Jakarta_Sans'] font-semibold text-[54px] md:text-[64px] text-[#111111] leading-none mb-4 tracking-[-0.03em]">
                 {stat?.number ?? ""}
               </div>
-              <div style={{
-                fontSize: "16px",
-                fontWeight: 700,
-                color: "#111827",
-                marginBottom: "6px",
-              }}>
+              <div className="text-[17px] text-[#666666] font-medium tracking-tight">
                 {stat?.label ?? ""}
-              </div>
-              <div style={{ fontSize: "13px", color: "#6B7280" }}>
-                {stat?.sub ?? ""}
               </div>
             </motion.div>
           ))}
@@ -119,31 +58,24 @@ export default function QuickFacts() {
       </div>
 
       {/* Partner strip */}
-      <div style={{
-        background: "#111827",
-        padding: "28px 0",
-        overflow: "hidden",
-      }}>
-        <div style={{
-          display: "flex",
-          width: "max-content",
-          animation: "marquee 25s linear infinite",
-        }}>
-          {[...data.partners, ...data.partners].map((p, i) => (
-            <span key={i} style={{
-              padding: "0 48px",
-              fontSize: "18px",
-              fontWeight: 700,
-              color: "rgba(255,255,255,0.2)",
-              letterSpacing: "0.05em",
-              textTransform: "uppercase",
-              whiteSpace: "nowrap",
-            }}>
-              {p}
-            </span>
+      <div className="w-full bg-[#FAFAFA] py-16 overflow-hidden border-y border-black/[0.04]">
+        <div className="w-full max-w-[1280px] mx-auto px-6 mb-12 flex items-center justify-start">
+           <div className="w-3 h-3 rounded-full border-[2.5px] border-[#E0400C]" />
+        </div>
+        <div className="flex w-max animate-[marquee_40s_linear_infinite]">
+          {[...data?.partners || [], ...data?.partners || [], ...data?.partners || []].map((p: string, i: number) => (
+             <div key={i} className="px-16 flex items-center justify-center min-w-[200px]">
+               <span className="text-2xl md:text-3xl font-extrabold text-black/[0.15] tracking-tight">{p}</span>
+             </div>
           ))}
         </div>
       </div>
+      <style>{`
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-33.33%); }
+        }
+      `}</style>
     </section>
   );
 }
