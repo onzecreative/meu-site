@@ -41,7 +41,10 @@ export default function SectionEditor({ id, label, defaultData }: Props) {
         body: JSON.stringify(data),
       });
       if (res.ok) setMessage("Salvo com sucesso!");
-      else setMessage("Erro ao salvar.");
+      else {
+        const errorData = await res.json().catch(() => ({}));
+        setMessage("Erro Supabase: " + (errorData.error || "Erro de conexão"));
+      }
     } catch {
       setMessage("Erro de conexão.");
     } finally {

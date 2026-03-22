@@ -10,9 +10,13 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const updated = await saveHeroConfig(body);
+    try {
+    const data = await req.json();
+    const updated = await saveHeroConfig(data);
     return NextResponse.json(updated);
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message || "Erro desconhecido" }, { status: 400 });
+  }
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 400 });
   }

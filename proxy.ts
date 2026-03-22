@@ -6,7 +6,7 @@ const ADMIN_SECRET = new TextEncoder().encode(
   process.env.ADMIN_SECRET || "fallback-secret-minimo-32-caracteres-!!"
 );
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Só protege rotas /admin, exceto /admin/login

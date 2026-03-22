@@ -23,8 +23,12 @@ export async function POST(
     if (!id) return NextResponse.json({ error: "Missing section ID" }, { status: 400 });
 
     const body = await req.json();
-    const updated = await saveSectionData(id, body);
-    return NextResponse.json(updated);
+    try {
+      const result = await saveSectionData(id, body);
+      return NextResponse.json(result);
+    } catch (error: any) {
+      return NextResponse.json({ error: error.message || "Erro desconhecido no BD" }, { status: 400 });
+    }
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 500 });
   }
