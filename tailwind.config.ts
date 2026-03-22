@@ -2,21 +2,24 @@ import type { Config } from "tailwindcss";
 
 export default {
   content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       fontFamily: {
-        figtree: ["var(--font-figtree)", "sans-serif"],
+        urbanist: ['var(--font-urbanist)', 'sans-serif'],
+        inter: ['var(--font-inter)', 'sans-serif'],
       },
       colors: {
-        primary: "#E8431A",
-        brandDark: "#1A0500",
-        brandLight: "#F2F0EB",
-        brandGray: "#E0DDD8",
-        textMain: "#1A1A1A",
+        primary: "#F94006",
+        background: "#1C1817",
+        foreground: "#ededed",
+        "brand-dark": "#1C1817",
+        "brand-light": "#F3F2F2",
+        "text-main": "#363130",
+        "brand-gray": "#CFCAC9",
       },
     },
   },

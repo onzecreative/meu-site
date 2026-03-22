@@ -1,0 +1,72 @@
+=== FRAMER DESIGN EXTRACT ===
+
+--- TOKENS DE COR ---
+--token-0698ec6e-98d5-4dc5-82cd-980692a5f3e9:#1c1817
+--token-a0bbb8c3-468f-4079-bdb9-c503ab2b01b0:#cfcac9
+--token-93ed733c-d50c-4cfe-9503-161904973ec7:#fff
+--token-0cfc16fd-3729-4b64-9ac8-d1037c8fcb3d:#f94006
+--token-342ba7e2-974a-463b-8931-03a635f79501:#363130
+--token-fe76d8b8-77c5-4283-b7c8-434b54680871:#46403f
+--token-0864501f-c811-45ef-b664-9856c84acce8:#5e5755
+--token-7bf4b6d9-05f0-431f-8063-c1d080e049ff:#706866
+--token-e04b250b-6670-46de-97e4-12cd804f910d:#867c79
+--token-3351e178-b022-4114-9b06-7f70ab7acc12:#9e9694
+--token-b0763a81-7774-40fa-b9ea-b49668d0a99f:#b6b0af
+--token-c9e785a9-c247-4ebc-b898-4c97fa07eb2d:#e7e5e4
+--token-c7940705-dd99-46ba-8f4c-0d15094b24d9:#f3f2f2
+--token-1e0f44e7-e745-45d4-a9c4-0dd04bfcb626:#fee5dc
+--token-346686bb-0692-4c74-84c6-5bc93ad4dced:#fdb39b
+--token-40b9ef69-3124-4ff9-b6e0-05618b8c13d1:#fb8c6a
+--token-ca6dc75f-b6b6-42bb-8eb5-371ffbd693b9:#fa6638
+--token-caf8948f-35c5-46c5-9c5b-bd193d8f7865:#f94006
+--token-9a64314a-003b-43e0-9aec-8b36aa9c054a:#c73305
+--token-f8713901-9877-4cc9-9746-4eb1dbd7b461:#952604
+--token-03addee0-85ca-4632-964b-3ca263d37f6a:#641a02
+--token-64d3685e-2276-4316-aebb-83141f2beb5a:#320d01
+
+--- ESPAÇAMENTOS (PADDING) ---
+padding:0 0 0 2px
+padding:0 16px
+padding:0 40px
+padding:0px
+padding:0px 16px 0px 16px
+padding:10px 12px
+padding:120px 16px
+padding:120px 40px
+padding:120px 40px 160px
+padding:160px 16px 120px
+padding:160px 40px
+padding:160px 40px 120px
+padding:16px
+padding:16px 20px
+padding:17px 20px
+padding:20px
+padding:240px 0 0
+padding:240px 0 120px
+padding:24px 0 0
+padding:24px 40px
+padding:2px 0 0
+padding:32px
+padding:32px 40px
+padding:40px 16px
+padding:4px
+padding:4px 0 0
+padding:80px 16px
+padding:80px 40px
+
+--- BORDER RADIUS ---
+border-radius:0px
+border-radius:12px
+border-radius:16px
+border-radius:56px
+border-radius:8px
+border-radius:var
+
+--- FONT SIZES ---
+font-size:10px
+font-size:12px
+font-size:13px
+font-size:16px
+font-size:1rem
+font-size:22px
+

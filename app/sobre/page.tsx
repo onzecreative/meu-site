@@ -36,7 +36,7 @@ export default function SobrePage() {
       <Navbar />
 
       {/* --- HERO SOBRE --- */}
-      <section className="w-full pt-40 pb-24 md:pb-32 px-6 md:px-12 max-w-7xl mx-auto" ref={heroRef}>
+      <section className="w-full pt-40 pb-24 md:pb-32 px-[16px] md:px-[40px] max-w-7xl mx-auto" ref={heroRef}>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
@@ -55,7 +55,7 @@ export default function SobrePage() {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={heroInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-full h-[400px] md:h-[600px] rounded-2xl overflow-hidden mb-16"
+          className="w-full h-[400px] md:h-[600px] rounded-[16px] overflow-hidden mb-16"
         >
           <img src="https://picsum.photos/seed/highway/1600/900" alt="LogiNord Highway" className="w-full h-full object-cover" />
         </motion.div>
@@ -81,8 +81,8 @@ export default function SobrePage() {
       </section>
 
       {/* --- TIMELINE HISTÓRIA --- */}
-      <section className="w-full bg-[#F2F0EB] py-24 md:py-32">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+      <section className="w-full bg-[#F2F0EB] py-[120px] md:py-[160px]">
+        <div className="max-w-7xl mx-auto px-[16px] md:px-[40px]">
           <h2 className="text-[#1A1A1A] mb-16 md:mb-24">Our History.</h2>
           
           <div className="flex flex-col md:flex-row gap-16 md:gap-24 relative">
@@ -97,11 +97,11 @@ export default function SobrePage() {
                   <div key={item.year} className="relative flex items-center group cursor-pointer" onClick={() => setActiveYear(item.year)}>
                     {/* The Dot & Line Indicator */}
                     <div className="hidden md:flex absolute -left-[14px] items-center">
-                      <div className={`w-2 h-2 rounded-full z-10 transition-colors duration-300 ${isActive ? 'bg-[#E8431A] ring-4 ring-[#E8431A]/20' : 'bg-[#1A1A1A]/20 group-hover:bg-[#1A1A1A]/40'}`} />
+                      <div className={`w-2 h-2 rounded-[56px] z-10 transition-colors duration-300 ${isActive ? 'bg-[#E8431A] ring-4 ring-[#E8431A]/20' : 'bg-[#1A1A1A]/20 group-hover:bg-[#1A1A1A]/40'}`} />
                       <div className={`h-[2px] transition-all duration-500 bg-[#E8431A] ${isActive ? 'w-16' : 'w-0'}`} />
                     </div>
                     
-                    <span className={`transition-all duration-300 font-figtree font-extrabold md:ml-12 ${isActive ? 'text-[40px] md:text-[56px] text-[#1A1A1A]' : 'text-[24px] md:text-[32px] text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60'}`}>
+                    <span className={`transition-all duration-300 font-urbanist font-extrabold md:ml-12 ${isActive ? 'text-[40px] md:text-[56px] text-[#1A1A1A]' : 'text-[24px] md:text-[32px] text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60'}`}>
                       {item.year}
                     </span>
                     {isActive && <div className="ml-4 md:hidden"><Label text="YEAR" className="!mb-0" /></div>}
@@ -123,7 +123,7 @@ export default function SobrePage() {
                 >
                   <h3 className="text-[#1A1A1A] text-[36px] md:text-[48px] mb-6">{activeTimeline.title}</h3>
                   <p className="text-[#1A1A1A]/70 text-[18px] mb-12 max-w-[500px]">{activeTimeline.desc}</p>
-                  <div className="w-full aspect-video rounded-2xl overflow-hidden bg-gray-200">
+                  <div className="w-full aspect-video rounded-[16px] overflow-hidden bg-gray-200">
                     <img src={activeTimeline.img} alt={activeTimeline.title} className="w-full h-full object-cover" />
                   </div>
                 </motion.div>
@@ -134,8 +134,8 @@ export default function SobrePage() {
       </section>
 
       {/* --- MISSÃO VISÃO VALORES --- */}
-      <section className="w-full bg-[#FAFAFA] py-24 md:py-32">
-        <div className="max-w-4xl mx-auto px-6 md:px-12 flex flex-col items-center">
+      <section className="w-full bg-[#FAFAFA] py-[120px] md:py-[160px]">
+        <div className="max-w-4xl mx-auto px-[16px] md:px-[40px] flex flex-col items-center">
           <Label text="What Drives Us." />
           <div className="w-full flex flex-col mt-12 divide-y divide-[#1A1A1A]/10 border-t border-b border-[#1A1A1A]/10">
             
@@ -168,7 +168,7 @@ export default function SobrePage() {
       </section>
 
       {/* --- LOCALIZAÇÕES --- */}
-      <section className="w-full bg-[#EFECE6] py-24 md:py-32 relative overflow-hidden flex justify-center items-center min-h-[800px]">
+      <section className="w-full bg-[#EFECE6] py-[120px] md:py-[160px] relative overflow-hidden flex justify-center items-center min-h-[800px]">
         <div className="absolute top-24 z-10 flex flex-col items-center pointer-events-none">
           <Label text="Our Locations" />
         </div>
@@ -192,8 +192,8 @@ export default function SobrePage() {
               onMouseLeave={() => setActiveLocation(null)}
               className="relative w-8 h-8 flex items-center justify-center cursor-pointer group"
             >
-              <div className="absolute inset-0 bg-[#E8431A] rounded-full animate-ping opacity-20" />
-              <div className="w-4 h-4 bg-[#E8431A] rounded-full ring-4 ring-white shadow-lg" />
+              <div className="absolute inset-0 bg-[#E8431A] rounded-[56px] animate-ping opacity-20" />
+              <div className="w-4 h-4 bg-[#E8431A] rounded-[56px] ring-4 ring-white shadow-lg" />
             </button>
             <AnimatePresence>
               {activeLocation === 'rotterdam' && (
@@ -201,7 +201,7 @@ export default function SobrePage() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-[280px] bg-white rounded-2xl shadow-xl p-4 pointer-events-none"
+                  className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-[280px] bg-white rounded-[16px] shadow-xl p-4 pointer-events-none"
                 >
                   <img src="https://picsum.photos/seed/rotterdam/400/200" className="w-full h-[120px] object-cover rounded-xl mb-4" />
                   <h4 className="font-bold text-[#1A1A1A] mb-1">Rotterdam, NL</h4>
@@ -218,8 +218,8 @@ export default function SobrePage() {
               onMouseLeave={() => setActiveLocation(null)}
               className="relative w-8 h-8 flex items-center justify-center cursor-pointer group"
             >
-              <div className="absolute inset-0 bg-[#E8431A] rounded-full animate-ping opacity-20" />
-              <div className="w-4 h-4 bg-[#E8431A] rounded-full ring-4 ring-white shadow-lg" />
+              <div className="absolute inset-0 bg-[#E8431A] rounded-[56px] animate-ping opacity-20" />
+              <div className="w-4 h-4 bg-[#E8431A] rounded-[56px] ring-4 ring-white shadow-lg" />
             </button>
             <AnimatePresence>
               {activeLocation === 'houston' && (
@@ -227,7 +227,7 @@ export default function SobrePage() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-[280px] bg-white rounded-2xl shadow-xl p-4 pointer-events-none"
+                  className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-[280px] bg-white rounded-[16px] shadow-xl p-4 pointer-events-none"
                 >
                   <img src="https://picsum.photos/seed/houston/400/200" className="w-full h-[120px] object-cover rounded-xl mb-4" />
                   <h4 className="font-bold text-[#1A1A1A] mb-1">Houston, TX, USA</h4>
@@ -241,23 +241,23 @@ export default function SobrePage() {
       </section>
 
       {/* --- TIME --- */}
-      <section className="w-full bg-white py-24 md:py-32">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-start">
+      <section className="w-full bg-white py-[120px] md:py-[160px]">
+        <div className="max-w-7xl mx-auto px-[16px] md:px-[40px] flex flex-col items-start">
           <Label text="People You Can Rely On." />
           <h2 className="text-[#1A1A1A] mb-16">The Leadership.</h2>
 
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
             {teamData.map((member, i) => (
-              <div key={i} className="group relative w-full aspect-[4/5] md:aspect-square rounded-2xl overflow-hidden bg-[#F2F0EB]">
+              <div key={i} className="group relative w-full aspect-[4/5] md:aspect-square rounded-[16px] overflow-hidden bg-[#F2F0EB]">
                 <img src={member.img} alt={member.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 
                 {/* Overlay card */}
-                <div className="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md rounded-2xl p-6 flex items-center justify-between">
+                <div className="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md rounded-[16px] p-6 flex items-center justify-between">
                   <div className="flex flex-col">
                     <span className="font-bold text-[#1A1A1A] text-[20px]">{member.name}</span>
                     <span className="text-[#1A1A1A]/60 text-[15px]">{member.role}</span>
                   </div>
-                  <a href="#" className="w-12 h-12 rounded-full border border-[#1A1A1A]/10 flex items-center justify-center hover:bg-[#E8431A] hover:text-white hover:border-[#E8431A] transition-colors text-[#1A1A1A]">
+                  <a href="#" className="w-12 h-12 rounded-[56px] border border-[#1A1A1A]/10 flex items-center justify-center hover:bg-[#E8431A] hover:text-white hover:border-[#E8431A] transition-colors text-[#1A1A1A]">
                     <ArrowUpRight size={20} />
                   </a>
                 </div>
@@ -268,8 +268,8 @@ export default function SobrePage() {
       </section>
 
       {/* --- CERTIFICAÇÕES --- */}
-      <section className="w-full bg-[#1A1A1A] py-24 md:py-32">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row gap-16 md:gap-12">
+      <section className="w-full bg-[#1A1A1A] py-[120px] md:py-[160px]">
+        <div className="max-w-7xl mx-auto px-[16px] md:px-[40px] flex flex-col md:flex-row gap-16 md:gap-12">
           
           <div className="w-full md:w-[40%] flex flex-col">
             <Label text="Certified. Verified. Compliant." />
@@ -283,8 +283,8 @@ export default function SobrePage() {
               { icon: CheckCircle2, title: "HACCP Compliance", desc: "Fully certified for temperature-controlled food and pharma transit." },
               { icon: ShieldCheck, title: "AEO Certified", desc: "Authorized Economic Operator status for expedited customs." }
             ].map((cert, i) => (
-              <div key={i} className="flex gap-6 p-8 rounded-2xl border border-white/10 bg-white/5 items-start">
-                <div className="text-[#E8431A] p-4 rounded-full bg-white/10 shrink-0">
+              <div key={i} className="flex gap-6 p-8 rounded-[16px] border border-white/10 bg-white/5 items-start">
+                <div className="text-[#E8431A] p-4 rounded-[56px] bg-white/10 shrink-0">
                   <cert.icon size={28} />
                 </div>
                 <div className="flex flex-col">

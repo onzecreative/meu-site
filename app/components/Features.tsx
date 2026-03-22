@@ -57,8 +57,8 @@ export default function Features() {
   const items = data?.items && data.items.length > 0 ? data.items : defaultFeatures;
 
   return (
-    <section id="features" className="w-full bg-white py-24 md:py-32">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row gap-16 md:gap-12" ref={ref}>
+    <section id="features" className="w-full bg-white py-[120px] md:py-[160px]">
+      <div className="max-w-7xl mx-auto px-[16px] md:px-[40px] flex flex-col md:flex-row gap-16 md:gap-12" ref={ref}>
         
         {/* Left Column */}
         <div className="w-full md:w-[35%] flex flex-col items-start pr-0 md:pr-12">
@@ -66,7 +66,7 @@ export default function Features() {
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ type: "spring", bounce: 0.25, duration: 0.8 }}
             className="text-[#1A1A1A] mb-6"
           >
             {data?.title ?? "Why Leading Businesses Rely on Us"}
@@ -74,7 +74,7 @@ export default function Features() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            transition={{ duration: 0.8, delay: 0.2, type: "spring", bounce: 0.25 }}
             className="text-[#1A1A1A]/70 mb-10 max-w-[340px]"
           >
             {data?.subtitle ?? "We combine operational excellence with robust infrastructure."}
@@ -82,7 +82,7 @@ export default function Features() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+            transition={{ duration: 0.8, delay: 0.3, type: "spring", bounce: 0.25 }}
           >
             <Button variant="outline-dark" text="Know More About Us" href="/sobre" />
           </motion.div>
@@ -97,10 +97,10 @@ export default function Features() {
                 key={i}
                 initial={{ opacity: 0, scale: 0.97, y: 20 }}
                 animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.1 * i, ease: "easeOut" }}
-                className="flex flex-col items-center justify-center text-center bg-[#F2F0EB] p-10 rounded-2xl aspect-square md:aspect-auto hover:-translate-y-2 transition-transform duration-300"
+                transition={{ duration: 0.6, delay: 0.1 * i, type: "spring", bounce: 0.25 }}
+                className="flex flex-col items-center justify-center text-center bg-[#F2F0EB] p-10 rounded-[16px] aspect-square md:aspect-auto hover:-translate-y-2 transition-transform duration-300"
               >
-                <div className="mb-6 bg-white p-4 rounded-full shadow-sm">
+                <div className="mb-6 bg-white p-4 rounded-[56px] shadow-sm">
                   <Icon />
                 </div>
                 <h3 className="text-[#1A1A1A] font-bold text-[22px] mb-3">{feat?.title ?? ""}</h3>

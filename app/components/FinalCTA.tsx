@@ -8,7 +8,7 @@ export default function FinalCTA() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section className="w-full bg-[#1A0500] py-24 md:py-32 relative flex flex-col items-center justify-center text-center overflow-hidden">
+    <section className="w-full bg-[#1A0500] py-[120px] md:py-[160px] relative flex flex-col items-center justify-center text-center overflow-hidden">
       
       {/* Decorative Arrow Pattern Background */}
       <div 
@@ -20,11 +20,11 @@ export default function FinalCTA() {
         }}
       />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 flex flex-col items-center" ref={ref}>
+      <div className="relative z-10 max-w-4xl mx-auto px-[16px] flex flex-col items-center" ref={ref}>
         <motion.h2
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ type: "spring", bounce: 0.25, duration: 0.8 }}
           className="text-white text-center mb-10 text-[48px] md:text-[64px] font-extrabold max-w-[800px] leading-tight"
         >
           Ready to move smarter?
@@ -33,7 +33,7 @@ export default function FinalCTA() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          transition={{ duration: 0.8, delay: 0.2, type: "spring", bounce: 0.25 }}
         >
           <Button variant="solid" text="Get a Custom Quote" href="/contato" />
         </motion.div>

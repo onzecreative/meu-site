@@ -43,8 +43,8 @@ export default function Services() {
   const items = data?.items || defaultServices;
 
   return (
-    <section id="services" className="w-full bg-white py-24 md:py-32">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row gap-16 md:gap-8 relative" ref={ref}>
+    <section id="services" className="w-full bg-white py-[120px] md:py-[160px]">
+      <div className="max-w-7xl mx-auto px-[16px] md:px-[40px] flex flex-col md:flex-row gap-16 md:gap-8 relative" ref={ref}>
         
         {/* Left Column (Sticky) */}
         <div className="w-full md:w-[40%] flex flex-col relative">
@@ -52,7 +52,7 @@ export default function Services() {
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              transition={{ type: "spring", bounce: 0.25, duration: 0.8 }}
               className="text-[#1A1A1A] mb-6 max-w-[400px]"
             >
               {data?.title ?? "Logistics that fit your needs."}
@@ -60,7 +60,7 @@ export default function Services() {
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              transition={{ duration: 0.8, delay: 0.2, type: "spring", bounce: 0.25 }}
               className="text-[#1A1A1A]/70 max-w-[340px]"
             >
               {data?.subtitle ?? "From temperature-controlled transport to regional distribution — we've got it covered."}
@@ -78,7 +78,7 @@ export default function Services() {
                  initial={{ opacity: 0, y: 40 }}
                  whileInView={{ opacity: 1, y: 0 }}
                  viewport={{ once: true, margin: "-100px" }}
-                 transition={{ duration: 0.8, ease: "easeOut" }}
+                 transition={{ type: "spring", bounce: 0.25, duration: 0.8 }}
                  className="flex flex-col items-start w-full"
                >
                  <Label text={num} />
@@ -87,7 +87,7 @@ export default function Services() {
                    {service?.title ?? ""}
                  </h3>
                  
-                 <div className="w-full overflow-hidden rounded-2xl bg-[#F2F0EB]">
+                 <div className="w-full overflow-hidden rounded-[16px] bg-[#F2F0EB]">
                    <img 
                      src={service?.image ?? defaultServices[i]?.image} 
                      alt={service?.title} 

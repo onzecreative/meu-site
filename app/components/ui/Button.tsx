@@ -8,7 +8,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export default function Button({ variant = 'solid', text, className = "", href, ...props }: ButtonProps) {
-  const baseClasses = "group flex items-center justify-between gap-4 rounded-full pl-6 pr-2 py-2 transition-all duration-300 w-fit cursor-pointer outline-none font-bold text-[15px]";
+  const baseClasses = "group flex items-center justify-between gap-4 rounded-[56px] pl-6 pr-2 py-2 transition-all duration-300 w-fit cursor-pointer outline-none font-bold text-[15px]";
   
   let customClasses = "";
   let innerCircleClasses = "";
@@ -35,7 +35,7 @@ export default function Button({ variant = 'solid', text, className = "", href, 
   const Content = (
     <>
       <span className="pl-1 pr-1">{text}</span>
-      <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all flex-shrink-0 ${innerCircleClasses}`}>
+      <div className={`w-10 h-10 rounded-[56px] flex items-center justify-center transition-all flex-shrink-0 ${innerCircleClasses}`}>
         <ArrowRight size={18} className={iconColorClass} />
       </div>
     </>

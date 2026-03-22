@@ -1,19 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-  --font-figtree: var(--font-figtree);
-  --color-primary: #E8431A;
-  --color-brand-dark: #1A0500;
-  --color-brand-light: #F2F0EB;
-  --color-brand-gray: #E0DDD8;
-  --color-text-main: #1A1A1A;
+  --font-urbanist: var(--font-urbanist);
+  --font-inter: var(--font-inter);
+  --color-primary: #F94006;
+  --color-brand-dark: #1C1817;
+  --color-brand-light: #F3F2F2;
+  --color-brand-gray: #CFCAC9;
+  --color-text-main: #363130;
 }
 
 :root {
-  --primary: #E8431A;
-  --brand-dark: #1A0500;
-  --brand-light: #F2F0EB;
-  --text-main: #1A1A1A;
+  --primary: #F94006;
+  --brand-dark: #1C1817;
+  --brand-light: #F3F2F2;
+  --text-main: #363130;
 }
 
 html {
@@ -26,12 +27,13 @@ body {
   background-color: var(--brand-light);
   color: var(--text-main);
   overflow-x: hidden;
+  font-family: var(--font-inter), sans-serif;
 }
 
 /* Typography Overrides (Framer Matches) */
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, .font-urbanist {
   color: inherit;
-  font-family: var(--font-figtree), sans-serif;
+  font-family: var(--font-urbanist), sans-serif;
 }
 
 h1 { 
@@ -51,10 +53,11 @@ h3 {
   font-weight: 700; 
   line-height: 1.25;
 }
-p { 
+p, .font-inter { 
   font-size: 16px; 
   line-height: 1.7; 
   font-weight: 400;
+  font-family: var(--font-inter), sans-serif;
 }
 
 @media (min-width: 768px) {

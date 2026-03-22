@@ -60,7 +60,7 @@ export default function ServicosPage() {
       <Navbar />
 
       {/* --- HERO SERVIÇOS --- */}
-      <section className="w-full pt-40 pb-24 md:pb-32 px-6 md:px-12 max-w-7xl mx-auto" ref={heroRef}>
+      <section className="w-full pt-40 pb-24 md:pb-32 px-[16px] md:px-[40px] max-w-7xl mx-auto" ref={heroRef}>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
@@ -79,7 +79,7 @@ export default function ServicosPage() {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={heroInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-full h-[400px] md:h-[600px] rounded-2xl overflow-hidden mb-16"
+          className="w-full h-[400px] md:h-[600px] rounded-[16px] overflow-hidden mb-16"
         >
           <img src="https://picsum.photos/seed/warehouse/1600/900" alt="LogiNord Warehouse" className="w-full h-full object-cover" />
         </motion.div>
@@ -97,8 +97,8 @@ export default function ServicosPage() {
       </section>
 
       {/* --- CORE CAPABILITIES --- */}
-      <section className="w-full bg-[#1A0500] py-24 md:py-32 text-white">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row gap-16 md:gap-8 relative">
+      <section className="w-full bg-[#1A0500] py-[120px] md:py-[160px] text-white">
+        <div className="max-w-7xl mx-auto px-[16px] md:px-[40px] flex flex-col md:flex-row gap-16 md:gap-8 relative">
           
           <div className="w-full md:w-[40%] flex flex-col relative">
             <div className="md:sticky md:top-32 flex flex-col items-start pr-0 md:pr-12">
@@ -115,7 +115,7 @@ export default function ServicosPage() {
                 <div key={i} className="flex flex-col items-start w-full group">
                   <Label text={num} />
                   <h3 className="text-white mb-8 leading-tight">{service.title}</h3>
-                  <div className="w-full overflow-hidden rounded-2xl bg-[#2a130c] mb-8">
+                  <div className="w-full overflow-hidden rounded-[16px] bg-[#2a130c] mb-8">
                     <img 
                       src={service.image} 
                       alt={service.title} 
@@ -126,7 +126,7 @@ export default function ServicosPage() {
                   <ul className="flex flex-col gap-3">
                     {service.bullets.map((bullet, j) => (
                       <li key={j} className="flex items-center gap-3 text-white/90">
-                        <div className="w-1.5 h-1.5 bg-[#E8431A] rounded-full" />
+                        <div className="w-1.5 h-1.5 bg-[#E8431A] rounded-[56px]" />
                         <span className="font-bold">{bullet}:</span> <span className="text-white/60 text-[15px]">Included in package</span>
                       </li>
                     ))}
@@ -140,14 +140,14 @@ export default function ServicosPage() {
       </section>
 
       {/* --- WHAT SETS US APART --- */}
-      <section className="w-full bg-[#F2F0EB] py-24 md:py-32 relative overflow-hidden" ref={apartRef}>
+      <section className="w-full bg-[#F2F0EB] py-[120px] md:py-[160px] relative overflow-hidden" ref={apartRef}>
         {/* Blurred BG */}
         <div 
           className="absolute inset-0 z-0 opacity-[0.08]"
           style={{ backgroundImage: "url('https://picsum.photos/seed/blur_truck/1920/1080')", backgroundSize: "cover", backgroundPosition: "center", filter: "blur(20px)" }}
         />
         
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row gap-16 md:gap-12">
+        <div className="relative z-10 max-w-7xl mx-auto px-[16px] md:px-[40px] flex flex-col md:flex-row gap-16 md:gap-12">
           
           {/* Left Column */}
           <div className="w-full md:w-[35%] flex flex-col items-start">
@@ -189,8 +189,8 @@ export default function ServicosPage() {
       </section>
 
       {/* --- THE PROCESS --- */}
-      <section className="w-full bg-white py-24 md:py-32" ref={processRef}>
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center">
+      <section className="w-full bg-white py-[120px] md:py-[160px]" ref={processRef}>
+        <div className="max-w-7xl mx-auto px-[16px] md:px-[40px] flex flex-col items-center">
           <Label text="HOW IT WORKS" />
           <h2 className="text-[#1A1A1A] mb-24 md:mb-32">The Process</h2>
 
@@ -212,7 +212,7 @@ export default function ServicosPage() {
                   className={`relative flex w-full mb-16 md:mb-24 ${isEven ? 'md:justify-end' : 'md:justify-start'}`}
                 >
                   {/* Central Dot */}
-                  <div className="absolute left-[24px] md:left-1/2 top-0 w-3 h-3 bg-[#E8431A] rounded-full -translate-x-1.5 md:-translate-x-1.5 mt-2" />
+                  <div className="absolute left-[24px] md:left-1/2 top-0 w-3 h-3 bg-[#E8431A] rounded-[56px] -translate-x-1.5 md:-translate-x-1.5 mt-2" />
                   
                   {/* Content Container */}
                   <div className={`w-full md:w-[45%] pl-16 md:pl-0 flex flex-col ${isEven ? 'md:pl-16 md:text-left' : 'md:pr-16 md:text-right md:items-end'}`}>

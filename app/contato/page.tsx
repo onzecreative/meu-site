@@ -32,7 +32,7 @@ export default function ContatoPage() {
       <Navbar />
 
       {/* --- HERO CONTATO --- */}
-      <section className="w-full bg-[#F2F0EB] pt-40 pb-24 md:pb-40 px-6 md:px-12 relative" ref={heroRef}>
+      <section className="w-full bg-[#F2F0EB] pt-40 pb-24 md:pb-40 px-[16px] md:px-[40px] relative" ref={heroRef}>
         <div className="max-w-7xl mx-auto flex flex-col items-center flex-1 w-full relative z-10 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -50,39 +50,39 @@ export default function ContatoPage() {
           initial={{ opacity: 0, scale: 0.98, y: 40 }}
           animate={heroInView ? { opacity: 1, scale: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative max-w-[780px] mx-auto bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.06)] p-6 md:p-10 -mb-48 mt-16 md:-mb-64 md:mt-24 z-20"
+          className="relative max-w-[780px] mx-auto bg-white rounded-[16px] shadow-[0_20px_60px_rgba(0,0,0,0.06)] p-6 md:p-10 -mb-48 mt-16 md:-mb-64 md:mt-24 z-20"
         >
           <form className="flex flex-col gap-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Field 01 */}
               <div className="flex flex-col gap-3">
                 <span className="text-[14px] text-[#1A1A1A]"><span className="text-[#1A1A1A]/40 text-[12px] font-bold mr-2">01</span><span className="font-bold">Full Name*</span></span>
-                <input type="text" placeholder="John Doe" className="w-full bg-white border border-[#E0DDD8] rounded-full px-5 py-4 text-[#1A1A1A] placeholder-[#1A1A1A]/30 focus:outline-none focus:border-[#1A1A1A]" />
+                <input type="text" placeholder="John Doe" className="w-full bg-white border border-[#E0DDD8] rounded-[56px] px-5 py-4 text-[#1A1A1A] placeholder-[#1A1A1A]/30 focus:outline-none focus:border-[#1A1A1A]" />
               </div>
               
               {/* Field 02 */}
               <div className="flex flex-col gap-3">
                 <span className="text-[14px] text-[#1A1A1A]"><span className="text-[#1A1A1A]/40 text-[12px] font-bold mr-2">02</span><span className="font-bold">Company Name</span></span>
-                <input type="text" placeholder="Your Company Ltd." className="w-full bg-white border border-[#E0DDD8] rounded-full px-5 py-4 text-[#1A1A1A] placeholder-[#1A1A1A]/30 focus:outline-none focus:border-[#1A1A1A]" />
+                <input type="text" placeholder="Your Company Ltd." className="w-full bg-white border border-[#E0DDD8] rounded-[56px] px-5 py-4 text-[#1A1A1A] placeholder-[#1A1A1A]/30 focus:outline-none focus:border-[#1A1A1A]" />
               </div>
 
               {/* Field 03 */}
               <div className="flex flex-col gap-3">
                 <span className="text-[14px] text-[#1A1A1A]"><span className="text-[#1A1A1A]/40 text-[12px] font-bold mr-2">03</span><span className="font-bold">Email Address*</span></span>
-                <input type="email" placeholder="john@company.com" className="w-full bg-white border border-[#E0DDD8] rounded-full px-5 py-4 text-[#1A1A1A] placeholder-[#1A1A1A]/30 focus:outline-none focus:border-[#1A1A1A]" />
+                <input type="email" placeholder="john@company.com" className="w-full bg-white border border-[#E0DDD8] rounded-[56px] px-5 py-4 text-[#1A1A1A] placeholder-[#1A1A1A]/30 focus:outline-none focus:border-[#1A1A1A]" />
               </div>
 
               {/* Field 04 */}
               <div className="flex flex-col gap-3">
                 <span className="text-[14px] text-[#1A1A1A]"><span className="text-[#1A1A1A]/40 text-[12px] font-bold mr-2">04</span><span className="font-bold">Phone Number</span></span>
-                <input type="tel" placeholder="+1 (555) 000-0000" className="w-full bg-white border border-[#E0DDD8] rounded-full px-5 py-4 text-[#1A1A1A] placeholder-[#1A1A1A]/30 focus:outline-none focus:border-[#1A1A1A]" />
+                <input type="tel" placeholder="+1 (555) 000-0000" className="w-full bg-white border border-[#E0DDD8] rounded-[56px] px-5 py-4 text-[#1A1A1A] placeholder-[#1A1A1A]/30 focus:outline-none focus:border-[#1A1A1A]" />
               </div>
             </div>
 
             {/* Field 05 */}
             <div className="flex flex-col gap-3">
               <span className="text-[14px] text-[#1A1A1A]"><span className="text-[#1A1A1A]/40 text-[12px] font-bold mr-2">05</span><span className="font-bold">What are you contacting us about?*</span></span>
-              <select className="w-full bg-white border border-[#E0DDD8] rounded-full px-5 py-4 text-[#1A1A1A] focus:outline-none focus:border-[#1A1A1A] appearance-none cursor-pointer">
+              <select className="w-full bg-white border border-[#E0DDD8] rounded-[56px] px-5 py-4 text-[#1A1A1A] focus:outline-none focus:border-[#1A1A1A] appearance-none cursor-pointer">
                 <option value="freight">National & International Freight</option>
                 <option value="coldchain">Cold Chain Logistics</option>
                 <option value="distribution">Regional Distribution</option>
@@ -93,17 +93,17 @@ export default function ContatoPage() {
             {/* Field 06 */}
             <div className="flex flex-col gap-3">
               <span className="text-[14px] text-[#1A1A1A]"><span className="text-[#1A1A1A]/40 text-[12px] font-bold mr-2">06</span><span className="font-bold">Message*</span></span>
-              <textarea placeholder="Tell us more about your logistics needs..." className="w-full bg-white border border-[#E0DDD8] rounded-2xl px-5 py-4 text-[#1A1A1A] placeholder-[#1A1A1A]/30 focus:outline-none focus:border-[#1A1A1A] min-h-[160px] resize-y" />
+              <textarea placeholder="Tell us more about your logistics needs..." className="w-full bg-white border border-[#E0DDD8] rounded-[16px] px-5 py-4 text-[#1A1A1A] placeholder-[#1A1A1A]/30 focus:outline-none focus:border-[#1A1A1A] min-h-[160px] resize-y" />
             </div>
 
             {/* Submit */}
             <div className="flex flex-col items-start gap-4 mt-4">
               <button 
                 type="button" 
-                className="group flex items-center justify-between gap-4 rounded-full pl-8 pr-3 py-3 w-fit transition-all duration-300 bg-[#E8431A] text-white hover:bg-[#d03a15] font-bold text-[16px] md:text-[18px]"
+                className="group flex items-center justify-between gap-4 rounded-[56px] pl-8 pr-3 py-3 w-fit transition-all duration-300 bg-[#E8431A] text-white hover:bg-[#d03a15] font-bold text-[16px] md:text-[18px]"
               >
                 <span>Send Message</span>
-                <div className="w-12 h-12 rounded-full flex items-center justify-center bg-white/20 border border-white/30 transition-transform group-hover:translate-x-1 shrink-0">
+                <div className="w-12 h-12 rounded-[56px] flex items-center justify-center bg-white/20 border border-white/30 transition-transform group-hover:translate-x-1 shrink-0">
                   <ArrowRight size={20} className="text-white" />
                 </div>
               </button>
@@ -118,7 +118,7 @@ export default function ContatoPage() {
 
       {/* --- FAQ --- */}
       <section className="w-full bg-white pt-16 pb-24 md:pb-32" ref={faqRef}>
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center">
+        <div className="max-w-7xl mx-auto px-[16px] md:px-[40px] flex flex-col items-center">
           <Label text="WE'RE HERE TO HELP YOU" />
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
@@ -147,13 +147,13 @@ export default function ContatoPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={faqInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className="bg-white border border-[#E0DDD8] rounded-2xl overflow-hidden cursor-pointer"
+                  className="bg-white border border-[#E0DDD8] rounded-[16px] overflow-hidden cursor-pointer"
                   onClick={() => toggleFaq(i)}
                 >
                   <div className="flex items-center justify-between p-6 md:p-8">
                     <div className="flex items-center gap-4 md:gap-8 pr-6">
                       <div className="flex items-center gap-2 shrink-0">
-                        <div className="w-2 h-2 rounded-full border-2 border-[#E8431A]" />
+                        <div className="w-2 h-2 rounded-[56px] border-2 border-[#E8431A]" />
                         <span className="text-[#1A1A1A]/40 font-bold text-[13px]">{num}</span>
                       </div>
                       <h4 className={`text-[#1A1A1A] font-bold text-[18px] md:text-[20px] leading-snug transition-colors ${isOpen ? 'text-[#E8431A]' : ''}`}>
@@ -161,7 +161,7 @@ export default function ContatoPage() {
                       </h4>
                     </div>
                     
-                    <div className="shrink-0 w-10 h-10 md:w-11 md:h-11 rounded-full border border-[#E0DDD8] flex items-center justify-center text-[#1A1A1A] transition-transform duration-300" style={{ transform: isOpen ? 'rotate(90deg) scale(0.95)' : 'rotate(0deg) scale(1)' }}>
+                    <div className="shrink-0 w-10 h-10 md:w-11 md:h-11 rounded-[56px] border border-[#E0DDD8] flex items-center justify-center text-[#1A1A1A] transition-transform duration-300" style={{ transform: isOpen ? 'rotate(90deg) scale(0.95)' : 'rotate(0deg) scale(1)' }}>
                       {isOpen ? <X size={20} className="text-[#E8431A]"/> : <Plus size={20} />}
                     </div>
                   </div>
@@ -174,7 +174,7 @@ export default function ContatoPage() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
                       >
-                        <div className="px-6 md:px-8 pb-8 pt-0 pl-12 md:pl-[84px] text-[#1A1A1A]/70 text-[16px] md:text-[18px]">
+                        <div className="px-[16px] md:px-8 pb-8 pt-0 pl-12 md:pl-[84px] text-[#1A1A1A]/70 text-[16px] md:text-[18px]">
                           {faq.a}
                         </div>
                       </motion.div>

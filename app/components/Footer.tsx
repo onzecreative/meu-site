@@ -5,12 +5,12 @@ export default function Footer() {
   const years = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-[#0a0a0a] text-white pt-24 pb-12 px-6 md:px-12 mt-auto">
+    <footer className="w-full bg-[#0a0a0a] text-white pt-24 pb-12 px-[16px] md:px-[40px] mt-auto">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-16 md:gap-8 justify-between">
         
         {/* Newsletter / Brand */}
         <div className="w-full md:w-[35%] flex flex-col items-start pr-0 md:pr-12">
-          <a href="/" className="font-figtree font-bold text-[28px] flex items-center gap-1 mb-8 text-white no-underline group">
+          <a href="/" className="font-urbanist font-bold text-[28px] flex items-center gap-1 mb-8 text-white no-underline group">
             LogiNord <ArrowUpRight size={24} strokeWidth={3} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
           </a>
           <p className="text-white/60 mb-8 max-w-[300px]">
@@ -20,9 +20,9 @@ export default function Footer() {
             <input 
               type="email" 
               placeholder="Your email address" 
-              className="w-full bg-white/5 border border-white/10 rounded-full px-6 py-4 text-white placeholder-white/40 focus:outline-none focus:border-white/30 transition-colors"
+              className="w-full bg-white/5 border border-white/10 rounded-[56px] px-[16px] py-4 text-white placeholder-white/40 focus:outline-none focus:border-white/30 transition-colors"
             />
-            <button className="w-full bg-[#E8431A] text-white font-bold rounded-full px-6 py-4 hover:bg-[#d03a15] transition-colors flex items-center justify-center gap-2 group">
+            <button className="w-full bg-[#E8431A] text-white font-bold rounded-[56px] px-[16px] py-4 hover:bg-[#d03a15] transition-colors flex items-center justify-center gap-2 group">
               Subscribe <ArrowUpRight size={18} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
             </button>
           </form>

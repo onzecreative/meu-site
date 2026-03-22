@@ -79,7 +79,7 @@ export default function QuickFacts() {
 
   return (
     <>
-      <section id="stats" className="w-full bg-white py-24 md:py-32 relative overflow-hidden">
+      <section id="stats" className="w-full bg-white py-[120px] md:py-[160px] relative overflow-hidden">
         {/* Decorative Arrows Background Pattern */}
         <div 
           className="absolute inset-0 pointer-events-none opacity-[0.03] z-0"
@@ -89,7 +89,7 @@ export default function QuickFacts() {
           }}
         />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row gap-16 md:gap-8" ref={ref}>
+        <div className="relative z-10 max-w-7xl mx-auto px-[16px] md:px-[40px] flex flex-col md:flex-row gap-16 md:gap-8" ref={ref}>
           
           {/* Left Column (1/3) */}
           <div className="w-full md:w-1/3 flex flex-col items-start pr-0 md:pr-8">
@@ -97,7 +97,7 @@ export default function QuickFacts() {
             <motion.h2 
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              transition={{ type: "spring", bounce: 0.25, duration: 0.8 }}
               className="text-[#1A1A1A] max-w-[400px]"
             >
               {data?.title ?? "Trusted by dozens of Companies across Industries."}
@@ -113,10 +113,10 @@ export default function QuickFacts() {
                   key={i}
                   initial={{ opacity: 0, y: 30 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.8, delay: i * 0.1, ease: "easeOut" }}
+                  transition={{ duration: 0.8, delay: i * 0.1, type: "spring", bounce: 0.25 }}
                   className="flex flex-col items-start"
                 >
-                  <div className="font-figtree font-extrabold text-[48px] md:text-[64px] text-[#1A1A1A] leading-none mb-3 tracking-tight">
+                  <div className="font-urbanist font-extrabold text-[48px] md:text-[64px] text-[#1A1A1A] leading-none mb-3 tracking-tight">
                     {inView && parsed.isValid ? (
                       <CountUp
                         start={0}
@@ -144,8 +144,8 @@ export default function QuickFacts() {
       </section>
 
       {/* Logos Marquee Section */}
-      <section className="w-full bg-[#F2F0EB] py-16 md:py-24 overflow-hidden border-t border-[#E0DDD8]">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 mb-12">
+      <section className="w-full bg-[#F2F0EB] py-16 md:py-[120px] overflow-hidden border-t border-[#E0DDD8]">
+        <div className="max-w-7xl mx-auto px-[16px] md:px-[40px] mb-12">
           <Label text="Clients & Partners" />
         </div>
         

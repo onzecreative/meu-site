@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
-import { Figtree } from "next/font/google";
+import { Urbanist, Inter } from "next/font/google";
 import "./globals.css";
 import JsonLd from "./components/JsonLd";
 import WhatsAppButton from "./components/WhatsAppButton";
 import CustomCursor from "./components/CustomCursor";
 
-const figtree = Figtree({
+const urbanist = Urbanist({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-figtree",
+  variable: "--font-urbanist",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -69,7 +76,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.webmanifest" />
       </head>
-      <body className={`${figtree.variable} font-figtree antialiased`}>
+      <body className={`${urbanist.variable} ${inter.variable} font-inter antialiased`}>
         <CustomCursor />
         {children}
         <JsonLd />

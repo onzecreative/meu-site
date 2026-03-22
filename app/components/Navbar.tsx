@@ -37,11 +37,11 @@ export default function Navbar() {
           scrolled ? "bg-white/90 backdrop-blur-xl border-b border-black/5 py-4 shadow-sm" : "bg-transparent py-6"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-[16px] md:px-[40px] flex items-center justify-between">
           
           {/* Logo */}
           <a href="/" className="flex items-center gap-1 no-underline group scale-100 hover:scale-[1.02] transition-transform">
-            <span className={`font-figtree font-bold text-[22px] tracking-tight flex items-center gap-1 ${scrolled ? 'text-[#1A1A1A]' : 'text-white'}`}>
+            <span className={`font-urbanist font-bold text-[22px] tracking-tight flex items-center gap-1 ${scrolled ? 'text-[#1A1A1A]' : 'text-white'}`}>
               LogiNord
               <ArrowUpRight size={20} strokeWidth={3} className={scrolled ? 'text-[#1A1A1A]' : 'text-white'} />
             </span>
@@ -79,7 +79,7 @@ export default function Navbar() {
 
           {/* Mobile Hamburguer */}
           <button
-            className={`md:hidden flex items-center justify-center p-2 rounded-full ${scrolled ? 'text-black' : 'text-white'}`}
+            className={`md:hidden flex items-center justify-center p-2 rounded-[56px] ${scrolled ? 'text-black' : 'text-white'}`}
             onClick={() => setMobileMenuOpen(true)}
           >
             <Menu size={28} />
@@ -98,7 +98,7 @@ export default function Navbar() {
             className="fixed inset-0 z-[1001] bg-white flex flex-col items-center justify-center"
           >
             <button
-              className="absolute top-6 right-6 p-2 rounded-full text-black hover:bg-black/5"
+              className="absolute top-6 right-6 p-2 rounded-[56px] text-black hover:bg-black/5"
               onClick={() => setMobileMenuOpen(false)}
             >
               <X size={32} />

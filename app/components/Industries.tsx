@@ -49,7 +49,7 @@ export default function Industries() {
   const items = data?.items && data.items.length > 0 ? data.items : defaultIndustries;
 
   return (
-    <section id="industries" className="w-full bg-[#1A0500] py-24 md:py-32 relative overflow-hidden">
+    <section id="industries" className="w-full bg-[#1A0500] py-[120px] md:py-[160px] relative overflow-hidden">
       
       {/* Decorative SVG Branch Pattern */}
       <div className="absolute right-0 top-0 bottom-0 w-[50%] opacity-20 pointer-events-none">
@@ -60,7 +60,7 @@ export default function Industries() {
         </svg>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row gap-16 md:gap-8" ref={ref}>
+      <div className="relative z-10 max-w-7xl mx-auto px-[16px] md:px-[40px] flex flex-col md:flex-row gap-16 md:gap-8" ref={ref}>
         
         {/* Left Column (Sticky) */}
         <div className="w-full md:w-[40%] flex flex-col relative">
@@ -69,7 +69,7 @@ export default function Industries() {
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              transition={{ type: "spring", bounce: 0.25, duration: 0.8 }}
               className="text-white mb-6 max-w-[400px]"
             >
               {data?.title ?? "Built for Critical Industries."}
@@ -77,7 +77,7 @@ export default function Industries() {
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              transition={{ duration: 0.8, delay: 0.2, type: "spring", bounce: 0.25 }}
               className="text-white/70 max-w-[340px] mb-10"
             >
               {data?.subtitle ?? "Every sector has specialized routing requirements. We adapt to all."}
@@ -85,7 +85,7 @@ export default function Industries() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+              transition={{ duration: 0.8, delay: 0.3, type: "spring", bounce: 0.25 }}
             >
               <Button variant="outline" text="Know Our Industries" />
             </motion.div>
@@ -100,8 +100,8 @@ export default function Industries() {
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="group cursor-pointer flex flex-col bg-[#2a130c] rounded-2xl overflow-hidden card-hover"
+              transition={{ type: "spring", bounce: 0.25, duration: 0.8 }}
+              className="group cursor-pointer flex flex-col bg-[#2a130c] rounded-[16px] overflow-hidden card-hover"
             >
               {/* Image top */}
               <div className="w-full h-[300px] md:h-[400px] bg-[#111] overflow-hidden relative">

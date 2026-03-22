@@ -38,7 +38,7 @@ export default function Hero() {
       {/* Content */}
       <motion.div 
         style={{ y: yText }}
-        className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 pt-32 pb-16 flex flex-col h-full flex-1"
+        className="relative z-10 w-full max-w-7xl mx-auto px-[16px] md:px-[40px] pt-32 pb-16 flex flex-col h-full flex-1"
       >
         
         {/* Texts at bottom left */}
@@ -46,7 +46,7 @@ export default function Hero() {
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ type: "spring", bounce: 0.25, duration: 0.8 }}
             className="text-white mb-6"
           >
             Your Freight, delivered with Precision.
@@ -55,11 +55,11 @@ export default function Hero() {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            transition={{ duration: 0.8, delay: 0.2, type: "spring", bounce: 0.25 }}
             className="flex flex-col gap-6"
           >
             <div className="flex items-center gap-3">
-              <div className="w-3 h-3 rounded-full bg-[#E8431A] ring-4 ring-[#E8431A]/20" />
+              <div className="w-3 h-3 rounded-[56px] bg-[#E8431A] ring-4 ring-[#E8431A]/20" />
               <span className="text-white text-[18px] md:text-[22px] font-medium tracking-tight">
                 Across Europe and the US.
               </span>
@@ -75,7 +75,7 @@ export default function Hero() {
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+          transition={{ duration: 0.8, delay: 0.4, type: "spring", bounce: 0.25 }}
           className="w-full flex justify-start md:justify-end mt-12 md:mt-0"
         >
           <Button 
