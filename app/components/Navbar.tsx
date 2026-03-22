@@ -3,22 +3,37 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import Button from "./ui/Button";
+import Link from "next/link";
+import { getSectionData } from "@/lib/services/section.service";
 
-const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "About Us", href: "/sobre" },
-  { name: "Services", href: "/servicos" },
-  { name: "Fleet", href: "/galeria" },
-  { name: "Industries", href: "#industries" },
-  { name: "Contact Us", href: "/contato" },
-];
+interface NavbarData {
+  logoText?: string;
+  links: { name: string; href: string }[];
+  cta: { text: string; href: string };
+}
+
+const DEFAULT_NAVBAR: NavbarData = {
+  logoText: "LogiNord",
+  links: [
+    { name: "Home", href: "/" },
+    { name: "About Us", href: "/sobre" },
+    { name: "Services", href: "/servicos" },
+    { name: "Fleet", href: "/galeria" },
+    { name: "Contact Us", href: "/contato" },
+  ],
+  cta: { text: "Get a Quote", href: "/contato" }
+};
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSegment, setActiveSegment] = useState("");
+  const [data, setData] = useState<NavbarData>(DEFAULT_NAVBAR);
 
   useEffect(() => {
+    // Dynamic Fetch from CMS
+    getSectionData<NavbarData>("navbar", DEFAULT_NAVBAR).then(setData);
+    
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
@@ -42,7 +57,7 @@ export default function Navbar() {
           {/* Logo */}
           <a href="/" className="flex items-center gap-1 no-underline group scale-100 hover:scale-[1.02] transition-transform">
             <span className={`font-urbanist font-bold text-[22px] tracking-tight flex items-center gap-1 ${scrolled ? 'text-[#1A1A1A]' : 'text-white'}`}>
-              LogiNord
+              {data.logoText || "LogiNord"}
               <ArrowUpRight size={20} strokeWidth={3} className={scrolled ? 'text-[#1A1A1A]' : 'text-white'} />
             </span>
           </a>
@@ -50,7 +65,7 @@ export default function Navbar() {
           {/* Desktop Links */}
           <div className="hidden md:flex flex-1 justify-center">
             <ul className={`flex items-center gap-8 ${scrolled ? 'text-[#1A1A1A]' : 'text-white'}`}>
-              {navLinks.map((link) => {
+              {data.links.map((link) => {
                 const isActive = activeSegment === link.href;
                 return (
                   <li key={link.name} className="relative group">
@@ -72,8 +87,8 @@ export default function Navbar() {
           <div className="hidden md:flex items-center">
             <Button 
               variant="solid" 
-              text="Get a Quote" 
-              href="/contato" 
+              text={data.cta.text} 
+              href={data.cta.href}
             />
           </div>
 
@@ -105,7 +120,7 @@ export default function Navbar() {
             </button>
 
             <ul className="flex flex-col items-center gap-8 text-center mt-[-10vh]">
-              {navLinks.map((link) => (
+              {data.links.map((link) => (
                 <li key={link.name}>
                   <a
                     href={link.href}
@@ -119,7 +134,7 @@ export default function Navbar() {
             </ul>
             
             <div className="absolute bottom-12">
-              <Button variant="solid" text="Get a Quote" href="/contato" />
+              <Button variant="solid" text={data.cta.text} href={data.cta.href} />
             </div>
           </motion.div>
         )}
