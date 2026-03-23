@@ -1,51 +1,64 @@
-import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
+import { NextRequest, NextResponse } from "next/server";
+import { getSectionData, saveSectionData } from "@/lib/services/section.service";
+
+// Define default data for each section to handle empty DB
+const DEFAULTS: Record<string, any> = {
+  brand: { siteName: "LogiNord", logo: "", colors: { primary: "#E8431A" } },
+  navbar: { links: [], cta: { text: "Contact", href: "/contact" } },
+  hero: { title: "Your Freight, Delivered.", subtitle: "Precision in motion." },
+  stats: { label: "FACTS", items: [] },
+  clients: { logos: [] },
+  services: { title: "Our Services", items: [] },
+  industries: { title: "Industries", items: [] },
+  whyus: { title: "Why Us", items: [] },
+  testimonials: { title: "Success Stories", items: [] },
+  gallery: { items: [] },
+  contact: { title: "Get in Touch" },
+  faq: { items: [] },
+  footer: { columns: [], socials: {} },
+  settings: { siteName: "LogiNord", seo: {} }
+};
 
 export async function GET(
-  request: NextRequest,
+  req: NextRequest,
   { params }: { params: { section: string } }
 ) {
   const { section } = await params;
-  const filePath = path.join(process.cwd(), 'data', `${section}.json`);
-
+  const defaultData = DEFAULTS[section] || {};
+  
   try {
-    const data = await fs.readFile(filePath, 'utf8');
-    return NextResponse.json(JSON.parse(data));
+    const data = await getSectionData(section, defaultData);
+    return NextResponse.json(data);
   } catch (error) {
-    return NextResponse.json({ error: 'Section not found' }, { status: 404 });
+    return NextResponse.json({ error: "Failed to load data" }, { status: 500 });
   }
 }
 
 export async function POST(
-  request: NextRequest,
+  req: NextRequest,
   { params }: { params: { section: string } }
 ) {
   const { section } = await params;
-  const filePath = path.join(process.cwd(), 'data', `${section}.json`);
-  const logsPath = path.join(process.cwd(), 'data', 'logs.json');
-
+  
   try {
-    const body = await request.json();
-    await fs.writeFile(filePath, JSON.stringify(body, null, 2));
-
-    // Log the change
+    const body = await req.json();
+    const updated = await saveSectionData(section, body);
+    
+    // Log the change in site_content under 'logs'
     try {
-      const logsData = await fs.readFile(logsPath, 'utf8');
-      const logs = JSON.parse(logsData);
-      const newLog = {
+      const logs = await getSectionData<any[]>("logs", []);
+      logs.unshift({
         section,
         timestamp: new Date().toISOString(),
         action: 'UPDATE'
-      };
-      logs.unshift(newLog);
-      await fs.writeFile(logsPath, JSON.stringify(logs.slice(0, 10), null, 2));
-    } catch (logError) {
-      console.error('Failed to log change:', logError);
+      });
+      await saveSectionData("logs", logs.slice(0, 50));
+    } catch (logErr) {
+      console.error("Log error:", logErr);
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, data: updated });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to update section' }, { status: 500 });
+    return NextResponse.json({ error: "Failed to save data" }, { status: 500 });
   }
 }
