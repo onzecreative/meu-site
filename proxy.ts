@@ -9,14 +9,20 @@ const ADMIN_SECRET = new TextEncoder().encode(
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Só protege rotas /admin, exceto /admin/login
-  if (!pathname.startsWith("/admin") || pathname.startsWith("/admin/login")) {
+  // Define as rotas que devem ser ignoradas (login e arquivos públicos/estáticos se necessário no matcher)
+  const isLoginRoute = pathname.startsWith("/admin/login") || pathname.startsWith("/api/admin/login");
+  const isAdminRoute = pathname.startsWith("/admin") || pathname.startsWith("/api/admin");
+
+  if (!isAdminRoute || isLoginRoute) {
     return NextResponse.next();
   }
 
   const token = request.cookies.get("admin_token")?.value;
 
   if (!token) {
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     return NextResponse.redirect(new URL("/admin/login", request.url));
   }
 
@@ -24,12 +30,15 @@ export async function proxy(request: NextRequest) {
     await jwtVerify(token, ADMIN_SECRET);
     return NextResponse.next();
   } catch {
-    const response = NextResponse.redirect(new URL("/admin/login", request.url));
+    const response = pathname.startsWith("/api/") 
+      ? NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      : NextResponse.redirect(new URL("/admin/login", request.url));
+    
     response.cookies.delete("admin_token");
     return response;
   }
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/api/admin/:path*"],
 };

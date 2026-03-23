@@ -28,7 +28,7 @@ const DEFAULTS: Record<string, any> = {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { section: string } }
+  { params }: { params: Promise<{ section: string }> }
 ) {
   const { section } = await params;
   const defaultData = DEFAULTS[section] || {};
@@ -43,7 +43,7 @@ export async function GET(
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { section: string } }
+  { params }: { params: Promise<{ section: string }> }
 ) {
   const { section } = await params;
   
