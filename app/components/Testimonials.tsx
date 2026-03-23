@@ -38,7 +38,7 @@ export default function Testimonials() {
   });
 
   useEffect(() => {
-    fetch("/api/admin/section/testimonials?t=" + Date.now())
+    fetch("/api/admin/testimonials?t=" + Date.now())
       .then((res) => res.json())
       .then((json) => {
         if (json && Object.keys(json).length > 0) setData((prev: any) => ({ ...prev, ...json }));

@@ -35,7 +35,7 @@ export default function Industries() {
   });
 
   useEffect(() => {
-    fetch("/api/admin/section/industries?t=" + Date.now())
+    fetch("/api/admin/industries?t=" + Date.now())
       .then((res) => res.json())
       .then((json) => {
         if (json && Object.keys(json).length > 0) setData((prev: any) => ({ ...prev, ...json }));
@@ -107,7 +107,7 @@ export default function Industries() {
               <div className="w-full h-[300px] md:h-[400px] bg-[#111] overflow-hidden relative">
                 <img 
                   src={ind?.image || defaultIndustries[i]?.image} 
-                  alt={ind?.title} 
+                  alt={ind?.name} 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
                 />
               </div>
@@ -115,7 +115,7 @@ export default function Industries() {
               {/* Text Content Bottom */}
               <div className="flex flex-col items-start p-6 md:p-8">
                 <h3 className="text-white mb-2 leading-tight">
-                  {ind?.title ?? ""}
+                  {ind?.name ?? ""}
                 </h3>
               </div>
             </motion.div>

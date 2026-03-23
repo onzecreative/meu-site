@@ -43,7 +43,7 @@ export default function Features() {
   });
 
   useEffect(() => {
-    fetch("/api/admin/section/features?t=" + Date.now())
+    fetch("/api/admin/whyus?t=" + Date.now())
       .then((res) => res.json())
       .then((json) => {
         if (json && Object.keys(json).length > 0) setData((prev: any) => ({ ...prev, ...json }));
@@ -104,7 +104,7 @@ export default function Features() {
                   <Icon />
                 </div>
                 <h3 className="text-[#1A1A1A] font-bold text-[22px] mb-3">{feat?.title ?? ""}</h3>
-                <p className="text-[#1A1A1A]/60 text-[15px]">{feat?.desc ?? ""}</p>
+                <p className="text-[#1A1A1A]/60 text-[15px]">{feat?.description ?? ""}</p>
               </motion.div>
             );
           })}

@@ -39,14 +39,14 @@ export default function QuickFacts() {
   });
 
   useEffect(() => {
-    fetch("/api/admin/section/stats?t=" + Date.now())
+    fetch("/api/admin/stats?t=" + Date.now())
       .then((r) => r.json())
       .then((json) => {
         if (json && Object.keys(json).length > 0) setData((prev: any) => ({ ...prev, ...json }));
       })
       .catch(() => {});
       
-    fetch("/api/admin/section/logos?t=" + Date.now())
+    fetch("/api/admin/clients?t=" + Date.now())
       .then((r) => r.json())
       .then((json) => {
         if (json && json.logos) setLogosConfig(json);
@@ -59,8 +59,8 @@ export default function QuickFacts() {
 
   const renderLogos = () => {
     if (logosConfig.logos && logosConfig.logos.length > 0) {
-      return logosConfig.logos.map((url: string, i: number) => (
-        <img key={i} src={url} alt={`Client logo ${i}`} className="h-10 md:h-12 w-auto object-contain shrink-0 mx-8" />
+      return logosConfig.logos.map((logo: any, i: number) => (
+        <img key={i} src={typeof logo === 'string' ? logo : logo.url} alt={logo.alt || `Client logo ${i}`} className="h-10 md:h-12 w-auto object-contain shrink-0 mx-8" />
       ));
     }
     // Fallback logos

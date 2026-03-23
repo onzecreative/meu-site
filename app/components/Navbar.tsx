@@ -32,7 +32,12 @@ export default function Navbar() {
 
   useEffect(() => {
     // Dynamic Fetch from CMS
-    getSectionData<NavbarData>("navbar", DEFAULT_NAVBAR).then(setData);
+    fetch("/api/admin/navbar?t=" + Date.now())
+      .then(r => r.json())
+      .then(json => {
+        if(json && json.links) setData(json);
+      })
+      .catch(() => {});
     
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
