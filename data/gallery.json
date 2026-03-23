@@ -1,0 +1,9 @@
+{
+  "title": "Our Operations",
+  "subtitle": "A glimpse into our daily logistics excellence.",
+  "categories": ["All", "Fleet", "Warehousing", "Events"],
+  "items": [
+    { "url": "https://picsum.photos/seed/op1/800/600", "alt": "Fleet in action", "category": "Fleet", "show": true },
+    { "url": "https://picsum.photos/seed/op2/800/600", "alt": "Warehouse efficiency", "category": "Warehousing", "show": true }
+  ]
+}

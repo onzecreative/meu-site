@@ -1,0 +1,8 @@
+{
+  "title": "Frequently Asked Questions",
+  "subtitle": "Everything you need to know about LogiNord.",
+  "items": [
+    { "question": "What areas do you cover?", "answer": "We provide national and international coverage, with a strong focus on regional distribution.", "show": true },
+    { "question": "How do I track my shipment?", "answer": "You can track your shipment in real-time through our dedicated portal.", "show": true }
+  ]
+}

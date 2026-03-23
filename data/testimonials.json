@@ -1,0 +1,20 @@
+{
+  "title": "What Our Clients Say",
+  "subtitle": "Trusted by industry leaders worldwide.",
+  "items": [
+    {
+      "text": "LogiNord has transformed our distribution model. Their precision and reliability are unmatched in the industry.",
+      "author": "Sarah Jenkins",
+      "company": "Global Retail Group",
+      "image": "https://picsum.photos/seed/person1/200/200",
+      "show": true
+    },
+    {
+      "text": "The real-time visibility provided by their platform gives us peace of mind for our most sensitive shipments.",
+      "author": "Marcus Thorne",
+      "company": "Thorne Pharma",
+      "image": "https://picsum.photos/seed/person2/200/200",
+      "show": true
+    }
+  ]
+}

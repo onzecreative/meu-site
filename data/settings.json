@@ -1,0 +1,25 @@
+{
+  "siteInfo": {
+    "name": "LogiNord",
+    "description": "Precision in Motion. Logistics Reimagined.",
+    "url": "https://project-6o5rg.vercel.app",
+    "email": "support@loginord.com",
+    "phone": "+1 (555) 000-0000"
+  },
+  "seo": {
+    "title": "LogiNord - Precision in Motion",
+    "description": "Leading logistics provider with real-time tracking and global reach.",
+    "ogImage": "/og-image.jpg"
+  },
+  "integrations": {
+    "googleAnalyticsId": "",
+    "supabase_url": "",
+    "supabase_anon_key": "",
+    "smtp": {
+      "host": "",
+      "user": "",
+      "password": "",
+      "port": "587"
+    }
+  }
+}

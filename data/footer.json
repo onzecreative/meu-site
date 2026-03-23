@@ -1,23 +1,36 @@
 {
-  "whatsappNumber": "5511900000000",
-  "whatsappMessage": "Olá! Gostaria de solicitar uma cotação.",
-  "description": "Logística de precisão para empresas que exigem o melhor. Tecnologia e compromisso em cada entrega.",
+  "whatsapp": {
+    "number": "5511999999999",
+    "message": "Hello! I'd like to request a logistics quote.",
+    "showFloating": true,
+    "showFooter": true
+  },
+  "newsletter": {
+    "text": "Subscribe to our newsletter for industry insights.",
+    "show": true
+  },
   "columns": [
     {
-      "id": "col1",
-      "title": "Blog",
+      "title": "Company",
       "links": [
-        { "id": "l1", "text": "Ver posts", "url": "/blog" },
-        { "id": "l2", "text": "Novidades", "url": "/blog/novidades" }
+        { "label": "About Us", "url": "/sobre" },
+        { "label": "Our Fleet", "url": "/fleet" },
+        { "label": "Careers", "url": "/careers" }
       ]
     },
     {
-      "id": "col2",
-      "title": "Carreiras",
+      "title": "Support",
       "links": [
-        { "id": "l3", "text": "Vagas abertas", "url": "/carreiras" },
-        { "id": "l4", "text": "Cultura", "url": "/carreiras/cultura" }
+        { "label": "Contact Us", "url": "/contato" },
+        { "label": "FAQ", "url": "/contato" },
+        { "label": "Terms of Service", "url": "/terms" }
       ]
     }
-  ]
+  ],
+  "socials": {
+    "linkedin": "https://linkedin.com/company/loginord",
+    "instagram": "https://instagram.com/loginord"
+  },
+  "description": "LogiNord is a leader in precision logistics, providing end-to-end supply chain solutions.",
+  "copyright": "© 2026 LogiNord. All rights reserved."
 }

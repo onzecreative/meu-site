@@ -1,0 +1,15 @@
+{
+  "title": "Start the Conversation.",
+  "subtitle": "REACH OUT TO US.",
+  "emailDestination": "contact@loginord.com",
+  "successMessage": "Thank you! Your message has been sent.",
+  "buttonText": "Send Message",
+  "fields": [
+    { "label": "Full Name", "placeholder": "Your name", "required": true, "show": true },
+    { "label": "Email", "placeholder": "your@email.com", "required": true, "show": true },
+    { "label": "Company", "placeholder": "Company name", "required": false, "show": true },
+    { "label": "Message", "placeholder": "How can we help?", "required": true, "show": true }
+  ],
+  "subjects": ["General Inquiry", "Quote Request", "Partnerships", "Careers"],
+  "history": []
+}

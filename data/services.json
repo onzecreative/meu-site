@@ -1,0 +1,36 @@
+{
+  "title": "Logistics that fit your needs.",
+  "subtitle": "From temperature-controlled transport to regional distribution — we've got it covered.",
+  "items": [
+    {
+      "title": "National & International Freight",
+      "description": "From local deliveries to cross-border transport, we offer reliable freight solutions tailored to your schedule.",
+      "image": "/images/services/service1.png",
+      "show": true
+    },
+    {
+      "title": "Regional Distribution",
+      "description": "Efficient short-haul transit ensuring that localized supply chains run seamlessly without costly delays.",
+      "image": "/images/services/service2.png",
+      "show": true
+    },
+    {
+      "title": "Warehousing & Fulfillment",
+      "description": "Interior of a modern high-tech warehouse with high shelves filled with neatly organized pallets.",
+      "image": "/images/services/service3.png",
+      "show": true
+    },
+    {
+      "title": "Refrigerated Transport",
+      "description": "Temperature-controlled transport to keep sensitive goods strictly within compliance from origin to destination.",
+      "image": "/images/services/service4.png",
+      "show": true
+    },
+    {
+      "title": "3PL Subcontracting",
+      "description": "Stunning aerial drone shot of a massive logistics hub and warehouse complex.",
+      "image": "/images/services/service5.png",
+      "show": true
+    }
+  ]
+}
