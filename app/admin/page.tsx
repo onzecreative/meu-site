@@ -13,6 +13,8 @@ import ServicesEditor from "./components/editors/ServicesEditor";
 import IndustriesEditor from "./components/editors/IndustriesEditor";
 import WhyUsEditor from "./components/editors/WhyUsEditor";
 import TestimonialsEditor from "./components/editors/TestimonialsEditor";
+import FinalCTAEditor from "./components/editors/FinalCTAEditor";
+import SobreEditor from "./components/editors/SobreEditor";
 import GalleryEditor from "./components/editors/GalleryEditor";
 import ContactEditor from "./components/editors/ContactEditor";
 import FAQEditor from "./components/editors/FAQEditor";
@@ -54,6 +56,8 @@ export default function AdminPage() {
             {activeTab === 'industries' && <IndustriesEditor />}
             {activeTab === 'whyus' && <WhyUsEditor />}
             {activeTab === 'testimonials' && <TestimonialsEditor />}
+            {activeTab === 'finalcta' && <FinalCTAEditor />}
+            {activeTab === 'sobre' && <SobreEditor />}
             {activeTab === 'gallery' && <GalleryEditor />}
             {activeTab === 'contact' && <ContactEditor />}
             {activeTab === 'faq' && <FAQEditor />}

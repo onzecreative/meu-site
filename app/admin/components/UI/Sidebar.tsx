@@ -16,7 +16,9 @@ import {
   IconMail, 
   IconHelp, 
   IconAffiliate,
-  IconPhoto
+  IconPhoto,
+  IconTarget,
+  IconInfoCircle
 } from '@tabler/icons-react';
 
 interface SidebarProps {
@@ -35,6 +37,8 @@ const menuItems = [
   { id: 'industries', label: 'Indústrias', icon: <IconBuildingCommunity size={20} /> },
   { id: 'whyus', label: 'Por Que Nós', icon: <IconCircleCheck size={20} /> },
   { id: 'testimonials', label: 'Depoimentos', icon: <IconMessageChatbot size={20} /> },
+  { id: 'finalcta', label: 'Chamada Final (CTA)', icon: <IconTarget size={20} /> },
+  { id: 'sobre', label: 'Página Sobre', icon: <IconInfoCircle size={20} /> },
   { id: 'gallery', label: 'Galeria', icon: <IconPhoto size={20} /> },
   { id: 'contact', label: 'Formulário', icon: <IconMail size={20} /> },
   { id: 'faq', label: 'FAQ', icon: <IconHelp size={20} /> },

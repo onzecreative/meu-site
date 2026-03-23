@@ -16,7 +16,14 @@ const DEFAULTS: Record<string, any> = {
   contact: { title: "Get in Touch" },
   faq: { items: [] },
   footer: { columns: [], socials: {} },
-  settings: { siteName: "LogiNord", seo: {} }
+  settings: { siteName: "LogiNord", seo: {} },
+  finalcta: { title: "Ready to move smarter?", buttonText: "Get a Quote", buttonUrl: "/contato" },
+  "sobre-hero": { title: "Driven by Purpose.", subtitle: "ABOUT US", description: "Precision in logistics.", secondTitle: "Built on Trust.", image: "" },
+  "sobre-history": { title: "Our History.", items: [] },
+  "sobre-mission": { title: "What Drives Us.", items: [] },
+  "sobre-locations": { title: "Our Locations", items: [] },
+  "sobre-team": { title: "The Leadership.", items: [] },
+  "sobre-certs": { title: "Our Accreditations", items: [] }
 };
 
 export async function GET(
