@@ -19,55 +19,34 @@ const inter = Inter({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ? 
-    (process.env.NEXT_PUBLIC_SITE_URL.startsWith('http') ? process.env.NEXT_PUBLIC_SITE_URL : `https://${process.env.NEXT_PUBLIC_SITE_URL}`) 
-    : 'http://localhost:3000'),
-  title: {
-    default: "LogiNord - Cargas com Precisão e Segurança",
-    template: "%s | LogiNord Integrada",
-  },
-  description: "Transporte confiável para a sua empresa. Rastreamento em tempo real, abrangência nacional e soluções logísticas sob medida.",
-  keywords: ["logística", "transporte rodoviário", "frete", "entregas", "supply chain", "distribuição"],
-  openGraph: {
-    type: "website",
-    locale: "pt_BR",
-    url: "/",
-    siteName: "LogiNord",
-    title: "LogiNord Integrada",
-    description: "Sua carga tratada com a máxima prioridade.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "LogiNord Preview",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "LogiNord",
-    description: "Transporte seguro e pontual.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-};
+import { getSectionData } from "@/lib/services/section.service";
 
-export default function RootLayout({
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSectionData<any>("settings", { seo: {} });
+  return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ? 
+      (process.env.NEXT_PUBLIC_SITE_URL.startsWith('http') ? process.env.NEXT_PUBLIC_SITE_URL : `https://${process.env.NEXT_PUBLIC_SITE_URL}`) 
+      : 'http://localhost:3000'),
+    title: {
+      default: settings.seo.title || "LogiNord - Cargas com Precisão e Segurança",
+      template: "%s | LogiNord Integrada",
+    },
+    description: settings.seo.description || "Transporte confiável para a sua empresa.",
+    openGraph: {
+      title: settings.seo.title,
+      description: settings.seo.description,
+      images: [settings.seo.ogImage || "/og-image.jpg"],
+    }
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSectionData<any>("settings", { integrations: {} });
+
   return (
     <html lang="pt-BR">
       <head>
@@ -75,12 +54,28 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.webmanifest" />
+        
+        {/* Marketing Scripts (Head) */}
+        {settings.integrations.googleAdsTag && (
+          <script dangerouslySetInnerHTML={{ __html: settings.integrations.googleAdsTag }} />
+        )}
+        {settings.integrations.metaAdsTag && (
+          <script dangerouslySetInnerHTML={{ __html: settings.integrations.metaAdsTag }} />
+        )}
+        {settings.integrations.headerTags && (
+          <script dangerouslySetInnerHTML={{ __html: settings.integrations.headerTags }} />
+        )}
       </head>
       <body className={`${urbanist.variable} ${inter.variable} font-inter antialiased`}>
         <CustomCursor />
         {children}
         <JsonLd />
         <WhatsAppButton />
+
+        {/* Marketing Scripts (Footer) */}
+        {settings.integrations.footerTags && (
+          <script dangerouslySetInnerHTML={{ __html: settings.integrations.footerTags }} />
+        )}
       </body>
     </html>
   );

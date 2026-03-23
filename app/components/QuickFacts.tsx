@@ -93,7 +93,7 @@ export default function QuickFacts() {
           
           {/* Left Column (1/3) */}
           <div className="w-full md:w-1/3 flex flex-col items-start pr-0 md:pr-8">
-            <Label text="Quick Facts" />
+            <Label text={data?.label || "Quick Facts"} />
             <motion.h2 
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}

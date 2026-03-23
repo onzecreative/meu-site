@@ -13,6 +13,10 @@
   },
   "integrations": {
     "googleAnalyticsId": "",
+    "googleAdsTag": "",
+    "metaAdsTag": "",
+    "headerTags": "",
+    "footerTags": "",
     "supabase_url": "",
     "supabase_anon_key": "",
     "smtp": {
