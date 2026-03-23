@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import QuickFacts from "./components/QuickFacts";
-import Services from "./components/Services";
+import ServicesSticky from "./components/ServicesSticky";
 import Industries from "./components/Industries";
 import Features from "./components/Features";
 import Testimonials from "./components/Testimonials";
@@ -38,7 +38,7 @@ export default function Home() {
       <Navbar />
       <Hero data={heroData} />
       <QuickFacts />
-      <Services />
+      <ServicesSticky />
       <Industries />
       <Features />
       <Testimonials />
