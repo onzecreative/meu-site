@@ -17,13 +17,21 @@ export default function SobreEditor() {
 
   const loadAll = async () => {
     setLoading(true);
-    const results: any = {};
-    for (const sec of sections) {
-      const res = await fetch(`/api/admin/sobre-${sec}`);
-      results[sec] = await res.json();
+    try {
+      const results: any = {};
+      for (const sec of sections) {
+        try {
+          const res = await fetch(`/api/admin/sobre-${sec}`);
+          results[sec] = await res.json();
+        } catch (e) {
+          console.error(`Error loading section ${sec}:`, e);
+          results[sec] = {};
+        }
+      }
+      setData(results);
+    } finally {
+      setLoading(false);
     }
-    setData(results);
-    setLoading(false);
   };
 
   const handleSave = async (sec: string) => {
@@ -63,10 +71,10 @@ export default function SobreEditor() {
 
       {activeSubTab === "hero" && <EditorCard title="Hero do Sobre" onSave={() => handleSave("hero")} saving={saving}>
         <div className="space-y-4">
-           <InputField label="Título" value={data.hero.title} onChange={(v: string) => setData({...data, hero: {...data.hero, title: v}})} />
-           <InputField label="Subtítulo" value={data.hero.subtitle} onChange={(v: string) => setData({...data, hero: {...data.hero, subtitle: v}})} />
-           <TextAreaField label="Descrição" value={data.hero.description} onChange={(v: string) => setData({...data, hero: {...data.hero, description: v}})} />
-           <InputField label="Foto (URL)" value={data.hero.image} onChange={(v: string) => setData({...data, hero: {...data.hero, image: v}})} />
+           <InputField label="Título" value={data.hero?.title} onChange={(v: string) => setData({...data, hero: {...data.hero, title: v}})} />
+           <InputField label="Subtítulo" value={data.hero?.subtitle} onChange={(v: string) => setData({...data, hero: {...data.hero, subtitle: v}})} />
+           <TextAreaField label="Descrição" value={data.hero?.description} onChange={(v: string) => setData({...data, hero: {...data.hero, description: v}})} />
+           <InputField label="Foto (URL)" value={data.hero?.image} onChange={(v: string) => setData({...data, hero: {...data.hero, image: v}})} />
         </div>
       </EditorCard>}
 
@@ -95,14 +103,99 @@ export default function SobreEditor() {
          </div>
       </EditorCard>}
 
-      {/* Simplified placeholders for others to save time while ensuring full management */}
-      {["mission", "locations", "team", "certs"].includes(activeSubTab) && (
-        <div className="bg-white/10 p-10 rounded-2xl text-center border border-white/10">
-           <p className="text-white/40 mb-4 uppercase tracking-widest text-xs font-bold">Gerenciador de Itens: {activeSubTab}</p>
-           <p className="text-sm text-white/20 mb-6">Acesse para editar os detalhes específicos desta seção.</p>
-           <button onClick={() => handleSave(activeSubTab)} className="bg-primary px-8 py-2 rounded-xl font-bold">Salvar {activeSubTab}</button>
-        </div>
-      )}
+      {activeSubTab === "mission" && <EditorCard title="Nossa Missão & Valores" onSave={() => handleSave("mission")} saving={saving}>
+         <div className="space-y-6">
+            <InputField label="Título da Seção" value={data.mission?.title} onChange={(v: string) => setData({...data, mission: {...data.mission, title: v}})} />
+            <div className="space-y-4">
+               {data.mission?.items?.map((it: any, i: number) => (
+                 <div key={i} className="p-4 bg-white/5 rounded-xl border border-white/5 flex gap-4 items-end">
+                    <div className="flex-1"><InputField label="Título" value={it.title} onChange={(v: string) => {
+                       const items = [...data.mission.items]; items[i].title = v; setData({...data, mission: {...data.mission, items}});
+                    }} /></div>
+                    <div className="flex-[2]"><InputField label="Descrição" value={it.description} onChange={(v: string) => {
+                       const items = [...data.mission.items]; items[i].description = v; setData({...data, mission: {...data.mission, items}});
+                    }} /></div>
+                    <button onClick={() => {
+                       const items = data.mission.items.filter((_: any, idx: number) => idx !== i);
+                       setData({...data, mission: {...data.mission, items}});
+                    }} className="p-2 text-white/20 hover:text-red-500">Excluir</button>
+                 </div>
+               ))}
+               <button onClick={() => setData({...data, mission: {...data.mission, items: [...(data.mission?.items||[]), {title: "Novo Valor", description: ""}]}})} className="w-full py-2 border border-dashed border-white/10 rounded-xl text-xs">+ Adicionar Item</button>
+            </div>
+         </div>
+      </EditorCard>}
+
+      {activeSubTab === "locations" && <EditorCard title="Nossas Localizações" onSave={() => handleSave("locations")} saving={saving}>
+         <div className="space-y-6">
+            <InputField label="Título da Seção" value={data.locations?.title} onChange={(v: string) => setData({...data, locations: {...data.locations, title: v}})} />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+               {data.locations?.items?.map((it: any, i: number) => (
+                 <div key={i} className="p-4 bg-white/5 rounded-xl border border-white/5 space-y-3 relative group">
+                    <InputField label="Cidade/Estado" value={it.name} onChange={(v: string) => {
+                       const items = [...data.locations.items]; items[i].name = v; setData({...data, locations: {...data.locations, items}});
+                    }} />
+                    <InputField label="Endereço" value={it.address} onChange={(v: string) => {
+                       const items = [...data.locations.items]; items[i].address = v; setData({...data, locations: {...data.locations, items}});
+                    }} />
+                    <InputField label="Telefone" value={it.phone} onChange={(v: string) => {
+                       const items = [...data.locations.items]; items[i].phone = v; setData({...data, locations: {...data.locations, items}});
+                    }} />
+                    <button onClick={() => {
+                       const items = data.locations.items.filter((_: any, idx: number) => idx !== i);
+                       setData({...data, locations: {...data.locations, items}});
+                    }} className="absolute top-2 right-2 p-1 text-white/10 opacity-0 group-hover:opacity-100 hover:text-red-500">Excluir</button>
+                 </div>
+               ))}
+               <button onClick={() => setData({...data, locations: {...data.locations, items: [...(data.locations?.items||[]), {name: "Nova Unidade", address: "", phone: ""}]}})} className="py-8 border border-dashed border-white/10 rounded-xl text-xs hover:bg-white/5">+ Unidade</button>
+            </div>
+         </div>
+      </EditorCard>}
+
+      {activeSubTab === "team" && <EditorCard title="Liderança" onSave={() => handleSave("team")} saving={saving}>
+         <div className="space-y-6">
+            <InputField label="Título da Seção" value={data.team?.title} onChange={(v: string) => setData({...data, team: {...data.team, title: v}})} />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+               {data.team?.items?.map((it: any, i: number) => (
+                 <div key={i} className="p-4 bg-white/5 rounded-xl border border-white/5 space-y-4">
+                    <div className="aspect-square bg-white/5 rounded-xl flex items-center justify-center text-[10px] text-white/20 border border-white/5">Foto Membro</div>
+                    <InputField label="Nome" value={it.name} onChange={(v: string) => {
+                       const items = [...data.team.items]; items[i].name = v; setData({...data, team: {...data.team, items}});
+                    }} />
+                    <InputField label="Cargo" value={it.role} onChange={(v: string) => {
+                       const items = [...data.team.items]; items[i].role = v; setData({...data, team: {...data.team, items}});
+                    }} />
+                    <button onClick={() => {
+                       const items = data.team.items.filter((_: any, idx: number) => idx !== i);
+                       setData({...data, team: {...data.team, items}});
+                    }} className="w-full text-[10px] uppercase font-bold text-white/10 hover:text-red-500">Excluir</button>
+                 </div>
+               ))}
+               <button onClick={() => setData({...data, team: {...data.team, items: [...(data.team?.items||[]), {name: "Novo Membro", role: "", image: ""}]}})} className="aspect-square border border-dashed border-white/10 rounded-xl text-xs hover:bg-white/5 flex items-center justify-center">+ Membro</button>
+            </div>
+         </div>
+      </EditorCard>}
+
+      {activeSubTab === "certs" && <EditorCard title="Certificações" onSave={() => handleSave("certs")} saving={saving}>
+         <div className="space-y-6">
+            <InputField label="Título da Seção" value={data.certs?.title} onChange={(v: string) => setData({...data, certs: {...data.certs, title: v}})} />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+               {data.certs?.items?.map((it: any, i: number) => (
+                 <div key={i} className="p-4 bg-white/5 rounded-xl border border-white/5 space-y-2 relative group">
+                    <div className="h-12 bg-white/5 rounded flex items-center justify-center text-[8px] text-white/10">Selo</div>
+                    <InputField label="Nome" value={it.name} onChange={(v: string) => {
+                       const items = [...data.certs.items]; items[i].name = v; setData({...data, certs: {...data.certs, items}});
+                    }} />
+                    <button onClick={() => {
+                       const items = data.certs.items.filter((_: any, idx: number) => idx !== i);
+                       setData({...data, certs: {...data.certs, items}});
+                    }} className="absolute -top-1 -right-1 p-1 bg-red-500 rounded-full opacity-0 group-hover:opacity-100"><IconDeviceFloppy size={10} /></button>
+                 </div>
+               ))}
+               <button onClick={() => setData({...data, certs: {...data.certs, items: [...(data.certs?.items||[]), {name: "Nova Cert.", image: ""}]}})} className="h-24 border border-dashed border-white/10 rounded-xl text-xs hover:bg-white/5">+ Selo</button>
+            </div>
+         </div>
+      </EditorCard>}
     </div>
   );
 }

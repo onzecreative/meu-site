@@ -75,7 +75,7 @@ export default function NavbarEditor() {
         <label className="text-xs font-bold text-white/40 uppercase mb-2 block">Logo / Nome do Site</label>
         <input 
           type="text" 
-          value={data.logoText} 
+          value={data?.logoText || ""} 
           onChange={(e) => setData({ ...data, logoText: e.target.value })}
           className="w-full max-w-md bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm outline-none focus:border-primary/50"
         />
@@ -90,19 +90,19 @@ export default function NavbarEditor() {
         </div>
         
         <div className="space-y-3">
-          {data.links.map((link: any, i: number) => (
+          {(data?.links || []).map((link: any, i: number) => (
             <div key={i} className="flex items-center gap-3 group">
               <IconGripVertical size={16} className="text-white/10 cursor-grab group-hover:text-white/30" />
               <input 
                 type="text" 
-                value={link.label} 
+                value={link.label || link.name || ""} 
                 onChange={(e) => updateLink(i, 'label', e.target.value)}
                 className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-primary/30"
                 placeholder="Label"
               />
               <input 
                 type="text" 
-                value={link.url} 
+                value={link.url || link.href || ""} 
                 onChange={(e) => updateLink(i, 'url', e.target.value)}
                 className="flex-[1.5] bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-primary/30"
                 placeholder="URL"
@@ -121,8 +121,8 @@ export default function NavbarEditor() {
           <input 
             type="checkbox" 
             id="show-cta"
-            checked={data.cta.show} 
-            onChange={(e) => setData({ ...data, cta: { ...data.cta, show: e.target.checked } })}
+            checked={data?.cta?.show ?? true} 
+            onChange={(e) => setData({ ...data, cta: { ...(data?.cta || {}), show: e.target.checked } })}
             className="w-4 h-4 rounded border-white/10 bg-white/5 accent-primary"
           />
           <label htmlFor="show-cta" className="text-sm font-medium text-white/80">Mostrar botão no menu</label>
@@ -133,8 +133,8 @@ export default function NavbarEditor() {
             <label className="text-[10px] font-bold text-white/40 uppercase mb-2 block">Texto do Botão</label>
             <input 
               type="text" 
-              value={data.cta.label} 
-              onChange={(e) => setData({ ...data, cta: { ...data.cta, label: e.target.value } })}
+              value={data?.cta?.label || data?.cta?.text || ""} 
+              onChange={(e) => setData({ ...data, cta: { ...(data?.cta || {}), label: e.target.value } })}
               className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm outline-none focus:border-primary/50"
             />
           </div>
@@ -142,8 +142,8 @@ export default function NavbarEditor() {
             <label className="text-[10px] font-bold text-white/40 uppercase mb-2 block">URL de Destino</label>
             <input 
               type="text" 
-              value={data.cta.url} 
-              onChange={(e) => setData({ ...data, cta: { ...data.cta, url: e.target.value } })}
+              value={data?.cta?.url || data?.cta?.href || ""} 
+              onChange={(e) => setData({ ...data, cta: { ...(data?.cta || {}), url: e.target.value } })}
               className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm outline-none focus:border-primary/50"
             />
           </div>

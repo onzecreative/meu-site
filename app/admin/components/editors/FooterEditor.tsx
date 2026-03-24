@@ -65,17 +65,17 @@ export default function FooterEditor() {
                     <input 
                       type="checkbox" 
                       id="show-wa-float"
-                      checked={data.whatsapp.showFloating} 
-                      onChange={(e) => setData({ ...data, whatsapp: { ...data.whatsapp, showFloating: e.target.checked } })}
+                      checked={data?.whatsapp?.showFloating ?? true} 
+                      onChange={(e) => setData({ ...data, whatsapp: { ...(data?.whatsapp || {}), showFloating: e.target.checked } })}
                       className="accent-green-500"
                     />
                     <label htmlFor="show-wa-float" className="text-xs font-bold text-white/60">Botão Flutuante</label>
-
+            
                     <input 
                       type="checkbox" 
                       id="show-wa-foot"
-                      checked={data.whatsapp.showFooter} 
-                      onChange={(e) => setData({ ...data, whatsapp: { ...data.whatsapp, showFooter: e.target.checked } })}
+                      checked={data?.whatsapp?.showFooter ?? true} 
+                      onChange={(e) => setData({ ...data, whatsapp: { ...(data?.whatsapp || {}), showFooter: e.target.checked } })}
                       className="accent-green-500"
                     />
                     <label htmlFor="show-wa-foot" className="text-xs font-bold text-white/60">Mostrar no Rodapé</label>
@@ -84,22 +84,22 @@ export default function FooterEditor() {
                     <label className="text-[10px] font-bold text-white/30 uppercase mb-1 block">Número (Com DDD)</label>
                     <input 
                       type="text" 
-                      value={data.whatsapp.number} 
-                      onChange={(e) => setData({ ...data, whatsapp: { ...data.whatsapp, number: e.target.value } })}
+                      value={data?.whatsapp?.number || ""} 
+                      onChange={(e) => setData({ ...data, whatsapp: { ...(data?.whatsapp || {}), number: e.target.value } })}
                       className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm outline-none focus:border-green-500/50"
                     />
                   </div>
                   <div>
                     <label className="text-[10px] font-bold text-white/30 uppercase mb-1 block">Mensagem Inicial</label>
                     <textarea 
-                      value={data.whatsapp.message} 
-                      onChange={(e) => setData({ ...data, whatsapp: { ...data.whatsapp, message: e.target.value } })}
+                      value={data?.whatsapp?.message || ""} 
+                      onChange={(e) => setData({ ...data, whatsapp: { ...(data?.whatsapp || {}), message: e.target.value } })}
                       className="w-full h-20 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm outline-none focus:border-green-500/50"
                     />
                   </div>
                </div>
             </div>
-
+            
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
                <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-6">Social Media</h3>
                <div className="space-y-4">
@@ -107,8 +107,8 @@ export default function FooterEditor() {
                      <IconBrandLinkedin size={20} className="text-blue-500" />
                      <input 
                        type="text" 
-                       value={data.socials.linkedin} 
-                       onChange={(e) => setData({ ...data, socials: { ...data.socials, linkedin: e.target.value } })}
+                       value={data?.socials?.linkedin || ""} 
+                       onChange={(e) => setData({ ...data, socials: { ...(data?.socials || {}), linkedin: e.target.value } })}
                        className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs outline-none"
                        placeholder="https://linkedin.com/..."
                      />
@@ -117,8 +117,8 @@ export default function FooterEditor() {
                      <IconBrandInstagram size={20} className="text-pink-500" />
                      <input 
                        type="text" 
-                       value={data.socials.instagram} 
-                       onChange={(e) => setData({ ...data, socials: { ...data.socials, instagram: e.target.value } })}
+                       value={data?.socials?.instagram || ""} 
+                       onChange={(e) => setData({ ...data, socials: { ...(data?.socials || {}), instagram: e.target.value } })}
                        className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs outline-none"
                        placeholder="https://instagram.com/..."
                      />
@@ -126,7 +126,7 @@ export default function FooterEditor() {
                </div>
             </div>
          </div>
-
+         
          <div className="space-y-6">
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
                <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-6">Informações Legais</h3>
@@ -135,7 +135,7 @@ export default function FooterEditor() {
                     <label className="text-[10px] font-bold text-white/30 uppercase mb-1 block">Copyright Text</label>
                     <input 
                       type="text" 
-                      value={data.copyright} 
+                      value={data?.copyright || ""} 
                       onChange={(e) => setData({ ...data, copyright: e.target.value })}
                       className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs outline-none"
                     />

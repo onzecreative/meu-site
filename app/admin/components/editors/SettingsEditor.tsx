@@ -63,16 +63,16 @@ export default function SettingsEditor() {
               <label className="text-[10px] font-bold text-white/30 uppercase mb-1 block">Título da Página (Meta Title)</label>
               <input 
                 type="text" 
-                value={data.seo.title} 
-                onChange={(e) => setData({ ...data, seo: { ...data.seo, title: e.target.value } })}
+                value={data?.seo?.title || ""} 
+                onChange={(e) => setData({ ...data, seo: { ...(data?.seo || {}), title: e.target.value } })}
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm outline-none focus:border-primary/50 text-white font-medium"
               />
            </div>
            <div>
               <label className="text-[10px] font-bold text-white/30 uppercase mb-1 block">Descrição (Meta Description)</label>
               <textarea 
-                value={data.seo.description} 
-                onChange={(e) => setData({ ...data, seo: { ...data.seo, description: e.target.value } })}
+                value={data?.seo?.description || ""} 
+                onChange={(e) => setData({ ...data, seo: { ...(data?.seo || {}), description: e.target.value } })}
                 className="w-full h-24 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs outline-none focus:border-primary/50 text-white/80"
               />
            </div>
@@ -87,8 +87,8 @@ export default function SettingsEditor() {
            <div>
               <label className="text-[10px] font-bold text-white/30 uppercase mb-2 block">Google Ads / Analytics (Header Script)</label>
               <textarea 
-                value={data.integrations.googleAdsTag} 
-                onChange={(e) => setData({ ...data, integrations: { ...data.integrations, googleAdsTag: e.target.value } })}
+                value={data?.integrations?.googleAdsTag || ""} 
+                onChange={(e) => setData({ ...data, integrations: { ...(data?.integrations || {}), googleAdsTag: e.target.value } })}
                 className="w-full h-24 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[10px] font-mono outline-none focus:border-primary/50 text-white/70"
                 placeholder="<!-- Paste <script> here -->"
               />
@@ -96,8 +96,8 @@ export default function SettingsEditor() {
            <div>
               <label className="text-[10px] font-bold text-white/30 uppercase mb-2 block">Meta Ads / Pixel (Header Script)</label>
               <textarea 
-                value={data.integrations.metaAdsTag} 
-                onChange={(e) => setData({ ...data, integrations: { ...data.integrations, metaAdsTag: e.target.value } })}
+                value={data?.integrations?.metaAdsTag || ""} 
+                onChange={(e) => setData({ ...data, integrations: { ...(data?.integrations || {}), metaAdsTag: e.target.value } })}
                 className="w-full h-24 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[10px] font-mono outline-none focus:border-primary/50 text-white/70"
                 placeholder="<!-- Paste <script> here -->"
               />
@@ -106,16 +106,16 @@ export default function SettingsEditor() {
               <div>
                 <label className="text-[10px] font-bold text-white/30 uppercase mb-2 block">Outros Scripts (Header)</label>
                 <textarea 
-                  value={data.integrations.headerTags} 
-                  onChange={(e) => setData({ ...data, integrations: { ...data.integrations, headerTags: e.target.value } })}
+                  value={data?.integrations?.headerTags || ""} 
+                  onChange={(e) => setData({ ...data, integrations: { ...(data?.integrations || {}), headerTags: e.target.value } })}
                   className="w-full h-20 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[10px] font-mono outline-none focus:border-primary/50 text-white/50"
                 />
               </div>
               <div>
                 <label className="text-[10px] font-bold text-white/30 uppercase mb-2 block">Outros Scripts (Footer)</label>
                 <textarea 
-                  value={data.integrations.footerTags} 
-                  onChange={(e) => setData({ ...data, integrations: { ...data.integrations, footerTags: e.target.value } })}
+                  value={data?.integrations?.footerTags || ""} 
+                  onChange={(e) => setData({ ...data, integrations: { ...(data?.integrations || {}), footerTags: e.target.value } })}
                   className="w-full h-20 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[10px] font-mono outline-none focus:border-primary/50 text-white/50"
                 />
               </div>
@@ -132,8 +132,8 @@ export default function SettingsEditor() {
               <label className="text-[10px] font-bold text-white/30 uppercase mb-1 block">Site URL</label>
               <input 
                 type="text" 
-                value={data.siteInfo.url} 
-                onChange={(e) => setData({ ...data, siteInfo: { ...data.siteInfo, url: e.target.value } })}
+                value={data?.siteInfo?.url || ""} 
+                onChange={(e) => setData({ ...data, siteInfo: { ...(data?.siteInfo || {}), url: e.target.value } })}
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs outline-none"
                 placeholder="https://..."
               />
@@ -142,8 +142,8 @@ export default function SettingsEditor() {
               <label className="text-[10px] font-bold text-white/30 uppercase mb-1 block">Email Suporte</label>
               <input 
                 type="text" 
-                value={data.siteInfo.email} 
-                onChange={(e) => setData({ ...data, siteInfo: { ...data.siteInfo, email: e.target.value } })}
+                value={data?.siteInfo?.email || ""} 
+                onChange={(e) => setData({ ...data, siteInfo: { ...(data?.siteInfo || {}), email: e.target.value } })}
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs outline-none"
               />
            </div>
@@ -151,8 +151,8 @@ export default function SettingsEditor() {
               <label className="text-[10px] font-bold text-white/30 uppercase mb-1 block">Telefone</label>
               <input 
                 type="text" 
-                value={data.siteInfo.phone} 
-                onChange={(e) => setData({ ...data, siteInfo: { ...data.siteInfo, phone: e.target.value } })}
+                value={data?.siteInfo?.phone || ""} 
+                onChange={(e) => setData({ ...data, siteInfo: { ...(data?.siteInfo || {}), phone: e.target.value } })}
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs outline-none"
               />
            </div>
