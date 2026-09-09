@@ -1,0 +1,22 @@
+{
+  "logo": {
+    "light": "/images/logo-light.png",
+    "dark": "/images/logo-dark.png",
+    "text": "LogiNord",
+    "width": 180
+  },
+  "favicon": "/favicon.ico",
+  "colors": {
+    "primary": "#E8431A",
+    "background_dark": "#1A0500",
+    "background_light": "#FFFFFF",
+    "gray_soft": "#F2F0EB",
+    "text_main": "#1A1A1A",
+    "links": "#E8431A"
+  },
+  "typography": {
+    "font_family": "Urbanist",
+    "google_font": "Urbanist"
+  },
+  "mode": "light"
+}

@@ -1,0 +1,11 @@
+{
+  "label": "QUICK FACTS",
+  "title": "Trusted by dozens of global enterprises and regional distributors.",
+  "subtitle": "Numbers that speak for themselves.",
+  "items": [
+    { "value": "96.2%", "label": "On-Time Delivery Rate" },
+    { "value": "1.2M", "label": "Square Feet of Warehousing" },
+    { "value": "24/7", "label": "Real-Time Tracking" },
+    { "value": "500+", "label": "Heavy-Duty Vehicles" }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "colors": {
+    "primary": "#DE3F0B",
+    "secondary": "#111111",
+    "background": "#1C1C1C",
+    "text": "#FFFFFF"
+  },
+  "font": "Inter",
+  "site": {
+    "title": "LogiNord",
+    "description": "Sua Carga, Entregue com Precisão.",
+    "url": "https://project-6o5rg.vercel.app"
+  },
+  "social": {
+    "instagram": "",
+    "whatsapp": "",
+    "linkedin": ""
+  },
+  "email": {
+    "destination": "",
+    "senderName": "LogiNord Contato"
+  }
+}

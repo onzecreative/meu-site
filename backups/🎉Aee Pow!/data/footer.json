@@ -1,0 +1,36 @@
+{
+  "whatsapp": {
+    "number": "5511999999999",
+    "message": "Hello! I'd like to request a logistics quote.",
+    "showFloating": true,
+    "showFooter": true
+  },
+  "newsletter": {
+    "text": "Subscribe to our newsletter for industry insights.",
+    "show": true
+  },
+  "columns": [
+    {
+      "title": "Company",
+      "links": [
+        { "label": "About Us", "url": "/sobre" },
+        { "label": "Our Fleet", "url": "/fleet" },
+        { "label": "Careers", "url": "/careers" }
+      ]
+    },
+    {
+      "title": "Support",
+      "links": [
+        { "label": "Contact Us", "url": "/contato" },
+        { "label": "FAQ", "url": "/contato" },
+        { "label": "Terms of Service", "url": "/terms" }
+      ]
+    }
+  ],
+  "socials": {
+    "linkedin": "https://linkedin.com/company/loginord",
+    "instagram": "https://instagram.com/loginord"
+  },
+  "description": "LogiNord is a leader in precision logistics, providing end-to-end supply chain solutions.",
+  "copyright": "© 2026 LogiNord. All rights reserved."
+}

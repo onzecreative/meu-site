@@ -1,0 +1,15 @@
+{
+  "logoText": "LogiNord",
+  "links": [
+    { "label": "Home", "url": "/" },
+    { "label": "About Us", "url": "/sobre" },
+    { "label": "Services", "url": "/servicos" },
+    { "label": "Fleet", "url": "/fleet" },
+    { "label": "Contact Us", "url": "/contato" }
+  ],
+  "cta": {
+    "show": true,
+    "label": "Get a Quote",
+    "url": "/contato"
+  }
+}

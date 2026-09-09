@@ -3,15 +3,16 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 export default function CustomCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Only show on non-touch devices
     if (window.matchMedia("(pointer: coarse)").matches) return;
 
     const updateMousePosition = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
+      if (!isVisible) setIsVisible(true);
     };
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -20,7 +21,9 @@ export default function CustomCursor() {
         target.tagName.toLowerCase() === "a" ||
         target.tagName.toLowerCase() === "button" ||
         target.closest("a") ||
-        target.closest("button")
+        target.closest("button") ||
+        target.classList.contains("cursor-pointer") ||
+        target.closest(".cursor-pointer")
       ) {
         setIsHovering(true);
       } else {
@@ -28,50 +31,50 @@ export default function CustomCursor() {
       }
     };
 
+    const handleMouseLeave = () => setIsVisible(false);
+
     window.addEventListener("mousemove", updateMousePosition);
     window.addEventListener("mouseover", handleMouseOver);
+    document.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
       window.removeEventListener("mousemove", updateMousePosition);
       window.removeEventListener("mouseover", handleMouseOver);
+      document.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, []);
+  }, [isVisible]);
 
   if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
     return null;
   }
 
+  if (!isVisible) return null;
+
   return (
     <>
+      {/* Precision Core Dot */}
       <motion.div
-        className="fixed top-0 left-0 w-3 h-3 bg-[#E0400C] rounded-[56px] pointer-events-none z-[9999]"
+        className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[9999] bg-[#6366F1] shadow-[0_0_12px_#6366F1]"
         animate={{
-          x: mousePosition.x - 6,
-          y: mousePosition.y - 6,
+          x: mousePosition.x - 4,
+          y: mousePosition.y - 4,
           scale: isHovering ? 0 : 1,
         }}
-        transition={{ type: "tween", ease: "backOut", duration: 0.1 }}
+        transition={{ type: "tween", ease: "backOut", duration: 0.08 }}
       />
+      
+      {/* Outer Halo */}
       <motion.div
-        className="fixed top-0 left-0 w-10 h-10 border border-[#E0400C]/50 rounded-[56px] pointer-events-none z-[9998]"
+        className="fixed top-0 left-0 w-8 h-8 rounded-full pointer-events-none z-[9998] border border-[#6366F1]/40"
         animate={{
-          x: mousePosition.x - 20,
-          y: mousePosition.y - 20,
-          scale: isHovering ? 1.5 : 1,
-          backgroundColor: isHovering ? "rgba(224, 64, 12, 0.1)" : "rgba(224, 64, 12, 0)",
+          x: mousePosition.x - 16,
+          y: mousePosition.y - 16,
+          scale: isHovering ? 1.6 : 1,
+          borderColor: isHovering ? "rgba(6, 182, 212, 0.7)" : "rgba(99, 102, 241, 0.35)",
+          backgroundColor: isHovering ? "rgba(99, 102, 241, 0.08)" : "transparent",
         }}
-        transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.5 }}
+        transition={{ type: "spring", stiffness: 220, damping: 20, mass: 0.4 }}
       />
-      <style jsx global>{`
-        @media (pointer: fine) {
-          body {
-            cursor: none;
-          }
-          a, button {
-            cursor: none;
-          }
-        }
-      `}</style>
     </>
   );
 }

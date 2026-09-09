@@ -1,36 +1,38 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import Label from "./ui/Label";
-import Button from "./ui/Button";
 
 const defaultIndustries = [
   {
-    title: "Food & Beverage",
-    image: "https://picsum.photos/seed/food/800/600",
+    name: "E-commerce & D2C",
+    desc: "Escala acelerada com gestão de tráfego, otimização de conversão e automação de pós-venda.",
+    image: "https://images.unsplash.com/photo-1556742049-0a67e557224f?w=800&q=80",
+    tag: "Tráfego & Vendas",
   },
   {
-    title: "Pharmaceutical & Medical",
-    image: "https://picsum.photos/seed/medy/800/600",
+    name: "Revenda & Produtos Físicos",
+    desc: "Posicionamento digital e canais de atração para distribuidores e revendedores.",
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80",
+    tag: "Digitalização",
   },
   {
-    title: "Industrial & Manufacturing",
-    image: "https://picsum.photos/seed/industry/800/600",
+    name: "Mentorias & Infoprodutos",
+    desc: "Funis automatizados, lançamentos e esteiras perpétuas de alto valor percebido.",
+    image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=80",
+    tag: "Educação & Escala",
   },
   {
-    title: "Electronics & Technology",
-    image: "https://picsum.photos/seed/techs/800/600",
-  },
-  {
-    title: "Retail & E-Commerce",
-    image: "https://picsum.photos/seed/retail/800/600",
+    name: "Empresas & Negócios Locais",
+    desc: "Captação constante de leads qualificados e atendimento automatizado via IA.",
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
+    tag: "Performance Local",
   },
 ];
 
 export default function Industries() {
   const [data, setData] = useState<any>({
-    title: "Built for Critical Industries.",
-    subtitle: "Every sector has specialized routing requirements. We adapt to all.",
+    title: "Mercados onde geramos\nalto impacto.",
+    subtitle: "Atuamos em segmentos estratégicos potencializando vendas, automação e presença de marca.",
     items: defaultIndustries,
   });
 
@@ -49,74 +51,97 @@ export default function Industries() {
   const items = data?.items && data.items.length > 0 ? data.items : defaultIndustries;
 
   return (
-    <section id="industries" className="w-full bg-[#1A0500] py-[120px] md:py-[160px] relative overflow-hidden">
+    <section id="industries" className="w-full py-[120px] md:py-[160px] relative overflow-hidden" style={{ background: "#030305" }}>
       
-      {/* Decorative SVG Branch Pattern */}
-      <div className="absolute right-0 top-0 bottom-0 w-[50%] opacity-20 pointer-events-none">
-        <svg viewBox="0 0 400 800" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid slice" className="w-full h-full">
-          <path d="M400 0C300 200 200 400 300 800" stroke="#E8431A" strokeWidth="2" strokeDasharray="8 8" />
-          <path d="M300 200C250 300 280 400 400 500" stroke="#E8431A" strokeWidth="1.5" />
-          <path d="M250 300C100 400 150 600 400 700" stroke="#E8431A" strokeWidth="1" strokeDasharray="4 4" />
-        </svg>
-      </div>
+      {/* Decorative Glow */}
+      <div 
+        className="glow-indigo"
+        style={{ width: 500, height: 500, top: "20%", right: "-10%", opacity: 0.15 }}
+      />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-[16px] md:px-[40px] flex flex-col md:flex-row gap-16 md:gap-8" ref={ref}>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-10 flex flex-col md:flex-row gap-16 md:gap-12" ref={ref}>
         
         {/* Left Column (Sticky) */}
-        <div className="w-full md:w-[40%] flex flex-col relative">
-          <div className="md:sticky md:top-32 flex flex-col items-start pr-0 md:pr-12">
-            <Label text="Industries" />
+        <div className="w-full md:w-[38%] flex flex-col relative">
+          <div className="md:sticky md:top-36 flex flex-col items-start pr-0 md:pr-8">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] mb-6">
+              <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
+              <span className="text-[11px] font-mono font-medium text-white/80 uppercase tracking-widest">
+                [MARKET VERTICALS // PROVEN FIT]
+              </span>
+            </div>
+
             <motion.h2
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ type: "spring", bounce: 0.25, duration: 0.8 }}
-              className="text-white mb-6 max-w-[400px]"
+              transition={{ duration: 0.7 }}
+              className="text-white mb-6 whitespace-pre-line text-[32px] md:text-[44px] font-extrabold tracking-tight leading-tight"
             >
-              {data?.title ?? "Built for Critical Industries."}
+              {data?.title ?? "Mercados onde geramos\nalto impacto."}
             </motion.h2>
+
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.2, type: "spring", bounce: 0.25 }}
-              className="text-white/70 max-w-[340px] mb-10"
+              transition={{ duration: 0.7, delay: 0.15 }}
+              className="text-[#9496A1] max-w-[340px] mb-8 leading-relaxed text-[15px] font-light"
             >
-              {data?.subtitle ?? "Every sector has specialized routing requirements. We adapt to all."}
+              {data?.subtitle}
             </motion.p>
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.3, type: "spring", bounce: 0.25 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
             >
-              <Button variant="outline" text="Know Our Industries" />
+              <a
+                href="/contato"
+                className="group relative inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-[14px] font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105"
+                style={{
+                  background: "linear-gradient(135deg, #6366F1, #4F46E5)",
+                  boxShadow: "0 0 25px rgba(99,102,241,0.4)",
+                }}
+              >
+                <span>Diagnosticar Meu Negócio</span>
+              </a>
             </motion.div>
           </div>
         </div>
 
         {/* Right Column (Stacked Cards) */}
-        <div className="w-full md:w-[60%] flex flex-col gap-8 md:gap-12">
+        <div className="w-full md:w-[62%] flex flex-col gap-6">
           {items.map((ind: any, i: number) => (
             <motion.div
-              key={ind?.title ?? i}
-              initial={{ opacity: 0, y: 40 }}
+              key={ind?.name ?? i}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ type: "spring", bounce: 0.25, duration: 0.8 }}
-              className="group cursor-pointer flex flex-col bg-[#2a130c] rounded-[16px] overflow-hidden card-hover"
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.6, delay: i * 0.1 }}
+              className="group relative flex flex-col md:flex-row bg-[#08090E] border border-white/[0.08] hover:border-indigo-500/40 rounded-2xl overflow-hidden transition-all duration-300"
             >
-              {/* Image top */}
-              <div className="w-full h-[300px] md:h-[400px] bg-[#111] overflow-hidden relative">
+              {/* Image */}
+              <div className="w-full md:w-[42%] h-[200px] md:h-auto overflow-hidden relative">
                 <img 
-                  src={ind?.image || defaultIndustries[i]?.image} 
+                  src={ind?.image || defaultIndustries[i % defaultIndustries.length]?.image} 
                   alt={ind?.name} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out opacity-70 group-hover:opacity-90" 
                 />
+                <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-transparent via-[#08090E]/60 to-[#08090E]" />
               </div>
 
-              {/* Text Content Bottom */}
-              <div className="flex flex-col items-start p-6 md:p-8">
-                <h3 className="text-white mb-2 leading-tight">
-                  {ind?.name ?? ""}
+              {/* Text Content */}
+              <div className="w-full md:w-[58%] flex flex-col justify-center p-7 md:p-8">
+                <div className="mb-3">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300">
+                    {ind?.tag || defaultIndustries[i % defaultIndustries.length]?.tag || "Especialidade"}
+                  </span>
+                </div>
+                <h3 className="text-white font-bold mb-2 text-[20px] md:text-[22px] tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-cyan-300 transition-all">
+                  {ind?.name ?? ind?.title ?? ""}
                 </h3>
+                <p className="text-[#9496A1] text-[14px] leading-relaxed font-light">
+                  {ind?.desc || "Estratégias sob medida para elevar a maturidade digital e gerar receita recorrente."}
+                </p>
               </div>
             </motion.div>
           ))}

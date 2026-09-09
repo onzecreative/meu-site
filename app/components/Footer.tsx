@@ -1,108 +1,151 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ArrowUpRight, Linkedin, Twitter, Instagram, Facebook } from "lucide-react";
+import { ArrowUpRight, Instagram, Linkedin, Twitter } from "lucide-react";
 
 const DEFAULT_FOOTER = {
-  description: "Receive our news and updates directly in your inbox.",
-  copyright: "LogiNord Integrada Ltda. All rights reserved.",
+  description: "Ecossistema digital completo para acelerar o crescimento da sua empresa com inovação, tecnologia e estratégia.",
+  copyright: "Onze Negócios Ltda. Todos os direitos reservados.",
   socials: {
     linkedin: "#",
     twitter: "#",
     instagram: "#",
-    facebook: "#"
   },
   columns: [
     {
-      title: "Company",
+      title: "Empresa",
       links: [
-        { label: "Home", url: "/" },
-        { label: "About Us", url: "/sobre" },
-        { label: "Services", url: "/servicos" },
-        { label: "Fleet", url: "/galeria" }
-      ]
+        { label: "Início", url: "/" },
+        { label: "Sobre a Onze", url: "/sobre" },
+        { label: "Soluções", url: "/servicos" },
+        { label: "Cases", url: "/galeria" },
+      ],
     },
     {
-      title: "Services",
+      title: "Soluções",
       links: [
-        { label: "National Freight", url: "/servicos" },
-        { label: "Regional Dist.", url: "/servicos" },
-        { label: "Cold Chain", url: "/servicos" },
-        { label: "Courier Services", url: "/servicos" }
-      ]
-    }
+        { label: "Tráfego Pago", url: "/servicos" },
+        { label: "Automação com IA", url: "/servicos" },
+        { label: "Websites", url: "/servicos" },
+        { label: "Consultoria", url: "/servicos" },
+      ],
+    },
+    {
+      title: "Treinamentos",
+      links: [
+        { label: "Mentorias", url: "/servicos" },
+        { label: "Capacitação de Equipes", url: "/servicos" },
+        { label: "Workshops", url: "/servicos" },
+      ],
+    },
   ],
   whatsapp: {
-     number: "+1(555)123-4567",
-     showFooter: true
-  }
+    number: "",
+    showFooter: false,
+  },
 };
 
 export default function Footer() {
-  const years = new Date().getFullYear();
+  const year = new Date().getFullYear();
   const [data, setData] = useState<any>(DEFAULT_FOOTER);
 
   useEffect(() => {
     fetch("/api/admin/footer?t=" + Date.now())
-      .then(r => r.json())
-      .then(json => {
-         if(json && json.columns) setData(json);
-      })
+      .then((r) => r.json())
+      .then((json) => { if (json?.columns) setData(json); })
       .catch(() => {});
   }, []);
 
   return (
-    <footer className="w-full bg-[#0a0a0a] text-white pt-24 pb-12 px-[16px] md:px-[40px] mt-auto">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-16 md:gap-8 justify-between">
-        
-        {/* Newsletter / Brand */}
-        <div className="w-full md:w-[35%] flex flex-col items-start pr-0 md:pr-12">
-          <a href="/" className="font-urbanist font-bold text-[28px] flex items-center gap-1 mb-8 text-white no-underline group">
-            LogiNord <ArrowUpRight size={24} strokeWidth={3} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+    <footer
+      className="w-full pt-20 pb-12 px-4 md:px-10 mt-auto border-t border-white/[0.08]"
+      style={{ background: "#030305" }}
+    >
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-16 md:gap-12 justify-between">
+
+        {/* Brand side */}
+        <div className="w-full md:w-[32%] flex flex-col items-start">
+          <a href="/" className="flex items-center gap-2.5 no-underline mb-6 group">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center p-[1px] shadow-[0_0_15px_rgba(99,102,241,0.3)]">
+              <div className="w-full h-full bg-[#08090E] rounded-[11px] flex items-center justify-center">
+                <span className="text-white font-black text-xs">11</span>
+              </div>
+            </div>
+            <span className="font-extrabold text-[20px] text-white tracking-tight">
+              Onze<span className="text-cyan-400">.</span>
+            </span>
           </a>
-          <p className="text-white/60 mb-8 max-w-[300px]">
+
+          <p className="text-[#9496A1] text-[14px] leading-relaxed mb-6 max-w-[300px] font-light">
             {data.description}
           </p>
-          <form className="w-full flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-            <input 
-              type="email" 
-              placeholder="Your email address" 
-              className="w-full bg-white/5 border border-white/10 rounded-[56px] px-[16px] py-4 text-white placeholder-white/40 focus:outline-none focus:border-white/30 transition-colors"
-            />
-            <button className="w-full bg-[#E8431A] text-white font-bold rounded-[56px] px-[16px] py-4 hover:bg-[#d03a15] transition-colors flex items-center justify-center gap-2 group">
-              Subscribe <ArrowUpRight size={18} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-            </button>
-          </form>
+
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.06] mb-8 text-[11px] font-mono text-emerald-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>SISTEMAS OPERACIONAIS // 99.9% UPTIME</span>
+          </div>
+
+          {/* Social icons */}
+          <div className="flex gap-3">
+            {data.socials?.instagram && (
+              <a
+                href={data.socials.instagram}
+                className="w-9 h-9 rounded-xl border border-white/[0.08] bg-white/[0.02] flex items-center justify-center text-[#9496A1] hover:text-white hover:border-indigo-500/40 hover:bg-white/[0.05] transition-all duration-300"
+              >
+                <Instagram size={15} />
+              </a>
+            )}
+            {data.socials?.linkedin && (
+              <a
+                href={data.socials.linkedin}
+                className="w-9 h-9 rounded-xl border border-white/[0.08] bg-white/[0.02] flex items-center justify-center text-[#9496A1] hover:text-white hover:border-indigo-500/40 hover:bg-white/[0.05] transition-all duration-300"
+              >
+                <Linkedin size={15} />
+              </a>
+            )}
+            {data.socials?.twitter && (
+              <a
+                href={data.socials.twitter}
+                className="w-9 h-9 rounded-xl border border-white/[0.08] bg-white/[0.02] flex items-center justify-center text-[#9496A1] hover:text-white hover:border-indigo-500/40 hover:bg-white/[0.05] transition-all duration-300"
+              >
+                <Twitter size={15} />
+              </a>
+            )}
+          </div>
         </div>
 
-        {/* Links Grid */}
-        <div className="w-full md:w-[60%] grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-12">
+        {/* Links columns */}
+        <div className="w-full md:w-[65%] grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-10">
           {data.columns.map((col: any, i: number) => (
             <div key={i} className="flex flex-col">
-              <h4 className="font-bold text-[14px] uppercase tracking-wider mb-6">{col.title}</h4>
-              <ul className="flex flex-col gap-4 text-white/60 text-[15px]">
+              <h4 className="text-[11px] font-mono font-bold uppercase tracking-widest text-white/50 mb-5">
+                {col.title}
+              </h4>
+              <ul className="flex flex-col gap-3">
                 {col.links.map((link: any, li: number) => (
-                  <li key={li}><a href={link.url} className="hover:text-white transition-colors">{link.label}</a></li>
+                  <li key={li}>
+                    <a
+                      href={link.url}
+                      className="text-[#9496A1] text-[14px] hover:text-white transition-colors flex items-center gap-1 group font-light"
+                    >
+                      <span className="group-hover:translate-x-1 transition-transform">{link.label}</span>
+                    </a>
+                  </li>
                 ))}
               </ul>
             </div>
           ))}
-          
-          <div className="flex flex-col">
-            <h4 className="font-bold text-[14px] uppercase tracking-wider mb-6">Connect</h4>
-            <ul className="flex flex-col gap-4 text-white/60 text-[15px]">
-              {data.socials.linkedin && <li><a href={data.socials.linkedin} className="hover:text-white group transition-colors flex items-center gap-1">LinkedIn <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></a></li>}
-              {data.socials.twitter && <li><a href={data.socials.twitter} className="hover:text-white group transition-colors flex items-center gap-1">Twitter <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></a></li>}
-              {data.socials.instagram && <li><a href={data.socials.instagram} className="hover:text-white group transition-colors flex items-center gap-1">Instagram <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></a></li>}
-              {data.socials.facebook && <li><a href={data.socials.facebook} className="hover:text-white group transition-colors flex items-center gap-1">Facebook <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></a></li>}
-            </ul>
-          </div>
         </div>
-
       </div>
 
-      <div className="max-w-7xl mx-auto border-t border-white/10 mt-20 pt-8 flex flex-col md:flex-row justify-between items-center text-[14px] text-white/40 gap-4">
-        <p>© {years} {data.copyright}</p>
-        <p>All rights reserved. Made based on Framer Clone Specs.</p>
+      {/* Bottom bar */}
+      <div className="max-w-7xl mx-auto border-t border-white/[0.06] mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p className="text-[12px] text-white/40 font-mono">
+          © {year} {data.copyright}
+        </p>
+        <div className="flex items-center gap-2 text-[12px] text-white/40 font-mono">
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+          <span>Arquitetado com Design System Moderno & WebGL 3D</span>
+        </div>
       </div>
     </footer>
   );

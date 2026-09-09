@@ -1,0 +1,2091 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CYBER_CORE // Visual 3D & Creative Engineering</title>
+  
+  <!-- =====================================================================
+       FONTES EXTERNAS (Google Fonts)
+       ===================================================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,500;0,700;1,400&family=Space+Grotesk:wght@300;500;700;900&family=Syne:wght@700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- =====================================================================
+       BIBLIOTECAS CDN (Three.js para o 3D & GSAP para animações)
+       ===================================================================== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- =====================================================================
+       ESTILOS CSS GLOBAIS, TEMA E ANIMAÇÕES
+       ===================================================================== -->
+  <style>
+    /* =====================================================================
+       1. VARIÁVEIS DE TEMA // CUSTOMIZAÇÃO DE CORES E IDENTIDADE
+       Altere estas variáveis para mudar instantaneamente a paleta visual!
+       ===================================================================== */
+    :root {
+      /* Fundo e tons escuros */
+      --bg-void: #05050a;
+      --bg-surface: #0a0a14;
+      --bg-card: rgba(12, 12, 24, 0.7);
+      --bg-card-hover: rgba(18, 18, 38, 0.85);
+
+      /* Cores de destaque (Cyberpunk Neon) */
+      --neon-cyan: #00f0ff;
+      --neon-magenta: #ff00aa;
+      --neon-purple: #8a2be2;
+      --neon-amber: #ffaa00;
+
+      /* Textos */
+      --text-main: #f0f4fc;
+      --text-muted: #8e9bb0;
+      --text-dim: #4e586e;
+
+      /* Bordas e brilhos */
+      --border-glow: rgba(0, 240, 255, 0.25);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --glow-cyan: 0 0 25px rgba(0, 240, 255, 0.45);
+      --glow-magenta: 0 0 25px rgba(255, 0, 170, 0.45);
+
+      /* Tipografia */
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'Space Grotesk', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Transições e curvas */
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Reset Básico */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-void);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: var(--neon-cyan);
+      color: var(--bg-void);
+    }
+
+    body {
+      background-color: var(--bg-void);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* =====================================================================
+       2. TEXTURAS DE FUNDO: RUÍDO, VINHETA E SCANLINES CRT SUTIS
+       ===================================================================== */
+    /* Ruído estático sutil */
+    .bg-noise {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Vinheta cinematográfica periférica */
+    .bg-vignette {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 2;
+      background: radial-gradient(circle at center, transparent 40%, rgba(5, 5, 10, 0.85) 90%, #05050a 100%);
+    }
+
+    /* Linhas de varredura cibernéticas (scanlines) */
+    .bg-scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 2;
+      background: linear-gradient(rgba(18, 16, 26, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+      background-size: 100% 3px, 3px 100%;
+      opacity: 0.6;
+    }
+
+    /* =====================================================================
+       3. CANVAS THREE.JS (CANVAS 3D FIXO NO BACKDROP)
+       ===================================================================== */
+    #webgl-canvas-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none; /* Deixa cliques passarem para os botões */
+    }
+
+    #webgl-canvas-container canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Fallback estático caso o WebGL não esteja disponível */
+    .webgl-fallback {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--neon-cyan) 0%, var(--neon-magenta) 50%, transparent 70%);
+      filter: blur(50px);
+      opacity: 0.3;
+      animation: pulseFallback 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseFallback {
+      0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.2; }
+      100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.45; }
+    }
+
+    /* =====================================================================
+       4. CURSOR CUSTOMIZADO CYBERPUNK COM BLEND MODE
+       ===================================================================== */
+    .custom-cursor-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--neon-cyan);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+      transition: width 0.2s, height 0.2s, background-color 0.2s;
+    }
+
+    .custom-cursor-ring {
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid var(--neon-cyan);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s ease-out, width 0.3s var(--ease-out-expo), height 0.3s var(--ease-out-expo), border-color 0.3s;
+      mix-blend-mode: screen;
+    }
+
+    .custom-cursor-ring.cursor-hover {
+      width: 60px;
+      height: 60px;
+      border-color: var(--neon-magenta);
+      background: rgba(255, 0, 170, 0.08);
+      box-shadow: 0 0 25px rgba(255, 0, 170, 0.3);
+    }
+
+    /* =====================================================================
+       5. HUD E NAVEGAÇÃO SUPERIOR
+       ===================================================================== */
+    .hud-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(5, 5, 10, 0.5);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-main);
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-symbol {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--neon-cyan);
+      position: relative;
+      display: grid;
+      place-items: center;
+      box-shadow: var(--glow-cyan);
+    }
+
+    .brand-symbol::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--neon-magenta);
+      box-shadow: var(--glow-magenta);
+    }
+
+    .hud-nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .hud-nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.25s, text-shadow 0.25s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .hud-nav-links a span.nav-index {
+      color: var(--neon-cyan);
+      font-size: 0.7rem;
+    }
+
+    .hud-nav-links a:hover {
+      color: var(--text-main);
+      text-shadow: 0 0 8px var(--neon-cyan);
+    }
+
+    .hud-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .system-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--neon-cyan);
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      padding: 0.35rem 0.8rem;
+      border-radius: 4px;
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--neon-cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--neon-cyan);
+      animation: pulseLed 1.8s infinite;
+    }
+
+    @keyframes pulseLed {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.7); }
+    }
+
+    .sound-toggle-btn {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.25s;
+    }
+
+    .sound-toggle-btn:hover {
+      border-color: var(--neon-magenta);
+      color: var(--neon-magenta);
+      box-shadow: var(--glow-magenta);
+    }
+
+    /* =====================================================================
+       6. TELEMETRIA LATERAL E ELEMENTOS DE INTERFACE DECORATIVOS (HUD)
+       ===================================================================== */
+    .hud-corner-tl {
+      position: fixed;
+      top: 90px;
+      left: 2rem;
+      z-index: 10;
+      pointer-events: none;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .hud-corner-br {
+      position: fixed;
+      bottom: 2rem;
+      right: 2.5rem;
+      z-index: 10;
+      pointer-events: none;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      text-align: right;
+    }
+
+    .hud-line {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hud-line-glow {
+      color: var(--neon-cyan);
+    }
+
+    /* =====================================================================
+       7. ESTRUTURA GERAL DAS SEÇÕES
+       ===================================================================== */
+    main {
+      position: relative;
+      z-index: 5;
+      width: 100%;
+    }
+
+    section {
+      min-height: 100vh;
+      width: 100%;
+      padding: 8rem 6vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      perspective: 1200px;
+    }
+
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-tag::before {
+      content: '//';
+      color: var(--neon-magenta);
+    }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      max-width: 900px;
+      text-transform: uppercase;
+    }
+
+    .section-heading .highlight-cyan {
+      color: transparent;
+      background: linear-gradient(135deg, #ffffff 20%, var(--neon-cyan) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      text-shadow: 0 0 35px rgba(0, 240, 255, 0.4);
+    }
+
+    .section-heading .highlight-magenta {
+      color: transparent;
+      background: linear-gradient(135deg, #ffffff 20%, var(--neon-magenta) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      text-shadow: 0 0 35px rgba(255, 0, 170, 0.4);
+    }
+
+    .section-subtext {
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      max-width: 620px;
+      margin-bottom: 3rem;
+      font-weight: 400;
+    }
+
+    /* =====================================================================
+       8. HERO SECTION
+       ===================================================================== */
+    #hero {
+      padding-top: 12rem;
+      padding-bottom: 6rem;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(0, 240, 255, 0.06);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      padding: 0.5rem 1.25rem;
+      border-radius: 100px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--neon-cyan);
+      margin-bottom: 2rem;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-badge-spark {
+      width: 8px;
+      height: 8px;
+      background: var(--neon-magenta);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--neon-magenta);
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 8.5vw, 7.5rem);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+      max-width: 1100px;
+      text-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+    }
+
+    .hero-title .glow-line {
+      display: block;
+      color: transparent;
+      background: linear-gradient(180deg, #ffffff 40%, rgba(255, 255, 255, 0.6) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .hero-title .accent-line {
+      display: block;
+      color: transparent;
+      background: linear-gradient(90deg, var(--neon-cyan) 0%, #ffffff 50%, var(--neon-magenta) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(0, 240, 255, 0.5));
+    }
+
+    .hero-description {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      color: var(--text-muted);
+      max-width: 650px;
+      margin-bottom: 3.5rem;
+      line-height: 1.55;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    /* Botão Principal com Efeito de Borda Neon e Elevação 3D */
+    .btn-primary {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      padding: 1.25rem 2.8rem;
+      background: var(--neon-cyan);
+      color: #030307;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: transform 0.3s var(--ease-elastic), box-shadow 0.3s, background-color 0.3s;
+      box-shadow: 0 0 35px rgba(0, 240, 255, 0.6), inset 0 0 12px rgba(255, 255, 255, 0.6);
+      transform-style: preserve-3d;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 6px;
+      background: linear-gradient(45deg, var(--neon-cyan), var(--neon-magenta), var(--neon-cyan));
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s;
+      filter: blur(8px);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-4px) scale(1.03) translateZ(10px);
+      box-shadow: 0 10px 45px rgba(0, 240, 255, 0.8), 0 0 20px var(--neon-magenta);
+      background: #ffffff;
+      color: #000;
+    }
+
+    .btn-primary:hover::before {
+      opacity: 1;
+    }
+
+    /* Botão Secundário Glassmorphism */
+    .btn-secondary {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1.25rem 2.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      transition: all 0.3s var(--ease-out-expo);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--neon-magenta);
+      background: rgba(255, 0, 170, 0.08);
+      color: #fff;
+      transform: translateY(-4px);
+      box-shadow: var(--glow-magenta);
+    }
+
+    /* Dica de rolagem do Hero */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 6vw;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    .scroll-line-track {
+      width: 48px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scroll-line-thumb {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      background: var(--neon-cyan);
+      animation: scrollTrackAnim 2.2s infinite;
+    }
+
+    @keyframes scrollTrackAnim {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(200%); }
+    }
+
+    /* =====================================================================
+       9. SEÇÃO "SOBRE" // CARDS COM 3D DEPTH & TILT REAL
+       ===================================================================== */
+    #sobre {
+      background: linear-gradient(180deg, transparent 0%, rgba(5, 5, 12, 0.7) 30%, transparent 100%);
+    }
+
+    .cards-3d-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2.5rem;
+      margin-top: 3rem;
+      perspective: 1200px;
+    }
+
+    /* Card com profundidade 3D */
+    .card-3d-wrapper {
+      position: relative;
+      border-radius: 12px;
+      transform-style: preserve-3d;
+      transform: rotateX(0deg) rotateY(0deg);
+      transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .card-3d-inner {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 3rem 2.5rem;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transform-style: preserve-3d;
+      overflow: hidden;
+      transition: border-color 0.3s, background-color 0.3s;
+    }
+
+    /* Borda sutil neon no hover */
+    .card-3d-inner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+      opacity: 0.3;
+      transition: opacity 0.3s;
+    }
+
+    .card-3d-wrapper:hover .card-3d-inner::before {
+      opacity: 1;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+    }
+
+    .card-3d-wrapper:hover .card-3d-inner {
+      border-color: rgba(0, 240, 255, 0.4);
+      background: var(--bg-card-hover);
+    }
+
+    /* Elementos internos flutuando no eixo Z */
+    .card-metric-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--neon-cyan);
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      display: inline-block;
+      align-self: flex-start;
+      margin-bottom: 2rem;
+      transform: translateZ(30px);
+      transition: transform 0.3s;
+    }
+
+    .card-icon-container {
+      width: 56px;
+      height: 56px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: grid;
+      place-items: center;
+      margin-bottom: 1.75rem;
+      color: var(--neon-cyan);
+      transform: translateZ(45px);
+      transition: transform 0.3s, color 0.3s, border-color 0.3s;
+    }
+
+    .card-3d-wrapper:hover .card-icon-container {
+      transform: translateZ(55px);
+      color: var(--neon-magenta);
+      border-color: var(--neon-magenta);
+      box-shadow: var(--glow-magenta);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      color: var(--text-main);
+      transform: translateZ(35px);
+    }
+
+    .card-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 2rem;
+      transform: translateZ(25px);
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      transform: translateZ(20px);
+    }
+
+    .card-footer-action {
+      color: var(--neon-cyan);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: gap 0.2s, color 0.2s;
+    }
+
+    .card-3d-wrapper:hover .card-footer-action {
+      gap: 0.65rem;
+      color: #fff;
+    }
+
+    /* =====================================================================
+       10. SEÇÃO "PROJETOS / DESTAQUES" // GRID ASSIMÉTRICO COM SCROLL 3D
+       ===================================================================== */
+    #projetos {
+      position: relative;
+    }
+
+    .projects-asymmetric-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 2.5rem;
+      margin-top: 3.5rem;
+    }
+
+    /* Variações de tamanho no grid assimétrico */
+    .project-item {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      opacity: 0; /* Controlado via JS ScrollTrigger */
+      transform: translateY(60px) rotateX(10deg);
+      transition: border-color 0.4s, transform 0.4s var(--ease-out-expo), box-shadow 0.4s;
+    }
+
+    .project-span-8 {
+      grid-column: span 8;
+      min-height: 480px;
+    }
+
+    .project-span-4 {
+      grid-column: span 4;
+      min-height: 480px;
+    }
+
+    .project-span-6 {
+      grid-column: span 6;
+      min-height: 420px;
+    }
+
+    .project-preview-viewport {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.8s var(--ease-out-expo), filter 0.8s;
+      filter: saturate(0.65) brightness(0.7);
+    }
+
+    .project-item:hover .project-preview-viewport {
+      transform: scale(1.06);
+      filter: saturate(1.1) brightness(0.9);
+    }
+
+    /* Gradiente e Scanline sobre a pré-visualização */
+    .project-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(5, 5, 10, 0.2) 0%, rgba(5, 5, 10, 0.85) 65%, #05050a 100%);
+      z-index: 1;
+    }
+
+    .project-item:hover {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 15px 40px rgba(0, 240, 255, 0.25);
+      transform: translateY(-8px) scale(1.01) !important;
+    }
+
+    .project-content {
+      position: relative;
+      z-index: 2;
+      padding: 3rem;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .project-meta-bar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .project-status {
+      padding: 0.2rem 0.65rem;
+      border-radius: 3px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .status-live {
+      background: rgba(0, 240, 255, 0.15);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 240, 255, 0.4);
+    }
+
+    .status-rd {
+      background: rgba(255, 0, 170, 0.15);
+      color: var(--neon-magenta);
+      border: 1px solid rgba(255, 0, 170, 0.4);
+    }
+
+    .project-category {
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .project-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+
+    .project-summary {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 580px;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tech-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      transition: all 0.2s;
+    }
+
+    .project-item:hover .tech-tag {
+      color: var(--text-main);
+      border-color: rgba(0, 240, 255, 0.3);
+    }
+
+    /* =====================================================================
+       11. SEÇÃO TELEMETRIA & STATS TICKER
+       ===================================================================== */
+    .hud-metrics-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      padding: 3rem 0;
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      margin: 5rem 0;
+    }
+
+    .metric-box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .metric-number {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      display: flex;
+      align-items: baseline;
+    }
+
+    .metric-unit {
+      color: var(--neon-cyan);
+      font-size: 1.5rem;
+      margin-left: 0.25rem;
+    }
+
+    .metric-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* =====================================================================
+       12. SEÇÃO CONTATO / CTA FINAL
+       ===================================================================== */
+    #contato {
+      position: relative;
+      text-align: center;
+      align-items: center;
+      padding-top: 10rem;
+      padding-bottom: 10rem;
+      overflow: hidden;
+    }
+
+    .contact-portal-box {
+      max-width: 860px;
+      width: 100%;
+      background: radial-gradient(circle at center, rgba(14, 14, 30, 0.75) 0%, rgba(5, 5, 10, 0.9) 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 5rem 3rem;
+      position: relative;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 240, 255, 0.08);
+      transform-style: preserve-3d;
+    }
+
+    .contact-portal-box::after {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 15%;
+      right: 15%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon-magenta), var(--neon-cyan), transparent);
+    }
+
+    .contact-cta-button {
+      margin-top: 2.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.4rem 3.5rem;
+      background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-magenta) 100%);
+      color: #05050a;
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      border-radius: 4px;
+      box-shadow: 0 0 35px rgba(0, 240, 255, 0.5), 0 0 30px rgba(255, 0, 170, 0.4);
+      transition: transform 0.35s var(--ease-elastic), box-shadow 0.35s;
+    }
+
+    .contact-cta-button:hover {
+      transform: translateY(-6px) scale(1.04);
+      box-shadow: 0 10px 50px rgba(0, 240, 255, 0.8), 0 0 50px rgba(255, 0, 170, 0.7);
+    }
+
+    .terminal-channels {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+      list-style: none;
+    }
+
+    .channel-link {
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      transition: all 0.25s;
+    }
+
+    .channel-link:hover {
+      color: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+      background: rgba(0, 240, 255, 0.05);
+      box-shadow: var(--glow-cyan);
+    }
+
+    /* =====================================================================
+       13. RODAPÉ INSTITUCIONAL (FOOTER)
+       ===================================================================== */
+    footer {
+      width: 100%;
+      padding: 3rem 6vw;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      position: relative;
+      z-index: 10;
+      background: #030307;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--text-dim);
+    }
+
+    /* =====================================================================
+       14. RESPONSIVIDADE (MOBILE & TABLET)
+       ===================================================================== */
+    @media (max-width: 1024px) {
+      .hud-header {
+        padding: 1.25rem 1.5rem;
+      }
+      .hud-nav-links {
+        display: none; /* Simplifica a navegação em telas menores */
+      }
+      .project-span-8, .project-span-4, .project-span-6 {
+        grid-column: span 12;
+      }
+      .hud-corner-tl, .hud-corner-br {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      section {
+        padding: 6rem 5vw;
+      }
+      .hero-title {
+        font-size: 3.2rem;
+      }
+      .cards-3d-grid {
+        grid-template-columns: 1fr;
+      }
+      .contact-portal-box {
+        padding: 3.5rem 1.5rem;
+      }
+      .contact-cta-button {
+        width: 100%;
+        padding: 1.2rem 1.5rem;
+      }
+      footer {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =====================================================================
+       CAMADAS DE EFEITO VISUAL (Ruído, Vinheta, Scanlines)
+       ===================================================================== -->
+  <div class="bg-noise" aria-hidden="true"></div>
+  <div class="bg-vignette" aria-hidden="true"></div>
+  <div class="bg-scanlines" aria-hidden="true"></div>
+
+  <!-- Cursor Customizado Cibernético -->
+  <div class="custom-cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+  <div class="custom-cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+
+  <!-- =====================================================================
+       CONTAINER 3D (THREE.JS)
+       A cena 3D será injetada e renderizada aqui.
+       ===================================================================== -->
+  <div id="webgl-canvas-container">
+    <!-- Fallback caso o navegador não suporte WebGL -->
+    <div class="webgl-fallback" id="webgl-fallback" aria-hidden="true"></div>
+  </div>
+
+  <!-- =====================================================================
+       TELEMETRIA LATERAL HUD (Coordenadas & Status de Sistema)
+       ===================================================================== -->
+  <div class="hud-corner-tl" aria-hidden="true">
+    <div class="hud-line"><span class="hud-line-glow">CORE:</span> ACTIVE [THREE.JS R128]</div>
+    <div class="hud-line"><span>LAT:</span> 23.5505° S / LON: 46.6333° W</div>
+    <div class="hud-line"><span>SEC:</span> 09 // ENCRYPT: AES-GCM</div>
+  </div>
+
+  <div class="hud-corner-br" aria-hidden="true">
+    <div class="hud-line">FPS: <span id="hud-fps-val" class="hud-line-glow">60</span> // MEM: OPTIMAL</div>
+    <div class="hud-line">SPATIAL RENDER ENGINE v4.8</div>
+  </div>
+
+  <!-- =====================================================================
+       HUD SUPERIOR / NAVEGAÇÃO
+       ===================================================================== -->
+  <header class="hud-header">
+    <!-- LOGO DA MARCA -->
+    <!-- [EDITAR]: Substitua pelo nome ou logotipo da sua marca/empresa -->
+    <a href="#hero" class="brand-logo" data-hover-sound="nav">
+      <div class="brand-symbol"></div>
+      <span>NEXUS<span style="color: var(--neon-cyan)">.CORE</span></span>
+    </a>
+
+    <!-- LINKS DE NAVEGAÇÃO -->
+    <nav>
+      <ul class="hud-nav-links">
+        <li><a href="#hero" data-hover-sound="nav"><span class="nav-index">01</span> Origem</a></li>
+        <li><a href="#sobre" data-hover-sound="nav"><span class="nav-index">02</span> Arquitetura</a></li>
+        <li><a href="#projetos" data-hover-sound="nav"><span class="nav-index">03</span> Deployments</a></li>
+        <li><a href="#contato" data-hover-sound="nav"><span class="nav-index">04</span> Uplink</a></li>
+      </ul>
+    </nav>
+
+    <!-- AÇÕES DO HUD (Status & Áudio Sintético) -->
+    <div class="hud-actions">
+      <div class="system-status">
+        <div class="pulse-dot"></div>
+        <span>SYSTEM ONLINE</span>
+      </div>
+
+      <!-- Botão de Efeitos Sonoros (Sintetizador Web Audio API) -->
+      <button class="sound-toggle-btn" id="sound-toggle-btn" title="Ativar/Desativar Efeitos Sonoros Futuristas">
+        <span id="sound-icon">🔊</span>
+        <span id="sound-label">SFX: ON</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       CONTEÚDO PRINCIPAL (SEÇÕES)
+       ===================================================================== -->
+  <main>
+
+    <!-- ===================================================================
+         SEÇÃO 01: HERO SECTION
+         =================================================================== -->
+    <section id="hero">
+      <!-- Badge de Tecnologia -->
+      <div class="hero-badge">
+        <div class="hero-badge-spark"></div>
+        <span>PROTOCOLO CIBERNÉTICO v4.0 // WEBGL EM TEMPO REAL</span>
+      </div>
+
+      <!-- Título de Impacto -->
+      <!-- [EDITAR]: Altere o título principal do Hero aqui -->
+      <h1 class="hero-title">
+        <span class="glow-line">O FUTURO NÃO É</span>
+        <span class="accent-line">ESPERADO. É CRIADO.</span>
+      </h1>
+
+      <!-- Descrição do Hero -->
+      <!-- [EDITAR]: Altere o subtítulo com a sua proposta de valor -->
+      <p class="hero-description">
+        Unimos engenharia gráfica tridimensional, design editorial de vanguarda e arquitetura de software de alta performance para construir experiências digitais inesquecíveis.
+      </p>
+
+      <!-- Grupo de Botões de Ação (CTA) -->
+      <div class="hero-cta-group">
+        <!-- [EDITAR]: Altere os links de destino e rótulos dos botões -->
+        <a href="#projetos" class="btn-primary" data-hover-sound="btn">
+          <span>INICIAR IMERSÃO</span>
+          <span>→</span>
+        </a>
+        <a href="#sobre" class="btn-secondary" data-hover-sound="btn">
+          <span>EXPLORAR STACK</span>
+        </a>
+      </div>
+
+      <!-- Indicador de Rolagem Animado -->
+      <div class="scroll-indicator">
+        <div class="scroll-line-track">
+          <div class="scroll-line-thumb"></div>
+        </div>
+        <span>ROLE PARA NAVEGAR</span>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         SEÇÃO 02: SEÇÃO "SOBRE" // CARDS COM PROFUNDIDADE 3D (TILT)
+         =================================================================== -->
+    <section id="sobre">
+      <div class="section-tag">ARQUITETURA & VISÃO</div>
+      
+      <!-- [EDITAR]: Título e introdução da seção Sobre -->
+      <h2 class="section-heading">
+        Engenharia Visual de <span class="highlight-cyan">Alta Fidelidade</span>
+      </h2>
+      <p class="section-subtext">
+        Rompa com a mesmice dos templates corporativos planos. Criamos mundos interativos nos quais cada vértice, sombra e shader serve a uma narrativa poderosa.
+      </p>
+
+      <!-- Grid com 3 Cards 3D Interativos -->
+      <div class="cards-3d-grid">
+
+        <!-- Card 1: Computação Espacial -->
+        <div class="card-3d-wrapper" data-tilt>
+          <div class="card-3d-inner">
+            <div>
+              <span class="card-metric-tag">// WEBGL 2.0 & GLSL</span>
+              <div class="card-icon-container">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                  <polyline points="2 17 12 22 22 17"></polyline>
+                  <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+              </div>
+              <h3 class="card-title">Cenas 3D em Tempo Real</h3>
+              <p class="card-desc">
+                Geometrias dinâmicas, nuvens de partículas computadas na GPU e shaders personalizados que reagem a cada interação do visitante.
+              </p>
+            </div>
+            <div class="card-footer">
+              <span>LATÊNCIA &lt; 8ms</span>
+              <span class="card-footer-action">EXPLORAR ↗</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Design Editorial Cyberpunk -->
+        <div class="card-3d-wrapper" data-tilt>
+          <div class="card-3d-inner">
+            <div>
+              <span class="card-metric-tag">// DIREÇÃO DE ARTE</span>
+              <div class="card-icon-container">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
+                  <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
+                  <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
+                  <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
+                  <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
+                  <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
+                </svg>
+              </div>
+              <h3 class="card-title">Estética Não Genérica</h3>
+              <p class="card-desc">
+                Tipografia geométrica monumental, camadas de profundidade ótica, iluminação volumétrica e identidade de impacto que gera autoridade imediata.
+              </p>
+            </div>
+            <div class="card-footer">
+              <span>CONTRASTE ÓTICO</span>
+              <span class="card-footer-action">CONCEITO ↗</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Performance Brutal -->
+        <div class="card-3d-wrapper" data-tilt>
+          <div class="card-3d-inner">
+            <div>
+              <span class="card-metric-tag">// OTIMIZAÇÃO RIGOROSA</span>
+              <div class="card-icon-container">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+              </div>
+              <h3 class="card-title">Taxa Estável a 60 FPS</h3>
+              <p class="card-desc">
+                Culling inteligente, geometrias instanciadas, clamp adaptativo de PixelRatio e degradação suave em dispositivos mobile com bateria reduzida.
+              </p>
+            </div>
+            <div class="card-footer">
+              <span>BENCHMARK 100%</span>
+              <span class="card-footer-action">MÉTRICAS ↗</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Ticker de Métricas / Telemetria Quantitativa -->
+      <div class="hud-metrics-strip">
+        <div class="metric-box">
+          <div class="metric-number">60<span class="metric-unit">FPS</span></div>
+          <div class="metric-label">Taxa de Atualização Travada</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-number">2.5<span class="metric-unit">K+</span></div>
+          <div class="metric-label">Partículas em Tempo Real</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-number">100<span class="metric-unit">%</span></div>
+          <div class="metric-label">Código Limpo & Autocontido</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-number">0.3<span class="metric-unit">s</span></div>
+          <div class="metric-label">Tempo de Renderização Inicial</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         SEÇÃO 03: PROJETOS / DESTAQUES // GRID ASSIMÉTRICO COM SCROLL 3D
+         =================================================================== -->
+    <section id="projetos">
+      <div class="section-tag">CASES SELECIONADOS</div>
+      
+      <!-- [EDITAR]: Título e subtítulo da seção de Projetos -->
+      <h2 class="section-heading">
+        Módulos & <span class="highlight-magenta">Projetos de Destaque</span>
+      </h2>
+      <p class="section-subtext">
+        Projetos desenvolvidos com foco em imersão, narrativa sensorial e arquitetura de código impecável.
+      </p>
+
+      <!-- Grid Assimétrico -->
+      <div class="projects-asymmetric-grid">
+
+        <!-- Projeto 1 (Destaque Grande: 8 colunas) -->
+        <article class="project-item project-span-8">
+          <div class="project-preview-viewport" style="background: radial-gradient(circle at 70% 30%, #005577 0%, #050510 70%);"></div>
+          <div class="project-overlay"></div>
+          <div class="project-content">
+            <div class="project-meta-bar">
+              <span class="project-status status-live">[ DEPLOYED ]</span>
+              <span class="project-category">// PLATAFORMA ESPACIAL</span>
+            </div>
+            <!-- [EDITAR]: Nome e descrição do Projeto 1 -->
+            <h3 class="project-title">NEURAL KINETIC OS</h3>
+            <p class="project-summary">
+              Interface tridimensional de telemetria biônica com visualização de fluxos de dados neurais em tempo real sobre Three.js e WebGPU.
+            </p>
+            <div class="project-tech-tags">
+              <span class="tech-tag">THREE.JS</span>
+              <span class="tech-tag">GLSL SHADERS</span>
+              <span class="tech-tag">WEBSOCKETS</span>
+              <span class="tech-tag">AUDIO-REACTIVE</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Projeto 2 (Destaque Médio: 4 colunas) -->
+        <article class="project-item project-span-4">
+          <div class="project-preview-viewport" style="background: radial-gradient(circle at 30% 60%, #880055 0%, #050510 70%);"></div>
+          <div class="project-overlay"></div>
+          <div class="project-content">
+            <div class="project-meta-bar">
+              <span class="project-status status-rd">[ LAB R&D ]</span>
+              <span class="project-category">// AUDIORREATIVO</span>
+            </div>
+            <!-- [EDITAR]: Nome e descrição do Projeto 2 -->
+            <h3 class="project-title">SYNTHWAVE EXODUS</h3>
+            <p class="project-summary">
+              Experiência imersiva WebGL com síntese sonora procedural e deformação de malha paramétrica.
+            </p>
+            <div class="project-tech-tags">
+              <span class="tech-tag">WEB AUDIO API</span>
+              <span class="tech-tag">PARTICLE ENGINE</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Projeto 3 (Destaque Médio: 6 colunas) -->
+        <article class="project-item project-span-6">
+          <div class="project-preview-viewport" style="background: radial-gradient(circle at 50% 50%, #1a0044 0%, #050510 80%);"></div>
+          <div class="project-overlay"></div>
+          <div class="project-content">
+            <div class="project-meta-bar">
+              <span class="project-status status-live">[ LIVE CLIENT ]</span>
+              <span class="project-category">// SHOWROOM VIRTUAL</span>
+            </div>
+            <!-- [EDITAR]: Nome e descrição do Projeto 3 -->
+            <h3 class="project-title">QUANTUM VAULT 3D</h3>
+            <p class="project-summary">
+              Showcase interativo para custódia de criptoativos de alto calibre com iluminação física (PBR) e física de gravidade zero.
+            </p>
+            <div class="project-tech-tags">
+              <span class="tech-tag">PBR MATERIALS</span>
+              <span class="tech-tag">PHYSICAL CAMERA</span>
+              <span class="tech-tag">GSAP</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Projeto 4 (Destaque Médio: 6 colunas) -->
+        <article class="project-item project-span-6">
+          <div class="project-preview-viewport" style="background: radial-gradient(circle at 40% 40%, #004433 0%, #050510 80%);"></div>
+          <div class="project-overlay"></div>
+          <div class="project-content">
+            <div class="project-meta-bar">
+              <span class="project-status status-rd">[ ALPHA 0.9 ]</span>
+              <span class="project-category">// SIMULAÇÃO FÍSICA</span>
+            </div>
+            <!-- [EDITAR]: Nome e descrição do Projeto 4 -->
+            <h3 class="project-title">CYBER SPATIAL CLOUD</h3>
+            <p class="project-summary">
+              Visualizador de dados tridimensional volumétrico para monitoramento de infraestruturas em nuvem descentralizadas.
+            </p>
+            <div class="project-tech-tags">
+              <span class="tech-tag">POINT CLOUDS</span>
+              <span class="tech-tag">COMPUTE BUFFERS</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         SEÇÃO 04: CONTATO / CTA FINAL
+         =================================================================== -->
+    <section id="contato">
+      <div class="contact-portal-box" data-tilt>
+        <div class="section-tag" style="justify-content: center;">TRANSMISSÃO DIRETA</div>
+        
+        <!-- [EDITAR]: Título e chamada do CTA final -->
+        <h2 class="section-heading" style="margin-inline: auto;">
+          Pronto Para Romper a Barreira do <span class="highlight-cyan">Ordinário?</span>
+        </h2>
+        <p class="section-subtext" style="margin-inline: auto;">
+          Disponível para consultorias seletas de engenharia 3D, direções de arte de vanguarda e produtos digitais que demandam autoridade e impacto estético.
+        </p>
+
+        <!-- Botão Principal de Conexão -->
+        <!-- [EDITAR]: Altere o mailto: ou link de agendamento -->
+        <a href="mailto:contato@seudominio.com" class="contact-cta-button" data-hover-sound="btn">
+          <span>ESTABELECER CONEXÃO</span>
+          <span>⚡</span>
+        </a>
+
+        <!-- Links de Canais Diretos -->
+        <!-- [EDITAR]: Altere as URLs e os perfis das suas redes -->
+        <ul class="terminal-channels">
+          <li><a href="https://github.com" target="_blank" rel="noopener noreferrer" class="channel-link" data-hover-sound="nav">[ GITHUB ]</a></li>
+          <li><a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="channel-link" data-hover-sound="nav">[ LINKEDIN ]</a></li>
+          <li><a href="https://x.com" target="_blank" rel="noopener noreferrer" class="channel-link" data-hover-sound="nav">[ X / TWITTER ]</a></li>
+          <li><a href="https://t.me" target="_blank" rel="noopener noreferrer" class="channel-link" data-hover-sound="nav">[ TELEGRAM ]</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================================
+       RODAPÉ INFORMATIVO
+       ===================================================================== -->
+  <footer>
+    <div class="footer-left">
+      <span>© 2026 NEXUS.CORE // TODOS OS DIREITOS RESERVADOS</span>
+      <span>•</span>
+      <span>ESTRUTURA 100% PURA THREE.JS</span>
+    </div>
+    <div class="footer-right">
+      <span>LATÊNCIA ZERO</span>
+      <span>•</span>
+      <span>TERMINAL ACTIVE</span>
+    </div>
+  </footer>
+
+  <!-- =====================================================================
+       SCRIPTS JAVASCRIPT: THREE.JS, INTERAÇÕES 3D E ÁUDIO PROCEDURAL
+       ===================================================================== -->
+  <script>
+    /* =====================================================================
+       ÍNDICE DO CÓDIGO JAVASCRIPT:
+       1. SISTEMA DE ÁUDIO PROCEDURAL (Web Audio API - Sem arquivos externos)
+       2. CURSOR CUSTOMIZADO COM SEGUI-MOUSE SUAVE
+       3. CENA 3D THREE.JS (Geometria, Materiais, Luzes, Partículas e Animação)
+       4. INTEGRAÇÃO MOUSE + SCROLL-DRIVEN 3D
+       5. EFEITO 3D TILT NOS CARDS (PERSPECTIVE TILT)
+       6. OBSERVER DE REVELAÇÃO SUAVE DE CONTEÚDO
+       ===================================================================== */
+
+    // =====================================================================
+    // 1. SISTEMA DE ÁUDIO SINTÉTICO (EFEITOS SONOROS CYBERPUNK NATIVOS)
+    // =====================================================================
+    let audioContext = null;
+    let soundEnabled = true;
+
+    function initAudioContext() {
+      if (!audioContext) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          audioContext = new AudioCtx();
+        }
+      }
+      if (audioContext && audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+    }
+
+    // Toca um bipe suave futurista ao passar ou clicar em elementos
+    function playSyntheticSound(type = 'nav') {
+      if (!soundEnabled) return;
+      initAudioContext();
+      if (!audioContext) return;
+
+      try {
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+
+        const now = audioContext.currentTime;
+
+        if (type === 'nav') {
+          // Tom sutil de alta frequência (blip holográfico)
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(800, now);
+          osc.frequency.exponentialRampToValueAtTime(1400, now + 0.05);
+          gain.gain.setValueAtTime(0.02, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        } else if (type === 'btn') {
+          // Tom de ativação com ressonância magnética
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.exponentialRampToValueAtTime(660, now + 0.12);
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+          osc.start(now);
+          osc.stop(now + 0.12);
+        }
+      } catch (e) {
+        // Ignora silenciosamente qualquer restrição de autoplay
+      }
+    }
+
+    // Toggle de som
+    const soundToggleBtn = document.getElementById('sound-toggle-btn');
+    const soundIcon = document.getElementById('sound-icon');
+    const soundLabel = document.getElementById('sound-label');
+
+    if (soundToggleBtn) {
+      soundToggleBtn.addEventListener('click', () => {
+        soundEnabled = !soundEnabled;
+        if (soundEnabled) {
+          soundIcon.textContent = '🔊';
+          soundLabel.textContent = 'SFX: ON';
+          playSyntheticSound('btn');
+        } else {
+          soundIcon.textContent = '🔇';
+          soundLabel.textContent = 'SFX: OFF';
+        }
+      });
+    }
+
+    // Liga os efeitos sonoros a elementos interativos com data-hover-sound
+    document.querySelectorAll('[data-hover-sound]').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        playSyntheticSound(el.getAttribute('data-hover-sound'));
+      });
+    });
+
+    // =====================================================================
+    // 2. CURSOR CUSTOMIZADO SUAVE
+    // =====================================================================
+    const cursorDot = document.getElementById('cursor-dot');
+    const cursorRing = document.getElementById('cursor-ring');
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let ringX = mouseX;
+    let ringY = mouseY;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (cursorDot) {
+        cursorDot.style.left = mouseX + 'px';
+        cursorDot.style.top = mouseY + 'px';
+      }
+    });
+
+    // Animação contínua de interpolação (lerp) para o anel externo
+    function renderCursor() {
+      ringX += (mouseX - ringX) * 0.18;
+      ringY += (mouseY - ringY) * 0.18;
+      if (cursorRing) {
+        cursorRing.style.left = ringX + 'px';
+        cursorRing.style.top = ringY + 'px';
+      }
+      requestAnimationFrame(renderCursor);
+    }
+    requestAnimationFrame(renderCursor);
+
+    // Efeito de expansão ao pairar sobre links e botões
+    const interactiveElements = document.querySelectorAll('a, button, [data-tilt], .project-item');
+    interactiveElements.forEach(item => {
+      item.addEventListener('mouseenter', () => cursorRing && cursorRing.classList.add('cursor-hover'));
+      item.addEventListener('mouseleave', () => cursorRing && cursorRing.classList.remove('cursor-hover'));
+    });
+
+    // =====================================================================
+    // 3. CENA 3D THREE.JS DE ALTO IMPACTO (CYBER ARTIFACT & PARTÍCULAS)
+    // =====================================================================
+    /* 
+       A cena é composta por:
+       1. Núcleo Icosaédrico Emissivo com Materiais PBR metálicos
+       2. Gaiola Wireframe externa que gira em contraponto
+       3. Anéis de Giroscópio Quântico com segmentos em rotação
+       4. Nuvem de Partículas em Espiral Reativa (Point Cloud)
+       5. Iluminação de estúdio (Key Light Cyan + Rim Light Magenta + Fill Light)
+    */
+
+    let scene, camera, renderer;
+    let coreGroup, innerMesh, wireframeMesh, gyroRing1, gyroRing2, gyroRing3, particleSystem;
+    let keyLight, fillLight, rimLight;
+
+    // Normalização de coordenadas do mouse (-1 a 1) para rotação suave
+    let targetMouseX = 0;
+    let targetMouseY = 0;
+    let smoothMouseX = 0;
+    let smoothMouseY = 0;
+
+    // Monitor de FPS simples para o HUD
+    let lastTime = performance.now();
+    let frameCount = 0;
+    const hudFpsVal = document.getElementById('hud-fps-val');
+
+    function isWebGLAvailable() {
+      try {
+        const canvas = document.createElement('canvas');
+        return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function initThreeScene() {
+      const container = document.getElementById('webgl-canvas-container');
+      const fallback = document.getElementById('webgl-fallback');
+
+      if (!isWebGLAvailable()) {
+        if (fallback) fallback.style.display = 'block';
+        return;
+      }
+
+      // --- CRIAÇÃO DA CENA & CÂMERA ---
+      scene = new THREE.Scene();
+      
+      // Neblina atmosférica suave para fundir o 3D com o fundo #05050a
+      scene.fog = new THREE.FogExp2(0x05050a, 0.035);
+
+      const aspect = window.innerWidth / window.innerHeight;
+      camera = new THREE.PerspectiveCamera(50, aspect, 0.1, 100);
+      camera.position.set(0, 0, 7.5);
+
+      // --- RENDERER COM ALTA PERFORMANCE ---
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance"
+      });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      // Limita o devicePixelRatio a no máximo 2 para salvar bateria e manter 60fps estáveis
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.2;
+      container.appendChild(renderer.domElement);
+
+      // --- ILUMINAÇÃO DE ESTÚDIO CINEMATOGRÁFICA ---
+      // 1. Fill Light (Ambiente azul/índigo suave)
+      const ambientLight = new THREE.AmbientLight(0x0a0c1a, 2.5);
+      scene.add(ambientLight);
+
+      // 2. Key Light (Luz Pontual Cyan Brilhante)
+      keyLight = new THREE.PointLight(0x00f0ff, 4.0, 30);
+      keyLight.position.set(5, 5, 5);
+      scene.add(keyLight);
+
+      // 3. Rim Light (Luz Magenta de Contraste Posterior)
+      rimLight = new THREE.DirectionalLight(0xff00aa, 3.5);
+      rimLight.position.set(-6, -4, -4);
+      scene.add(rimLight);
+
+      // 4. Luz de realce central pulsante
+      const centerPulseLight = new THREE.PointLight(0x00f0ff, 1.5, 8);
+      centerPulseLight.position.set(0, 0, 0);
+      scene.add(centerPulseLight);
+
+      // =====================================================================
+      // GRUPO PRINCIPAL DO OBJETO 3D
+      // [COMO SUBSTITUIR POR OUTRO MODELO 3D NO FUTURO]:
+      // Para carregar um modelo .GLTF / .GLB em vez desta forma geométrica:
+      // 1. Importe o GLTFLoader: <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"><\/script>
+      // 2. Use: const loader = new THREE.GLTFLoader();
+      //    loader.load('seu-modelo.glb', (gltf) => { coreGroup.add(gltf.scene); });
+      // =====================================================================
+      coreGroup = new THREE.Group();
+      scene.add(coreGroup);
+
+      // 1. NÚCLEO POLIGONAL INTERNO (Icosahedron Facetado com Metalness & Roughness)
+      const coreGeo = new THREE.IcosahedronGeometry(1.6, 1);
+      const coreMat = new THREE.MeshPhysicalMaterial({
+        color: 0x070b19,
+        emissive: 0x002b44,
+        emissiveIntensity: 0.8,
+        metalness: 0.95,
+        roughness: 0.15,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.1,
+        reflectivity: 1.0,
+        wireframe: false,
+        flatShading: true
+      });
+      innerMesh = new THREE.Mesh(coreGeo, coreMat);
+      coreGroup.add(innerMesh);
+
+      // 2. GAIOLA WIREFRAME EXTERNA (Efeito Holográfico)
+      const wireGeo = new THREE.IcosahedronGeometry(2.0, 1);
+      const wireMat = new THREE.MeshBasicMaterial({
+        color: 0x00f0ff,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.35
+      });
+      wireframeMesh = new THREE.Mesh(wireGeo, wireMat);
+      coreGroup.add(wireframeMesh);
+
+      // 3. ANÉIS DE GIROSCÓPIO QUÂNTICO (Torus Tecnológico)
+      // Anel 1 (Cyan)
+      const ringGeo1 = new THREE.TorusGeometry(2.5, 0.025, 16, 100);
+      const ringMat1 = new THREE.MeshStandardMaterial({
+        color: 0x00f0ff,
+        emissive: 0x00f0ff,
+        emissiveIntensity: 1.2,
+        metalness: 1.0,
+        roughness: 0.2
+      });
+      gyroRing1 = new THREE.Mesh(ringGeo1, ringMat1);
+      coreGroup.add(gyroRing1);
+
+      // Anel 2 (Magenta com rotação inclinada)
+      const ringGeo2 = new THREE.TorusGeometry(2.8, 0.02, 16, 100);
+      const ringMat2 = new THREE.MeshStandardMaterial({
+        color: 0xff00aa,
+        emissive: 0xff00aa,
+        emissiveIntensity: 1.0,
+        metalness: 1.0,
+        roughness: 0.2
+      });
+      gyroRing2 = new THREE.Mesh(ringGeo2, ringMat2);
+      gyroRing2.rotation.x = Math.PI / 3;
+      coreGroup.add(gyroRing2);
+
+      // Anel 3 (Segmentado / Tech Gimbal)
+      const ringGeo3 = new THREE.TorusGeometry(3.1, 0.015, 8, 80);
+      const ringMat3 = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.2
+      });
+      gyroRing3 = new THREE.Mesh(ringGeo3, ringMat3);
+      gyroRing3.rotation.y = Math.PI / 4;
+      coreGroup.add(gyroRing3);
+
+      // 4. CAMPO DE PARTÍCULAS EM ÓRBITA (2.200 Partículas)
+      const particleCount = 2200;
+      const particlePositions = new Float32Array(particleCount * 3);
+      const particleColors = new Float32Array(particleCount * 3);
+
+      const colorCyan = new THREE.Color(0x00f0ff);
+      const colorMagenta = new THREE.Color(0xff00aa);
+
+      for (let i = 0; i < particleCount; i++) {
+        // Distribuição esférica e espiralada
+        const radius = 2.4 + Math.random() * 4.5;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos((Math.random() * 2) - 1);
+
+        particlePositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+        particlePositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+        particlePositions[i * 3 + 2] = radius * Math.cos(phi);
+
+        // Interpolação de cor entre Cyan e Magenta
+        const mixedColor = colorCyan.clone().lerp(colorMagenta, Math.random());
+        particleColors[i * 3] = mixedColor.r;
+        particleColors[i * 3 + 1] = mixedColor.g;
+        particleColors[i * 3 + 2] = mixedColor.b;
+      }
+
+      const particleGeometry = new THREE.BufferGeometry();
+      particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+      particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+
+      // Material de partículas com brilho suave e blend aditivo
+      const particleMaterial = new THREE.PointsMaterial({
+        size: 0.04,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.7,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+
+      particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+      scene.add(particleSystem);
+
+      // Configuração inicial de posição
+      update3DOnScroll();
+    }
+
+    // =====================================================================
+    // 4. REAÇÃO AO MOUSE E AO SCROLL (CHOREOGRAPHY & LERP)
+    // =====================================================================
+    window.addEventListener('mousemove', (e) => {
+      // Converte coordenadas do mouse para [-1, 1]
+      targetMouseX = (e.clientX / window.innerWidth) * 2 - 1;
+      targetMouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+    });
+
+    // Suporte para tela de toque (mobile)
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        targetMouseX = (e.touches[0].clientX / window.innerWidth) * 2 - 1;
+        targetMouseY = -(e.touches[0].clientY / window.innerHeight) * 2 + 1;
+      }
+    }, { passive: true });
+
+    // Posição de rolagem normalizada
+    let scrollProgress = 0;
+
+    function onWindowScroll() {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      scrollProgress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+      update3DOnScroll();
+    }
+    window.addEventListener('scroll', onWindowScroll, { passive: true });
+
+    // Atualiza a posição, rotação e escala do modelo 3D com base no scroll
+    function update3DOnScroll() {
+      if (!coreGroup) return;
+
+      const scrollY = window.scrollY;
+      const windowH = window.innerHeight;
+
+      // Conforme rola, o núcleo se move sutilmente para a lateral e rotaciona
+      if (scrollY < windowH * 1.5) {
+        // Transição Hero -> Sobre: move ligeiramente para a direita para dar espaço aos textos
+        const p = scrollY / (windowH * 1.5);
+        coreGroup.position.x = THREE.MathUtils.lerp(1.2, 2.5, p);
+        coreGroup.position.y = THREE.MathUtils.lerp(0, -0.4, p);
+        coreGroup.scale.setScalar(THREE.MathUtils.lerp(1.1, 0.9, p));
+      } else if (scrollY < windowH * 3.0) {
+        // Transição Sobre -> Projetos: move para a esquerda como backdrop
+        const p = (scrollY - windowH * 1.5) / (windowH * 1.5);
+        coreGroup.position.x = THREE.MathUtils.lerp(2.5, -2.8, p);
+        coreGroup.position.y = THREE.MathUtils.lerp(-0.4, 0.2, p);
+        coreGroup.scale.setScalar(THREE.MathUtils.lerp(0.9, 1.2, p));
+      } else {
+        // Transição para a seção Contato: centraliza novamente atrás do portal
+        coreGroup.position.x = THREE.MathUtils.lerp(coreGroup.position.x, 0, 0.05);
+        coreGroup.position.y = THREE.MathUtils.lerp(coreGroup.position.y, 0, 0.05);
+        coreGroup.scale.setScalar(THREE.MathUtils.lerp(coreGroup.scale.x, 1.35, 0.05));
+      }
+
+      // Altera a intensidade e cor da luz conforme desce a página
+      if (keyLight && rimLight) {
+        keyLight.intensity = 3.5 + Math.sin(scrollProgress * Math.PI) * 2;
+        rimLight.intensity = 3.0 + Math.cos(scrollProgress * Math.PI) * 1.5;
+      }
+    }
+
+    // --- LOOP DE ANIMAÇÃO PRINCIPAL (TICK / REQUEST ANIMATION FRAME) ---
+    const clock = new THREE.Clock();
+
+    function animateThreeScene() {
+      requestAnimationFrame(animateThreeScene);
+
+      const elapsedTime = clock.getElapsedTime();
+
+      // Suavização do mouse via interpolação linear (LERP)
+      smoothMouseX += (targetMouseX - smoothMouseX) * 0.05;
+      smoothMouseY += (targetMouseY - smoothMouseY) * 0.05;
+
+      if (coreGroup) {
+        // Rotação contínua e autônoma somada à influência do mouse
+        coreGroup.rotation.y = elapsedTime * 0.15 + smoothMouseX * 0.45;
+        coreGroup.rotation.x = Math.sin(elapsedTime * 0.2) * 0.1 + -smoothMouseY * 0.4;
+
+        // Rotação inversa do anel wireframe para criar contra-movimento visual
+        if (wireframeMesh) {
+          wireframeMesh.rotation.y = -elapsedTime * 0.25;
+          wireframeMesh.rotation.z = elapsedTime * 0.1;
+        }
+
+        // Anéis de giroscópio rodando em eixos e velocidades diferentes
+        if (gyroRing1) gyroRing1.rotation.z = elapsedTime * 0.35;
+        if (gyroRing2) gyroRing2.rotation.y = elapsedTime * 0.25;
+        if (gyroRing3) gyroRing3.rotation.x = -elapsedTime * 0.18;
+
+        // Efeito de pulso "respiração" no núcleo emissivo
+        if (innerMesh) {
+          const pulse = 1 + Math.sin(elapsedTime * 2.0) * 0.03;
+          innerMesh.scale.set(pulse, pulse, pulse);
+        }
+      }
+
+      // Rotação suave da nuvem de partículas
+      if (particleSystem) {
+        particleSystem.rotation.y = elapsedTime * 0.04 + smoothMouseX * 0.15;
+        particleSystem.rotation.x = -smoothMouseY * 0.1;
+      }
+
+      // Parallax sutil da câmera em relação ao cursor
+      if (camera) {
+        camera.position.x += (smoothMouseX * 0.5 - camera.position.x) * 0.03;
+        camera.position.y += (smoothMouseY * 0.3 - camera.position.y) * 0.03;
+        camera.lookAt(0, 0, 0);
+      }
+
+      // Renderiza o frame
+      if (renderer && scene && camera) {
+        renderer.render(scene, camera);
+      }
+
+      // Medidor de FPS no HUD
+      frameCount++;
+      const now = performance.now();
+      if (now - lastTime >= 1000) {
+        if (hudFpsVal) {
+          hudFpsVal.textContent = frameCount;
+        }
+        frameCount = 0;
+        lastTime = now;
+      }
+    }
+
+    // Redimensionamento responsivo do Three.js
+    window.addEventListener('resize', () => {
+      if (!camera || !renderer) return;
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    });
+
+    // =====================================================================
+    // 5. EFEITO 3D PERSPECTIVE TILT NOS CARDS (TRANSFORM-STYLE: PRESERVE-3D)
+    // =====================================================================
+    const tiltCards = document.querySelectorAll('[data-tilt]');
+
+    tiltCards.forEach((card) => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Converte para coordenadas de -1 a 1 relativas ao centro do card
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = ((y - centerY) / centerY) * -12; // Máximo 12 graus de inclinação
+        const rotateY = ((x - centerX) / centerX) * 12;
+
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        card.style.boxShadow = `${-rotateY * 2}px ${rotateX * 2}px 35px rgba(0, 240, 255, 0.25)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        card.style.boxShadow = `none`;
+      });
+    });
+
+    // =====================================================================
+    // 6. OBSERVER DE REVELAÇÃO SUAVE DE CONTEÚDO (SCROLL-DRIVEN 3D POP)
+    // =====================================================================
+    const projectItems = document.querySelectorAll('.project-item');
+
+    if ('IntersectionObserver' in window) {
+      const observerOptions = {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const projectObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            // Animação de entrada em 3D: fade in + translateZ + desinclinamento
+            setTimeout(() => {
+              entry.target.style.opacity = '1';
+              entry.target.style.transform = 'translateY(0px) rotateX(0deg)';
+            }, index * 100);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      projectItems.forEach((item) => projectObserver.observe(item));
+    } else {
+      // Fallback simples caso IntersectionObserver não exista
+      projectItems.forEach((item) => {
+        item.style.opacity = '1';
+        item.style.transform = 'none';
+      });
+    }
+
+    // Inicialização da cena 3D ao carregar a página
+    window.addEventListener('DOMContentLoaded', () => {
+      initThreeScene();
+      animateThreeScene();
+    });
+  </script>
+</body>
+</html>

@@ -1,10 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowUpRight } from "lucide-react";
-import Button from "./ui/Button";
+import { Menu, X, ArrowUpRight, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { getSectionData } from "@/lib/services/section.service";
 
 interface NavbarData {
   logoText?: string;
@@ -13,15 +11,15 @@ interface NavbarData {
 }
 
 const DEFAULT_NAVBAR: NavbarData = {
-  logoText: "LogiNord",
+  logoText: "Onze",
   links: [
-    { name: "Home", href: "/" },
-    { name: "About Us", href: "/sobre" },
-    { name: "Services", href: "/servicos" },
-    { name: "Fleet", href: "/galeria" },
-    { name: "Contact Us", href: "/contato" },
+    { name: "Início", href: "/" },
+    { name: "Sobre", href: "/sobre" },
+    { name: "Soluções", href: "/servicos" },
+    { name: "Cases", href: "/galeria" },
+    { name: "Contato", href: "/contato" },
   ],
-  cta: { text: "Get a Quote", href: "/contato" }
+  cta: { text: "Fale Conosco", href: "/contato" },
 };
 
 export default function Navbar() {
@@ -31,17 +29,14 @@ export default function Navbar() {
   const [data, setData] = useState<NavbarData>(DEFAULT_NAVBAR);
 
   useEffect(() => {
-    // Dynamic Fetch from CMS
     fetch("/api/admin/navbar?t=" + Date.now())
-      .then(r => r.json())
-      .then(json => {
-        if(json && json.links) setData(json);
+      .then((r) => r.json())
+      .then((json) => {
+        if (json?.links) setData(json);
       })
       .catch(() => {});
-    
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -52,94 +47,139 @@ export default function Navbar() {
 
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-500 ${
-          scrolled ? "bg-white/90 backdrop-blur-xl border-b border-black/5 py-4 shadow-sm" : "bg-transparent py-6"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-[16px] md:px-[40px] flex items-center justify-between">
+      <header className="fixed top-0 left-0 w-full z-[1000] px-4 md:px-8 pt-4 pb-2 transition-all duration-300 pointer-events-none">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
           
-          {/* Logo */}
-          <a href="/" className="flex items-center gap-1 no-underline group scale-100 hover:scale-[1.02] transition-transform">
-            <span className={`font-urbanist font-bold text-[22px] tracking-tight flex items-center gap-1 ${scrolled ? 'text-[#1A1A1A]' : 'text-white'}`}>
-              {data.logoText || "LogiNord"}
-              <ArrowUpRight size={20} strokeWidth={3} className={scrolled ? 'text-[#1A1A1A]' : 'text-white'} />
-            </span>
-          </a>
+          {/* Main Floating Glass Capsule */}
+          <nav
+            className={`w-full flex items-center justify-between px-5 py-3 rounded-full pointer-events-auto transition-all duration-500 border ${
+              scrolled
+                ? "bg-[#08090E]/85 backdrop-blur-xl border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+                : "bg-[#08090E]/50 backdrop-blur-md border-white/[0.06]"
+            }`}
+          >
+            {/* Logo */}
+            <a href="/" className="flex items-center gap-2 group no-underline">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center p-[1px] shadow-[0_0_15px_rgba(99,102,241,0.4)]">
+                <div className="w-full h-full bg-[#08090E] rounded-[11px] flex items-center justify-center">
+                  <span className="text-white font-black text-sm tracking-tighter">11</span>
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-extrabold text-[17px] tracking-tight text-white flex items-center gap-1 leading-none">
+                  Onze<span className="text-cyan-400">.</span>
+                </span>
+                <span className="text-[9px] font-mono tracking-widest text-white/40 uppercase">
+                  Digital Core
+                </span>
+              </div>
+            </a>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex flex-1 justify-center">
-            <ul className={`flex items-center gap-8 ${scrolled ? 'text-[#1A1A1A]' : 'text-white'}`}>
+            {/* Desktop Links */}
+            <ul className="hidden md:flex items-center gap-1 bg-white/[0.03] p-1.5 rounded-full border border-white/[0.04]">
               {data.links.map((link) => {
                 const isActive = activeSegment === link.href;
                 return (
-                  <li key={link.name} className="relative group">
+                  <li key={link.name}>
                     <a
                       href={link.href}
-                      className="text-[14px] font-semibold tracking-wide transition-colors opacity-90 hover:opacity-100"
+                      className={`px-4 py-1.5 rounded-full text-[13px] font-medium transition-all duration-200 flex items-center gap-1.5 ${
+                        isActive
+                          ? "bg-white/[0.08] text-white shadow-sm border border-white/[0.08]"
+                          : "text-white/65 hover:text-white hover:bg-white/[0.04]"
+                      }`}
                     >
+                      {isActive && <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />}
                       {link.name}
                     </a>
-                    {/* Hover Underline using before pseudo or simple span */}
-                    <div className={`absolute -bottom-1 left-0 h-[2px] bg-${scrolled ? 'black' : 'white'} transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'}`} />
                   </li>
                 );
               })}
             </ul>
-          </div>
 
-          {/* Right CTA */}
-          <div className="hidden md:flex items-center">
-            <Button 
-              variant="solid" 
-              text={data.cta.text} 
-              href={data.cta.href}
-            />
-          </div>
+            {/* Right Side: Status indicator & CTA */}
+            <div className="hidden md:flex items-center gap-4">
+              <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[11px] font-mono text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                <span>ONLINE</span>
+              </div>
 
-          {/* Mobile Hamburguer */}
-          <button
-            className={`md:hidden flex items-center justify-center p-2 rounded-[56px] ${scrolled ? 'text-black' : 'text-white'}`}
-            onClick={() => setMobileMenuOpen(true)}
-          >
-            <Menu size={28} />
-          </button>
+              <a
+                href={data.cta.href}
+                className="group relative flex items-center gap-2 px-5 py-2.5 rounded-full text-[13px] font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105"
+                style={{
+                  background: "linear-gradient(135deg, #6366F1, #4F46E5)",
+                  boxShadow: "0 0 20px rgba(99,102,241,0.4)",
+                }}
+              >
+                <span>{data.cta.text}</span>
+                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </a>
+            </div>
+
+            {/* Mobile Hamburger */}
+            <button
+              className="md:hidden flex items-center justify-center p-2 text-white/80 hover:text-white"
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Menu"
+            >
+              <Menu size={22} />
+            </button>
+          </nav>
         </div>
-      </nav>
+      </header>
 
       {/* Mobile Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[1001] bg-white flex flex-col items-center justify-center"
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.96 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[1001] flex flex-col justify-between p-6 bg-[#030305]/95 backdrop-blur-2xl"
           >
-            <button
-              className="absolute top-6 right-6 p-2 rounded-[56px] text-black hover:bg-black/5"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <X size={32} />
-            </button>
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div className="flex items-center gap-2">
+                <span className="font-extrabold text-xl text-white">Onze<span className="text-cyan-400">.</span></span>
+              </div>
+              <button
+                className="p-2.5 rounded-full bg-white/5 border border-white/10 text-white"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <X size={20} />
+              </button>
+            </div>
 
-            <ul className="flex flex-col items-center gap-8 text-center mt-[-10vh]">
-              {data.links.map((link) => (
-                <li key={link.name}>
+            <ul className="flex flex-col gap-4 my-auto">
+              {data.links.map((link, idx) => (
+                <motion.li
+                  key={link.name}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                >
                   <a
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-[32px] font-bold text-[#1A1A1A] hover:text-[#E8431A] transition-colors"
+                    className="text-2xl font-bold text-white/80 hover:text-white flex items-center justify-between p-3 rounded-xl hover:bg-white/5"
                   >
-                    {link.name}
+                    <span>{link.name}</span>
+                    <ArrowUpRight size={18} className="text-white/40" />
                   </a>
-                </li>
+                </motion.li>
               ))}
             </ul>
-            
-            <div className="absolute bottom-12">
-              <Button variant="solid" text={data.cta.text} href={data.cta.href} />
+
+            <div className="pt-4 border-t border-white/10">
+              <a
+                href={data.cta.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full py-3.5 rounded-xl text-center font-bold text-white bg-gradient-to-r from-indigo-600 to-cyan-500 flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30"
+              >
+                <span>{data.cta.text}</span>
+                <ArrowUpRight size={16} />
+              </a>
             </div>
           </motion.div>
         )}

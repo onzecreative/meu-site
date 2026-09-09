@@ -1,110 +1,212 @@
 "use client";
-
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { ArrowUpRight, Sparkles, Layers, Cpu, TrendingUp } from "lucide-react";
+import Card3D from "@/components/3d/Card3D";
+import Service3DVisualizer from "@/components/3d/Service3DVisualizer";
 
 const defaultServices = [
-  { 
-    titulo: "National & International Freight",
-    imagem: "/images/services/service1.png",
-    descricao: "From local deliveries to cross-border transport, we offer reliable freight solutions tailored to your schedule.",
-    show: true
+  {
+    number: "01",
+    title: "Marketing de Performance & Tráfego Pago",
+    desc: "Engenharia de dados em Google Ads, Meta Ads e TikTok. Criação de funis de alta conversão, testes A/B estruturados e escala previsível com ROAS consistente.",
+    tag: "GROWTH & TRÁFEGO",
+    type: "growth",
+    color: "#06B6D4",
   },
-  { 
-    titulo: "Regional Distribution", 
-    imagem: "/images/services/service2.png",
-    descricao: "Efficient short-haul transit ensuring that localized supply chains run seamlessly without costly delays.",
-    show: true
+  {
+    number: "02",
+    title: "Automações com Inteligência Artificial",
+    desc: "Agentes autônomos e fluxos de atendimento inteligente que qualificam leads, integram CRMs e eliminam gargalos operacionais 24 horas por dia.",
+    tag: "IA & AUTOMAÇÃO",
+    type: "ai",
+    color: "#6366F1",
   },
-  { 
-    titulo: "Warehousing & Fulfillment",
-    imagem: "/images/services/service3.png",
-    descricao: "Interior of a modern high-tech warehouse with high shelves filled with neatly organized pallets.",
-    show: true
-  },
-  { 
-    titulo: "Refrigerated Transport",
-    imagem: "/images/services/service4.png",
-    descricao: "Temperature-controlled transport to keep sensitive goods strictly within compliance from origin to destination.",
-    show: true
-  },
-  { 
-    titulo: "3PL Subcontracting",
-    imagem: "/images/services/service5.png",
-    descricao: "Stunning aerial drone shot of a massive logistics hub and warehouse complex.",
-    show: true
+  {
+    number: "03",
+    title: "Plataformas Web & Engenharia Digital",
+    desc: "Websites, landing pages e portais de altíssimo impacto desenvolvidos em Next.js com design system sob medida, tempos de carregamento instantâneos e máxima conversão.",
+    tag: "NEXT-GEN WEB",
+    type: "web",
+    color: "#8B5CF6",
   },
 ];
 
-const ServicesSticky = () => {
+export default function ServicesSticky() {
   const [data, setData] = useState<any>({
-    title: "Logistics that fit your needs.",
-    subtitle: "From temperature-controlled transport to regional distribution — we've got it covered.",
-    items: defaultServices
+    title: "Soluções que\naceleram negócios.",
+    subtitle:
+      "Do tráfego pago de escala à automação com agentes de IA — um ecossistema completo para liderar o mercado digital.",
+    items: defaultServices,
   });
 
   useEffect(() => {
-    fetch("/api/admin/services?t=" + Date.now())
-      .then(r => r.json())
-      .then(json => {
-        if(json && json.items) setData(json);
+    fetch("/api/admin/section/services?t=" + Date.now())
+      .then((r) => r.json())
+      .then((json) => {
+        if (json && Object.keys(json).length > 0)
+          setData((prev: any) => ({ ...prev, ...json }));
       })
       .catch(() => {});
   }, []);
 
-  const items = data.items.filter((s:any) => s.show !== false);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const items = data?.items?.length > 0 ? data.items : defaultServices;
+
   return (
-    <section className="relative bg-white font-urbanist">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="flex flex-col md:flex-row gap-16 items-start">
-          
-          {/* COLUNA ESQUERDA — STICKY */}
-          <div className="w-full md:w-1/3 md:sticky md:top-[20vh] self-start py-12 md:py-24">
-            <h2 className="text-4xl md:text-5xl font-bold text-text-main mb-6 leading-tight">
-              {data.title}
-            </h2>
-            <p className="text-lg text-text-main/70 max-w-sm">
-              {data.subtitle}
-            </p>
-          </div>
+    <section
+      id="services"
+      className="w-full py-[120px] md:py-[160px] relative overflow-hidden"
+      style={{ background: "#030305" }}
+    >
+      {/* Background ambient lighting */}
+      <div
+        className="glow-indigo"
+        style={{ width: 600, height: 600, top: "20%", right: "-10%", opacity: 0.2 }}
+      />
+      <div
+        className="glow-cyan"
+        style={{ width: 500, height: 500, bottom: "10%", left: "-5%", opacity: 0.15 }}
+      />
 
-          {/* COLUNA DIREITA — SCROLL */}
-          <div className="w-full md:w-2/3 py-12 md:py-24">
-            {items.map((service: any, i: number) => (
-              <motion.div 
-                key={i} 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.4, ease: "easeOut", delay: i * 0.1 }}
-                className="pb-24 last:pb-0"
+      <div
+        className="max-w-7xl mx-auto px-4 md:px-10 flex flex-col md:flex-row gap-12 md:gap-16 relative z-10"
+        ref={ref}
+      >
+        {/* Left — Sticky Header & Architecture Index */}
+        <div className="w-full md:w-[38%] flex flex-col">
+          <div className="md:sticky md:top-36 flex flex-col items-start pr-0 md:pr-8">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] mb-6">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              <span className="text-[11px] font-mono font-medium text-white/80 uppercase tracking-widest">
+                [ARCHITECTURE // CAPABILITIES]
+              </span>
+            </div>
+
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7 }}
+              className="text-white mb-6 whitespace-pre-line text-[36px] md:text-[48px] font-extrabold tracking-tight leading-tight"
+            >
+              {data?.title ?? "Soluções que\naceleram negócios."}
+            </motion.h2>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="text-[#9496A1] max-w-[360px] leading-relaxed text-[15px] font-light"
+            >
+              {data?.subtitle}
+            </motion.p>
+
+            {/* Quick spec indicators */}
+            <div className="mt-8 space-y-3 w-full border-t border-white/[0.06] pt-6">
+              <div className="flex items-center justify-between text-[12px] font-mono text-white/50">
+                <span>STACK</span>
+                <span className="text-white">Next.js 16 + React 19 + AI Nodes</span>
+              </div>
+              <div className="flex items-center justify-between text-[12px] font-mono text-white/50">
+                <span>INTERACTIVITY</span>
+                <span className="text-cyan-400">3D WebGL + Spatial Perspective</span>
+              </div>
+              <div className="flex items-center justify-between text-[12px] font-mono text-white/50">
+                <span>DEPLOYS</span>
+                <span className="text-emerald-400">Continuous 99.9% Uptime</span>
+              </div>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7, delay: 0.25 }}
+              className="mt-10"
+            >
+              <a
+                href="/servicos"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-[13px] font-semibold text-white bg-white/[0.04] border border-white/[0.1] hover:border-indigo-500/40 hover:bg-white/[0.08] transition-all duration-300 group"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="w-2.5 h-2.5 rounded-full bg-primary inline-block" />
-                  <span className="text-primary font-bold tracking-wider">
-                    {(i + 1).toString().padStart(2, '0')}
-                  </span>
-                </div>
-                
-                <h3 className="text-3xl md:text-4xl font-bold text-text-main mb-6">
-                  {service.titulo}
-                </h3>
-                
-                <div className="mt-4 rounded-2xl overflow-hidden shadow-sm">
-                  <img 
-                    src={service.imagem} 
-                    alt={service.titulo}
-                    className="w-full h-[300px] md:h-[450px] object-cover hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                </div>
-              </motion.div>
-            ))}
+                <span>Conhecer todos os módulos</span>
+                <ArrowUpRight
+                  size={14}
+                  className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                />
+              </a>
+            </motion.div>
           </div>
+        </div>
 
+        {/* Right — 3D Interactive Cards */}
+        <div className="w-full md:w-[62%] flex flex-col gap-8">
+          {items.map((service: any, i: number) => {
+            const color = service.color || defaultServices[i % defaultServices.length]?.color || "#6366F1";
+            const serviceType = service.type || (i === 0 ? "growth" : i === 1 ? "ai" : "web");
+            
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.7, delay: i * 0.1 }}
+              >
+                <Card3D maxTilt={10} glareOpacity={0.16}>
+                  <div className="relative rounded-2xl border border-white/[0.08] bg-[#08090E] p-7 md:p-9 overflow-hidden group hover:border-indigo-500/40 transition-colors">
+                    {/* Corner accent glow */}
+                    <div
+                      className="absolute -top-16 -right-16 w-36 h-36 rounded-full opacity-20 blur-2xl pointer-events-none group-hover:opacity-40 transition-opacity"
+                      style={{ background: color }}
+                    />
+
+                    {/* Top Row: Tag & Number */}
+                    <div className="flex items-center justify-between mb-6">
+                      <span
+                        className="text-[10px] font-mono font-semibold px-3 py-1 rounded-full uppercase tracking-wider border"
+                        style={{
+                          background: `${color}15`,
+                          borderColor: `${color}35`,
+                          color,
+                        }}
+                      >
+                        {service.tag || defaultServices[i % defaultServices.length]?.tag}
+                      </span>
+                      <span className="text-[13px] font-mono text-white/30 font-bold">
+                        0{i + 1} // 03
+                      </span>
+                    </div>
+
+                    {/* 3D Visualizer Mockup */}
+                    <div className="mb-6 rounded-xl overflow-hidden shadow-2xl">
+                      <Service3DVisualizer type={serviceType} color={color} />
+                    </div>
+
+                    {/* Title & Description */}
+                    <h3 className="text-white font-bold mb-3 text-[22px] md:text-[26px] leading-snug tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-cyan-300 transition-all">
+                      {service?.title}
+                    </h3>
+                    <p className="text-[#9496A1] leading-relaxed text-[15px] font-light">
+                      {service?.desc}
+                    </p>
+
+                    {/* Bottom action trigger */}
+                    <div className="mt-6 pt-5 border-t border-white/[0.06] flex items-center justify-between">
+                      <a
+                        href="/contato"
+                        className="inline-flex items-center gap-2 text-[13px] font-medium text-white/70 group-hover:text-white transition-colors"
+                      >
+                        <span>Solicitar diagnóstico desta solução</span>
+                        <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      </a>
+                    </div>
+                  </div>
+                </Card3D>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
   );
-};
-
-export default ServicesSticky;
+}

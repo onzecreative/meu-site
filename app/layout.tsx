@@ -1,61 +1,59 @@
 import type { Metadata } from "next";
-import { Urbanist, Inter } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
 import JsonLd from "./components/JsonLd";
 import WhatsAppButton from "./components/WhatsAppButton";
 import CustomCursor from "./components/CustomCursor";
-
-const urbanist = Urbanist({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-urbanist",
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
 import { getSectionData } from "@/lib/services/section.service";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSectionData<any>("settings", { seo: {} });
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ? 
-      (process.env.NEXT_PUBLIC_SITE_URL.startsWith('http') ? process.env.NEXT_PUBLIC_SITE_URL : `https://${process.env.NEXT_PUBLIC_SITE_URL}`) 
-      : 'http://localhost:3000'),
+    metadataBase: new URL(
+      process.env.NEXT_PUBLIC_SITE_URL
+        ? (process.env.NEXT_PUBLIC_SITE_URL.startsWith('http')
+            ? process.env.NEXT_PUBLIC_SITE_URL
+            : `https://${process.env.NEXT_PUBLIC_SITE_URL}`)
+        : 'http://localhost:3000'
+    ),
     title: {
-      default: settings.seo.title || "LogiNord - Cargas com Precisão e Segurança",
-      template: "%s | LogiNord Integrada",
+      default: settings.seo.title || "Onze Negócios — Ecossistema Digital Completo",
+      template: "%s | Onze Negócios",
     },
-    description: settings.seo.description || "Transporte confiável para a sua empresa.",
+    description:
+      settings.seo.description ||
+      "Aceleramos o crescimento da sua empresa no digital. Marketing, IA, automação, websites e consultoria estratégica.",
     openGraph: {
       title: settings.seo.title,
       description: settings.seo.description,
       images: [settings.seo.ogImage || "/og-image.jpg"],
-    }
+    },
   };
 }
 
 export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   const settings = await getSectionData<any>("settings", { integrations: {} });
 
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className={cn("font-sans", geist.variable)}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.webmanifest" />
-        
-        {/* Marketing Scripts (Head) */}
+
+        {/* Aileron font via Bunny Fonts */}
+        <link rel="preconnect" href="https://fonts.bunny.net" />
+        <link
+          href="https://fonts.bunny.net/css?family=aileron:100,200,300,400,600,700,900&display=swap"
+          rel="stylesheet"
+        />
+
         {settings.integrations.googleAdsTag && (
           <script dangerouslySetInnerHTML={{ __html: settings.integrations.googleAdsTag }} />
         )}
@@ -66,13 +64,11 @@ export default async function RootLayout({
           <script dangerouslySetInnerHTML={{ __html: settings.integrations.headerTags }} />
         )}
       </head>
-      <body className={`${urbanist.variable} ${inter.variable} font-inter antialiased`}>
+      <body style={{ fontFamily: "'Aileron', sans-serif" }} className="antialiased">
         <CustomCursor />
         {children}
         <JsonLd />
         <WhatsAppButton />
-
-        {/* Marketing Scripts (Footer) */}
         {settings.integrations.footerTags && (
           <script dangerouslySetInnerHTML={{ __html: settings.integrations.footerTags }} />
         )}

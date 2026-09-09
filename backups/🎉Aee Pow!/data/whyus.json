@@ -1,0 +1,11 @@
+{
+  "label": "WHY US",
+  "title": "The LogiNord Difference",
+  "subtitle": "Excellence in every mile.",
+  "cta": { "label": "Our Process", "url": "/sobre" },
+  "items": [
+    { "icon": "ShieldCheck", "title": "Secure Handling", "description": "Protocol-driven safety at every touchpoint.", "show": true },
+    { "icon": "Clock", "title": "On-Time Guarantee", "description": "Reliability you can build your business on.", "show": true },
+    { "icon": "BarChart3", "title": "Real-time Visibility", "description": "Data-backed tracking for peace of mind.", "show": true }
+  ]
+}

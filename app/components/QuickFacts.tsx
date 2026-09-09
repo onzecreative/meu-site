@@ -22,15 +22,15 @@ const parseStat = (str: string) => {
 };
 
 const defaultStats = [
-  { number: "98.6%", label: "On-Time Delivery Rate." },
-  { number: "24/7", label: "GPS Tracking Coverage." },
-  { number: "+20", label: "Countries covered daily." },
-  { number: "+2.5K", label: "Monthly Orders Fulfilled." },
+  { number: "500+", label: "Clientes atendidos com sucesso." },
+  { number: "98%", label: "Taxa de satisfação dos clientes." },
+  { number: "3×", label: "Crescimento médio de receita." },
+  { number: "24/7", label: "Suporte especializado dedicado." },
 ];
 
 export default function QuickFacts() {
   const [data, setData] = useState<any>({
-    title: "Trusted by dozens of Companies across Industries.",
+    title: "Números que comprovam nossos resultados.",
     stats: defaultStats,
   });
   
@@ -79,44 +79,49 @@ export default function QuickFacts() {
 
   return (
     <>
-      <section id="stats" className="w-full bg-white py-[120px] md:py-[160px] relative overflow-hidden">
-        {/* Decorative Arrows Background Pattern */}
-        <div 
-          className="absolute inset-0 pointer-events-none opacity-[0.03] z-0"
-          style={{
-            backgroundImage: "url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMjBMMTkgMUw0MCAyMEwyMCAyMEwyMCA0MEw0MCA0MEwwIDIwWiIgZmlsbD0iIzAwMCIvPjwvc3ZnPg==')",
-            backgroundSize: "120px 120px"
-          }}
+      <section id="stats" className="w-full py-[100px] md:py-[140px] relative overflow-hidden" style={{ background: '#030305' }}>
+        {/* Ambient subtle light */}
+        <div
+          className="glow-indigo"
+          style={{ width: 500, height: 500, top: '20%', left: '-10%', opacity: 0.15 }}
         />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-[16px] md:px-[40px] flex flex-col md:flex-row gap-16 md:gap-8" ref={ref}>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-10 flex flex-col md:flex-row gap-12 md:gap-16" ref={ref}>
           
           {/* Left Column (1/3) */}
-          <div className="w-full md:w-1/3 flex flex-col items-start pr-0 md:pr-8">
-            <Label text={data?.label || "Quick Facts"} />
-            <motion.h2 
-              initial={{ opacity: 0, y: 30 }}
+          <div className="w-full md:w-1/3 flex flex-col items-start pr-0 md:pr-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+              <span className="text-[11px] font-mono font-medium text-white/70 uppercase tracking-widest">Métricas & Escala</span>
+            </div>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ type: "spring", bounce: 0.25, duration: 0.8 }}
-              className="text-[#1A1A1A] max-w-[400px]"
+              transition={{ duration: 0.7 }}
+              className="text-white text-[32px] md:text-[44px] font-bold tracking-tight leading-tight"
             >
-              {data?.title ?? "Trusted by dozens of Companies across Industries."}
+              {data?.title ?? "Números que comprovam nossos resultados."}
             </motion.h2>
+            <p className="mt-4 text-[15px] text-[#9496A1] font-light leading-relaxed">
+              Decisões guiadas por dados analíticos em tempo real, automações contínuas e infraestrutura de alta conversão.
+            </p>
           </div>
 
-          {/* Right Column (2/3) - 2x2 Grid */}
-          <div className="w-full md:w-2/3 grid grid-cols-2 gap-y-16 gap-x-8 md:gap-x-16 pl-0 md:pl-12">
+          {/* Right Column (2/3) - 2x2 Grid with Spotlight Cards */}
+          <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
             {(data?.stats || defaultStats).map((stat: any, i: number) => {
               const parsed = parseStat(stat?.number ?? "");
               return (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.8, delay: i * 0.1, type: "spring", bounce: 0.25 }}
-                  className="flex flex-col items-start"
+                  transition={{ duration: 0.6, delay: i * 0.1 }}
+                  className="p-6 md:p-8 rounded-2xl bg-[#08090E] border border-white/[0.08] hover:border-indigo-500/30 transition-all duration-300 relative group overflow-hidden"
                 >
-                  <div className="font-urbanist font-extrabold text-[48px] md:text-[64px] text-[#1A1A1A] leading-none mb-3 tracking-tight">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-indigo-500/10 to-transparent rounded-bl-3xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
+                  
+                  <div className="font-extrabold text-[44px] md:text-[56px] leading-none mb-3 tracking-tight text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-cyan-300 transition-all">
                     {inView && parsed.isValid ? (
                       <CountUp
                         start={0}
@@ -132,7 +137,7 @@ export default function QuickFacts() {
                       stat?.number ?? ""
                     )}
                   </div>
-                  <div className="text-[15px] md:text-[16px] text-[#1A1A1A]/70 leading-snug max-w-[200px]">
+                  <div className="text-[14px] md:text-[15px] text-[#9496A1] leading-relaxed">
                     {stat?.label ?? ""}
                   </div>
                 </motion.div>
@@ -143,13 +148,17 @@ export default function QuickFacts() {
         </div>
       </section>
 
-      {/* Logos Marquee Section */}
-      <section className="w-full bg-[#F2F0EB] py-16 md:py-[120px] overflow-hidden border-t border-[#E0DDD8]">
-        <div className="max-w-7xl mx-auto px-[16px] md:px-[40px] mb-12">
-          <Label text="Clients & Partners" />
+      {/* Modern Monochrome Logos Marquee */}
+      <section className="w-full py-12 md:py-16 overflow-hidden border-y border-white/[0.06]" style={{ background: '#08090E' }}>
+        <div className="max-w-7xl mx-auto px-4 md:px-10 mb-6 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+            <span className="text-[11px] font-mono uppercase tracking-widest text-white/50">Empresas e Plataformas Integradas</span>
+          </div>
+          <span className="text-[11px] font-mono text-white/30 hidden sm:inline">ECOSYSTEM // VERIFIED</span>
         </div>
         
-        <div className="group/marquee w-full flex whitespace-nowrap overflow-hidden">
+        <div className="group/marquee w-full flex whitespace-nowrap overflow-hidden" style={{ maskImage: 'linear-gradient(90deg, transparent, black 12%, black 88%, transparent)' }}>
           <div className="animate-marquee flex items-center group-hover/marquee:[animation-play-state:paused] whitespace-nowrap">
             {renderLogos()}
             {renderLogos()}

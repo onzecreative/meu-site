@@ -1,0 +1,13 @@
+{
+  "label": "CLIENTS & PARTNERS",
+  "logos": [
+    { "url": "/images/logos/client1.svg", "alt": "Client 1" },
+    { "url": "/images/logos/client2.svg", "alt": "Client 2" },
+    { "url": "/images/logos/client3.svg", "alt": "Client 3" },
+    { "url": "/images/logos/client4.svg", "alt": "Client 4" }
+  ],
+  "marquee": {
+    "enabled": true,
+    "speed": 30
+  }
+}

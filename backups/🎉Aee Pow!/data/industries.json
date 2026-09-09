@@ -1,0 +1,11 @@
+{
+  "title": "Industries We Serve",
+  "subtitle": "Tailored solutions for diverse sectors.",
+  "cta": { "label": "Full Fleet", "url": "/fleet" },
+  "items": [
+    { "name": "Retail & E-commerce", "image": "https://picsum.photos/seed/retail/600/400", "show": true },
+    { "name": "Food & Beverage", "image": "https://picsum.photos/seed/food/600/400", "show": true },
+    { "name": "Healthcare & Pharma", "image": "https://picsum.photos/seed/health/600/400", "show": true },
+    { "name": "Tech & Electronics", "image": "https://picsum.photos/seed/tech/600/400", "show": true }
+  ]
+}
